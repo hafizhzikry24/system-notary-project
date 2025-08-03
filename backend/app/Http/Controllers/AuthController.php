@@ -9,23 +9,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-
         DB::beginTransaction();
         try {
-            if ($request->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'errors' => $request->errors()
-                ], 422);
-            }
-
             $user = User::create([
+                'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
@@ -65,20 +59,21 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            if (!Auth::attempt($request->only('username', 'password'))) {
+            // Find user by username
+            $user = User::where('username', $request->username)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'message' => 'Invalid login credentials'
                 ], 401);
             }
 
-            $user = Auth::user();
-
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'message' => 'Login successful',
+                'data' => $user,
                 'access_token' => $token,
-
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
