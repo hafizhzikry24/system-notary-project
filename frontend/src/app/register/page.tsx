@@ -1,6 +1,4 @@
-'use client';
-
-import { RegisterForm } from "@/components/register-form"
+import { RegisterForm } from "@/components/auth/register-form"
 import Image from "next/image"
 
 export default function RegisterPage() {
@@ -13,14 +11,11 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-      <div className="relative h-svh hidden bg-muted lg:block">
-        <Image
-          src="/assets/register.jpg"
-          alt="Login background"
-          fill
-          className="object-cover dark:brightness-[0.2] dark:grayscale"
-          priority
-        />
+      <div className="relative h-svh bg-zinc-50 hidden lg:block">
+        <div className="w-full h-full flex flex-col items-center justify-center text-center font-bold">
+          <div className="w-full text-7xl font-serif">E-Commerce</div>
+          <div className="w-full text-7xl font-serif">System</div>
+        </div>
       </div>
     </div>
   )

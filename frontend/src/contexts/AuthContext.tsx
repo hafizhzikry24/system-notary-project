@@ -60,33 +60,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials) => {
     try {
       const response = await authService.login(credentials);
-      
-      // Check if we have access_token in response
+  
       if (response.access_token) {
         try {
-          // Get user data after successful login
           const userData = await authService.getUser();
-          console.log('User data response:', userData);
           setUser(userData.data);
         } catch (userError) {
-          console.error('Failed to get user data after login:', userError);
-          // If we can't get user data, we can still consider user logged in
-          // since we have the token
           setUser({
             id: 0,
             name: 'User',
             username: credentials.username,
-            email: ''
+            email: '',
           });
         }
       } else {
         throw new Error('No access token received');
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        throw error;
+      } else {
+        throw new Error('Login failed. Please try again.');
+      }
     }
   };
+  
 
   const register = async (userData: RegisterData) => {
     try {

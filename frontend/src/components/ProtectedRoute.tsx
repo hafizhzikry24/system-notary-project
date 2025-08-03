@@ -20,8 +20,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div role="status" aria-busy="true" className="flex flex-col items-center">
+
+          <div className="animate-spin inline-block w-16 h-16 border-4 border-current border-t-transparent text-blue-600 rounded-full mb-4" />
+
+          <p className="text-gray-700 dark:text-gray-300 text-lg font-medium mt-2">Loading secure content...</p>
+        </div>
       </div>
     );
   }
@@ -31,4 +36,4 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   return <>{children}</>;
-}; 
+};

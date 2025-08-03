@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../../contexts/AuthContext"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -42,27 +42,26 @@ export function LoginForm({ className }: LoginFormProps) {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true)
-    setError("")
-
+    setError("");
+  
     try {
-      await login(data)
+      await login(data);
       // If login is successful, redirect to dashboard
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (err: any) {
-      console.error('Login error:', err)
+      console.error('Login error:', err);
       // Handle different types of errors
       if (err.response?.data?.message) {
-        setError(err.response.data.message)
+        setError(err.response.data.message);
       } else if (err.message) {
-        setError(err.message)
+        setError(err.message);
       } else {
-        setError("Login failed. Please try again.")
+        setError("Login failed. Please try again.");
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>

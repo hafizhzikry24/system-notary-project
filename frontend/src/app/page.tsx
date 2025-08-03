@@ -8,20 +8,27 @@ export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
+
   useEffect(() => {
-    if (!isLoading) {
-      if (isAuthenticated) {
-        router.push('/dashboard');
-      } else {
-        router.push('/login');
-      }
+    const token = localStorage.getItem('access_token');
+
+    if (!token) {
+      router.push('/login');
+    } else {
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, []);
+  
 
   // Show loading spinner while checking authentication
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-    </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div role="status" aria-busy="true" className="flex flex-col items-center">
+
+          <div className="animate-spin inline-block w-16 h-16 border-4 border-current border-t-transparent text-gray-600 rounded-full mb-4" />
+
+          <p className="text-gray-700 dark:text-gray-300 text-lg font-medium mt-2">Loading...</p>
+        </div>
+      </div>
   );
 }
