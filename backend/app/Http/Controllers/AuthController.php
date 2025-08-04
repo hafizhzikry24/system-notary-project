@@ -14,6 +14,12 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    /**
+     * Register a new user.
+     *
+     * @param RegisterRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(RegisterRequest $request)
     {
         DB::beginTransaction();
@@ -44,6 +50,12 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Login a user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         try {
@@ -83,7 +95,11 @@ class AuthController extends Controller
         }
     }
 
-
+    /**
+     * Logout the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
         try {
