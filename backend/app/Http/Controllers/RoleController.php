@@ -17,12 +17,13 @@ class RoleController extends Controller
     {
         $query = Role::query();
 
+        $perPage = $request->input('per_page', 10);
+
         $searchables = [
             'name' => 'like',
         ];
 
         $orderables = [
-            'name' => 'asc',
             'id' => 'asc',
         ];
 
@@ -50,7 +51,7 @@ class RoleController extends Controller
             }
         }
 
-        $roles = $query->get();
+        $roles = $query->paginate($perPage);
 
         return response()->json([
             'roles' => $roles,
