@@ -53,13 +53,13 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex-col border-r bg-white transition-all duration-300 ease-in-out lg:static lg:z-auto lg:flex",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0", // Mobile behavior
-          "w-64 lg:w-16 lg:hover:w-64", // Tambahkan 'w-64' untuk mobile, lalu ubah di desktop menjadi 'w-16'
-          isHovered ? "lg:w-64" : "lg:w-20" // Terapkan lebar saat hover hanya di desktop
-        )}
+            "fixed inset-y-0 left-0 z-50 flex-col border-r bg-white transition-all duration-300 ease-in-out lg:static lg:z-auto lg:flex",
+            isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+            "w-64 lg:hover:w-64",
+            isHovered ? "lg:w-64" : "lg:w-[67px]"
+          )}
       >
-        <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
+        <nav className="flex-1 space-y-2 px-2 py-4 overflow-y-auto">
           <div className="flex items-center justify-between border-b px-4 lg:hidden">
             <h2 className="text-xl mb-2 font-semibold">Menu</h2>
 
@@ -96,8 +96,8 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                   }
                 }}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
-                  isActive && "bg-gray-100 text-gray-900",
+                  " flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
+                  isActive && "bg-gray-100 text-gray-900 font-bold",
                   "justify-start"
                 )}
               >
@@ -105,9 +105,8 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                 <span
                   className={cn(
                     "overflow-hidden whitespace-nowrap transition-all duration-300",
-                    "lg:opacity-0 lg:w-0", // Sembunyikan dan beri lebar 0 di desktop secara default
-                    isHovered && "lg:opacity-100 lg:w-auto", // Tampilkan saat hover di desktop
-                    "opacity-100 w-auto" // Selalu tampilkan di mobile
+                    "lg:opacity-0 lg:w-0 lg:-ml-0",
+                    isHovered && "lg:opacity-100 lg:w-auto"
                   )}
                 >
                   {item.title}
