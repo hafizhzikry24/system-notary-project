@@ -8,11 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Save } from "lucide-react";
 import Layout from "@/components/layout/Layout";
-
-interface Role {
-  id: number;
-  name: string;
-}
+import { Role } from "@/types/role";
 
 export default function RolePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();

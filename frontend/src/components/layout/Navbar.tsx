@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { Menu, Bell, User } from 'lucide-react';
+import { Menu, Bell, User, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-
-interface NavbarProps {
-  toggleSidebar: () => void;
-}
+import { NavbarProps } from '@/types/layout/navbar';
 
 export default function Navbar({ toggleSidebar }: NavbarProps) {
   const { user, logout } = useAuth();
@@ -60,6 +57,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => logout()} className="text-red-600">
+                <LogOut className="mr-2 h-4 w-4 text-red-600" />
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
