@@ -71,6 +71,15 @@ class AuthController extends Controller
                 ], 422);
             }
 
+            // Check for token identifier
+            $expectedTokenIdentifier = config('app.token_identifier');
+
+            if ($request->token_identifier !== $expectedTokenIdentifier) {
+                return response()->json([
+                    'message' => 'Invalid token identifier'
+                ], 403); // Forbidden
+            }
+
             // Find user by username
             $user = User::where('username', $request->username)->first();
 
