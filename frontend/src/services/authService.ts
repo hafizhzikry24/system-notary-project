@@ -1,8 +1,10 @@
 import api from './api';
+import { environment } from '../environment/environment';
 
 export interface LoginCredentials {
   username: string;
   password: string;
+  token_identifier?: string;
 }
 
 export interface RegisterData {
@@ -20,7 +22,13 @@ export interface AuthResponse {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await api.post('/login', credentials);
+    // Include token identifier if provided
+    const payload = {
+      ...credentials,
+      token_identifier: environment.token_identifier,
+    };
+
+    const response = await api.post('/login', payload);
     const { access_token } = response.data;
     
     // Store token in localStorage

@@ -123,4 +123,13 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*|--------------------------------------------------------------------------
+    | Token Identifier
+    |--------------------------------------------------------------------------
+    |
+    | This value is used to verify the token identifier during user login.
+    | It should match the identifier set in the frontend environment.
+    |*/
+    'token_identifier' => env('APP_TOKEN_IDENTIFIER', 'token'),
+
 ];
