@@ -255,7 +255,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
 
       <div className="text-center text-sm">
         Already have an account?{" "}
-        <a href="/login" className="underline underline-offset-4">
+        <a href="/auth/login" className="underline underline-offset-4">
           Sign in
         </a>
       </div>

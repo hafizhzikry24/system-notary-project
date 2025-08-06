@@ -3,37 +3,9 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Users, Shield } from "lucide-react";
 import { useState } from "react";
-
-interface NavItem {
-  title: string;
-  href: string;
-  icon: React.ReactNode;
-}
-
-interface SidebarProps {
-  isOpen: boolean;
-  closeSidebar: () => void;
-}
-
-const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: <Home className="h-5 w-5" />,
-  },
-  {
-    title: "Users",
-    href: "/users",
-    icon: <Users className="h-5 w-5" />,
-  },
-  {
-    title: "Roles",
-    href: "/roles",
-    icon: <Shield className="h-5 w-5" />,
-  },
-];
+import { SidebarProps } from "@/types/layout/sidebar";
+import { navItems } from "@/components/layout/Sidebar/menu-items";
 
 export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
   const pathname = usePathname();
@@ -56,7 +28,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
             "fixed inset-y-0 left-0 z-50 flex-col border-r bg-white transition-all duration-300 ease-in-out lg:static lg:z-auto lg:flex",
             isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
             "w-64 lg:hover:w-64",
-            isHovered ? "lg:w-64" : "lg:w-[67px]"
+            isHovered ? "lg:w-64" : "lg:w-16"
           )}
       >
         <nav className="flex-1 space-y-2 px-2 py-4 overflow-y-auto">
@@ -101,7 +73,9 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                   "justify-start"
                 )}
               >
-                {item.icon}
+                <span className="flex-shrink-0 ml-0.5">
+                  <item.icon className="h-4 w-4"/>
+                </span>
                 <span
                   className={cn(
                     "overflow-hidden whitespace-nowrap transition-all duration-300",

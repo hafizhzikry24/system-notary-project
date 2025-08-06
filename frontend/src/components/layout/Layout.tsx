@@ -1,14 +1,9 @@
 "use client";
 
-import { ReactNode, useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-
-import Sidebar from "./Sidebar";
-
-interface LayoutProps {
-  children: ReactNode;
-}
+import Sidebar from "./Sidebar/Sidebar";
+import { LayoutProps } from "@/types/layout/layout";
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -55,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
           closeSidebar={() => setSidebarOpen(false)}
         />
 
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 lg:p-8 w-full">
+        <main className="flex-1 overflow-y-auto bg-gray-50 w-full">
           {children}
         </main>
       </div>

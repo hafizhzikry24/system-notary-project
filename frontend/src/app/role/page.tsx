@@ -2,7 +2,7 @@
 
   import { useState, useEffect } from "react";
   import { ProtectedRoute } from "@/components/ProtectedRoute";
-  import { DeleteModal } from "@/components/DeleteModal";
+  import { DeleteModal } from "@/components/ui/DeleteModal";
   import {
     Table,
     TableBody,
@@ -17,11 +17,7 @@
   import { useRouter } from "next/navigation";
   import api from "@/services/api";
   import Layout from "@/components/layout/Layout";
-
-  interface Role {
-    id: number;
-    name: string;
-  }
+  import { Role } from "@/types/role";
 
   interface PaginationData {
     current_page: number;

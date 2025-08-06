@@ -2,7 +2,6 @@
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Layout from "@/components/layout/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Dashboard() {
