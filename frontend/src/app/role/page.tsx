@@ -71,7 +71,7 @@
     };
 
     const handleEditRole = (id: number) => {
-      router.push(`/roles/${id}`);
+      router.push(`/role/${id}`);
     };
 
     const handleDeleteRole = (id: number) => {
@@ -125,7 +125,7 @@
                 <h1 className="text-sm sm:text-2xl font-bold text-gray-900">
                   Roles Management
                 </h1>
-                <Button className="flex items-center p-2 text-xs sm:text-sm" onClick={() => router.push("/roles/create")}>
+                <Button className="flex items-center p-2 text-xs sm:text-sm" onClick={() => router.push("/role/create")}>
                   Add New Role
                 </Button>
               </div>

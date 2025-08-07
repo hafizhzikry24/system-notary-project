@@ -43,7 +43,7 @@ export default function RolePage({ params }: { params: Promise<{ id: string }> }
     setSaving(true);
     try {
       await api.put(`/roles/${id}`, { name });
-      router.push('/roles');
+      router.push('/role');
     } catch (err: any) {
       setError(err);
     } finally {
@@ -70,7 +70,7 @@ export default function RolePage({ params }: { params: Promise<{ id: string }> }
               <div className="flex items-center mb-6">
                 <Button
                   variant="ghost"
-                  onClick={() => router.push('/roles')}
+                  onClick={() => router.push('/role')}
                   className="mr-4"
                 >
                   <ArrowLeft size={20} />
