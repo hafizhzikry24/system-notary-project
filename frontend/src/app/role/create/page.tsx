@@ -22,7 +22,7 @@ export default function RolePage( ) {
     setSaving(true);
     try {
       await api.post(`/roles/`,  { name });
-      router.push('/roles');
+      router.push('/role');
     } catch (err: any) {
       setError(err);
       console.error("Failed to create role:", err);
@@ -40,7 +40,7 @@ export default function RolePage( ) {
               <div className="flex items-center mb-6">
                 <Button
                   variant="ghost"
-                  onClick={() => router.push('/roles')}
+                  onClick={() => router.push('/role')}
                   className="mr-4"
                 >
                   <ArrowLeft size={20} />
