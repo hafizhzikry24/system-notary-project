@@ -12,8 +12,8 @@ export default function RegisterPage() {
       </div>
       <div className="relative h-svh bg-zinc-50 hidden lg:block">
         <div className="w-full h-full flex flex-col items-center justify-center text-center font-bold">
-          <div className="w-full text-7xl font-serif">E-Commerce</div>
-          <div className="w-full text-7xl font-serif">System</div>
+          <div className="w-full text-7xl font-serif">NOIS</div>
+          <div className="w-full text-3xl font-serif">Notary Information Systems</div>
         </div>
       </div>
     </div>
