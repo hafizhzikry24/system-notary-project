@@ -2,126 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Services\AuthService;
+use App\Http\Requests\LoginRequest;
+use App\Http\Traits\MessageResponse;
 use App\Http\Requests\RegisterRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
-     * Register a new user.
+     * Use the MessageResponse trait for standardized responses.
+     */
+    use MessageResponse;
+
+    /**
+     * The AuthService instance.
+     *
+     * @var AuthService
+     */
+    protected AuthService $authService;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param AuthService $authService
+     */
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    /**
+     * Handle user registration.
      *
      * @param RegisterRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function register(RegisterRequest $request)
     {
-        DB::beginTransaction();
         try {
-            $user = User::create([
-                'uuid' => Str::uuid(),
-                'name' => $request->name,
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
+            $result = $this->authService->register($request->validated());
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+        return $this->registerResponse($result['user'], $result['token']);
 
-            DB::commit();
-
-            return response()->json([
-                'message' => 'User created successfully',
-                'data' => $user,
-                'access_token' => $token,
-            ], 201);
+        } catch (ValidationException $e) {
+            return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->errorResponse('An error occurred: ' . $e->getMessage(), 500);
         }
     }
 
     /**
-     * Login a user.
+     * Handle user login.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param LoginRequest $request
+     * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'username' => 'required|string',
-                'password' => 'required|string|min:8',
-            ]);
+            $result = $this->authService->login($request->only('username', 'password'), $request->token_identifier);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+        return $this->registerResponse($result['user'], $result['token']);
 
-            // Check for token identifier
-            $expectedTokenIdentifier = config('app.token_identifier');
-
-            if ($request->token_identifier !== $expectedTokenIdentifier) {
-                return response()->json([
-                    'message' => 'Invalid token identifier'
-                ], 403); // Forbidden
-            }
-
-            // Find user by username
-            $user = User::where('username', $request->username)->first();
-
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json([
-                    'message' => 'Invalid login credentials'
-                ], 401);
-            }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Login successful',
-                'data' => $user,
-                'access_token' => $token,
-            ], 200);
+        } catch (ValidationException $e) {
+            return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->errorResponse('An error occurred: ' . $e->getMessage(), 500);
         }
     }
 
     /**
-     * Logout the authenticated user.
+     * Handle user logout.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout()
     {
         try {
-            Auth::guard('api')->user()->currentAccessToken()->delete();
+            $this->authService->logout();
 
-            return response()->json([
-                'message' => 'Logged out successfully'
-            ], 200);
+            return $this->successResponse('message', null, 'Logged out successfully', 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred during logout',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorResponse('An error occurred during logout: ' . $e->getMessage(), 500);
         }
     }
 }

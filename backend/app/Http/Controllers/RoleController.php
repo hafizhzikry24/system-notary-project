@@ -3,137 +3,156 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use App\Http\Requests\RoleRequest;
+use App\Http\Services\RoleService;
+use App\Http\Traits\MessageResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class RoleController extends Controller
 {
     /**
+     * Use the MessageResponse trait for standardized responses.
+     */
+    use MessageResponse;
+
+    /**
+     * The RoleService instance.
+     *
+     * @var RoleService
+     */
+    protected RoleService $roleService;
+
+    /**
+     * RoleController constructor.
+     *
+     * @param RoleService $roleService
+     */
+    public function __construct(RoleService $roleService)
+    {
+        $this->roleService = $roleService;
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
-     * @return \Illuminate\Http\Request
+     * @param Request $request
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $query = Role::query();
+        try {
+            // Retrieve all roles with optional filters
+            $roles = $this->roleService->getAll($request->all());
 
-        $perPage = $request->input('per_page', 10);
+            return $this->successResponse('roles', $roles, 'Roles retrieved successfully');
 
-        $searchables = [
-            'name' => 'like',
-        ];
-
-        $orderables = [
-            'id' => 'asc',
-        ];
-
-        $search = $request->input('search');
-        if ($search) {
-            $query->where(function ($q) use ($search, $searchables) {
-                foreach ($searchables as $column => $operator) {
-                    if ($operator === 'like') {
-                        $q->orWhere($column, 'LIKE', "%$search%");
-                    } else {
-                        $q->orWhere($column, $operator, $search);
-                    }
-                }
-            });
+        } catch (ValidationException $e) {
+            return $this->validationErrorResponse($e);
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to retrieve roles: ' . $e->getMessage(), 500);
         }
 
-        $sortBy = $request->input('sort_by');
-        $sortDir = $request->input('sort_dir');
-
-        if ($sortBy && array_key_exists($sortBy, $orderables)) {
-            $query->orderBy($sortBy, $sortDir ?? $orderables[$sortBy]);
-        } else {
-            foreach ($orderables as $column => $direction) {
-                $query->orderBy($column, $direction);
-            }
-        }
-
-        $roles = $query->paginate($perPage);
-
-        return response()->json([
-            'roles' => $roles,
-            'message' => 'Roles retrieved successfully'
-        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param RoleRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name',
-        ]);
+        try {
+            DB::beginTransaction();
+            // Create a new role
+            $role = $this->roleService->create($request->validated());
 
-        $role = Role::create([
-            'name' => $request->name,
-        ]);
+            DB::commit();
 
-        return response()->json([
-            'role' => $role,
-            'message' => 'Role created successfully'
-        ]);
+            return $this->successResponse('role', $role, 'Role created successfully', 201);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return $this->validationErrorResponse($e);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse('Failed to create role: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function show($id)
     {
-        $role = Role::findOrFail($id);
+        try {
+            // Find a role by ID
+            $role = $this->roleService->getById($id);
+            if (!$role) {
+                return $this->errorResponse('Role not found', 404);
+            }
 
-        return response()->json([
-            'role' => $role,
-            'message' => 'Role retrieved successfully'
-        ]);
+            return $this->successResponse('role', $role, 'Role retrieved successfully');
+        } catch (ValidationException $e) {
+            return $this->validationErrorResponse($e);
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to retrieve role: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param RoleRequest $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name,' . $id,
-        ]);
+        try {
+            DB::beginTransaction();
+            // Update a role by ID
+            $role = $this->roleService->update($id, $request->validated());
 
-        $role = Role::findOrFail($id);
-        $role->update([
-            'name' => $request->name,
-        ]);
+            DB::commit();
 
-        return response()->json([
-            'role' => $role,
-            'message' => 'Role updated successfully'
-        ]);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return $this->validationErrorResponse($e);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse('Failed to update role: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
-        $role->delete();
+        try {
+            DB::beginTransaction();
+            // Delete a role by ID
+            $role = $this->roleService->getById($id);
+            if (!$role) {
+                return $this->errorResponse('Role not found', 404);
+            }
 
-        return response()->json([
-            'message' => 'Role deleted successfully'
-        ]);
+            $this->roleService->delete($id);
+            DB::commit();
+            return $this->successResponse('role', null, 'Role deleted successfully');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return $this->validationErrorResponse($e);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->errorResponse('Failed to delete role: ' . $e->getMessage(), 500);
+        }
     }
 }

@@ -70,8 +70,8 @@ export function RegisterForm({ className }: RegisterFormProps) {
     } catch (err: any) {
       console.error('Registration error:', err)
       // Handle different types of errors
-      if (err.response?.data?.message) {
-        setError(err.response.data.message)
+      if (err.response?.data?.errors?.credentials) {
+         setError(err.response.data.errors.credentials[0]);
       } else if (err.message) {
         setError(err.message)
       } else {

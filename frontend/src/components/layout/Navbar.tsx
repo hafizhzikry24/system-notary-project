@@ -31,7 +31,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           >
             <Menu className="h-6 w-6" />
           </Button>
-          <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+          <h1 className="text-xl font-semibold text-gray-900">NOIS</h1>
         </div>
 
         <div className="flex items-center gap-2">
