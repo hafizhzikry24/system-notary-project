@@ -138,11 +138,11 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                       item.children.map((child) => (
                         <Link
                           key={child.href}
-                          href={child.href}
+                          href={`${item.href}${child.href}`}
                           onClick={closeSidebar} // Close sidebar on mobile when a link is clicked
                           className={cn(
                             "block rounded-lg px-3 py-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 text-sm",
-                            pathname === child.href &&
+                            pathname === `${item.href}${child.href}` &&
                               "bg-gray-100 text-gray-900 font-semibold"
                           )}
                         >

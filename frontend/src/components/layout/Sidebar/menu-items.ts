@@ -1,5 +1,3 @@
-// src/lib/navItems.ts
-
 import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check } from "lucide-react";
 import { MenuItem } from "@/types/layout/sidebar";
 
@@ -17,7 +15,7 @@ export const navItems: MenuItem[] = [
   // },
   {
     title: "Pelanggan",
-    href: "/customers",
+    href: "/pelaggan",
     icon: Landmark,
     children: [
       { title: "Perorangan", href: "/perorangan" },
@@ -26,8 +24,8 @@ export const navItems: MenuItem[] = [
     ],
   },
     {
-    title: "Lembar Kerja",
-    href: "/worksheets",
+    title: "Perjanjian Kerja",
+    href: "/perjanjian-kerja",
     icon: LayoutList,
     children: [
       { title: "Lembar Kerja", href: "/worksheet" },
@@ -36,7 +34,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Rekap Keuangan",
-    href: "/financials",
+    href: "/financial",
     icon: Banknote,
     children: [
       { title: "Keuangan", href: "/keuangan" },
