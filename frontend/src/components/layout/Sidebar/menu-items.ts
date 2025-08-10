@@ -54,7 +54,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Notaris & PPAT Profil",
-    href: "/profils",
+    href: "/profile",
     icon: UserRoundPen,
   },
 ];
