@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProfilesettingController;
 
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,5 +28,11 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [RoleController::class, 'store']);
         Route::put('/{id}', [RoleController::class, 'update']);
         Route::delete('/{id}', [RoleController::class, 'destroy']);
+    });
+
+    //profile settings endpoint
+    Route::prefix('profile-settings')->group(function () {
+        Route::get('/{id}', [ProfilesettingController::class, 'show']);
+        Route::put('/{id}', [ProfilesettingController::class, 'update']);
     });
 });
