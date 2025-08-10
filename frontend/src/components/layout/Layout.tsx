@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar/Sidebar";
 import { LayoutProps } from "@/types/layout/layout";
+import { Toaster } from "react-hot-toast";
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -51,6 +52,7 @@ export default function Layout({ children }: LayoutProps) {
         />
 
         <main className="flex-1 overflow-y-auto bg-gray-50 w-full">
+          <Toaster position="top-right" />
           {children}
         </main>
       </div>
