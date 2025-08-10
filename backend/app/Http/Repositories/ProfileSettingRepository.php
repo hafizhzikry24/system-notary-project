@@ -2,8 +2,9 @@
 
 namespace App\Http\Repositories;
 
-use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
 use App\Models\ProfileSetting;
+use App\Enums\ProfileSetting\ProfileSettingGenderEnum;
+use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
 
 class ProfileSettingRepository implements ProfileSettingRepositoryInterface
 {
@@ -11,25 +12,34 @@ class ProfileSettingRepository implements ProfileSettingRepositoryInterface
     /**
      * Find a role by ID.
      *
-     * @param string $id
      * @return mixed
      */
-    public function findById(string $id)
+    public function findBy()
     {
-        return ProfileSetting::where('uuid', $id)->findOrFail($id);
+        return ProfileSetting::first();
     }
 
     /**
      * Update a role by ID.
      *
-     * @param string $id
      * @param array $data
      * @return mixed
      */
-    public function updateById(string $id, array $data)
+    public function updateBy(array $data)
     {
-        $profileSetting = $this->findById($id);
+        $profileSetting = $this->findBy();
         $profileSetting->update($data);
         return $profileSetting;
+    }
+
+    /**
+     * Get gender values.
+     * @return array
+     */
+    public function getGenderValues()
+    {
+        $genderValues = ProfileSettingGenderEnum::values();
+
+        return $genderValues;
     }
 }

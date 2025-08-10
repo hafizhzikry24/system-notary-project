@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ProfileSetting extends Model
 {
     /** @use HasFactory<\Database\Factories\ProfileSetiingFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

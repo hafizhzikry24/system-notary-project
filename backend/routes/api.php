@@ -32,7 +32,8 @@ Route::middleware('auth:api')->group(function () {
 
     //profile settings endpoint
     Route::prefix('profile-settings')->group(function () {
-        Route::get('/{id}', [ProfilesettingController::class, 'show']);
-        Route::put('/{id}', [ProfilesettingController::class, 'update']);
+        Route::get('/', [ProfilesettingController::class, 'show']);
+        Route::get('/gender-options', [ProfilesettingController::class, 'getGenderValues']);
+        Route::put('/', [ProfilesettingController::class, 'update']);
     });
 });

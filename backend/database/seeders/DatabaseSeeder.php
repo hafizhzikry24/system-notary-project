@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // Call the individual seeders
         $this->call([
-            UserSeeder::class,
+            // UserSeeder::class,
             ProfileSettingSeeder::class,
         ]);
     }

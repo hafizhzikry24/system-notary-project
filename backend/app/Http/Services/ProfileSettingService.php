@@ -26,23 +26,30 @@ class ProfileSettingService
     /**
      * Find a Profile & Setting by ID.
      *
-     * @param string $id
      * @return mixed
      */
-    public function getById(string $id)
+    public function getBy()
     {
-        return $this->profilesettigRepository->findById($id);
+        return $this->profilesettigRepository->findBy();
     }
 
     /**
      * Update a Profile & Setting by ID.
      *
-     * @param string $id
      * @param array $data
      * @return mixed
      */
-    public function update(string $id, array $data)
+    public function update(array $data)
     {
-        return $this->profilesettigRepository->updateById($id, $data);
+        return $this->profilesettigRepository->updateBy($data);
+    }
+
+    /**
+     * Get gender values.
+     * @return array
+     */
+    public function getGenderValues()
+    {
+        return $this->profilesettigRepository->getGenderValues();
     }
 }
