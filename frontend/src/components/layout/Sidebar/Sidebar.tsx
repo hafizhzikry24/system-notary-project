@@ -64,39 +64,66 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
             const isActive = pathname === item.href;
             const isMenuOpen = openMenus.includes(item.title);
 
+            // Determine if the item should be a direct link or a collapsible menu
+            const isDirectLink = !item.children;
+
             return (
               <div key={item.title}>
-                {/* Parent Menu */}
-                <div
-                  onClick={() =>
-                    item.children ? toggleMenu(item.title) : null
-                  }
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 cursor-pointer",
-                    isActive && "bg-gray-100 text-gray-900 font-bold",
-                    "justify-between"
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    {item.icon && <item.icon className="h-4 w-4" />}
-                    <span
-                      className={cn(
-                        "overflow-hidden whitespace-nowrap transition-all duration-300",
-                        "lg:opacity-0 lg:w-0",
-                        isHovered && "lg:opacity-100 lg:w-auto"
-                      )}
-                    >
-                      {item.title}
-                    </span>
+                {isDirectLink ? (
+                  // Direct Link
+                  <Link
+                    href={item.href}
+                    onClick={closeSidebar} // Close sidebar on mobile when a link is clicked
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
+                      isActive && "bg-gray-100 text-gray-900 font-bold",
+                      "justify-between"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span
+                        className={cn(
+                          "overflow-hidden whitespace-nowrap transition-all duration-300",
+                          "lg:opacity-0 lg:w-0",
+                          isHovered && "lg:opacity-100 lg:w-auto"
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                  </Link>
+                ) : (
+                  // Parent Menu with children
+                  <div
+                    onClick={() => toggleMenu(item.title)}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 cursor-pointer",
+                      isActive && "bg-gray-100 text-gray-900 font-bold",
+                      "justify-between"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span
+                        className={cn(
+                          "overflow-hidden whitespace-nowrap transition-all duration-300",
+                          "lg:opacity-0 lg:w-0",
+                          isHovered && "lg:opacity-100 lg:w-auto"
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                    {(isHovered || isOpen) && (
+                      isMenuOpen ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )
+                    )}
                   </div>
-                    {item.children && (isHovered || isOpen) && (
-                    isMenuOpen ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )
-                  )}
-                </div>
+                )}
                 {/* Sub Menu */}
                 {item.children && (
                   <div
@@ -112,6 +139,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                         <Link
                           key={child.href}
                           href={child.href}
+                          onClick={closeSidebar} // Close sidebar on mobile when a link is clicked
                           className={cn(
                             "block rounded-lg px-3 py-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 text-sm",
                             pathname === child.href &&
