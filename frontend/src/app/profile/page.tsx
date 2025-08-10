@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { showSuccess, showError, showValidationErrors } from "@/services/toastService";
 import { useRouter } from "next/navigation";
 import api from "@/services/api";
 import dynamic from "next/dynamic";
@@ -115,9 +116,13 @@ function ProfileSettingsForm() {
 
       await api.put(`/profile-settings`, profileToSubmit);
       router.push("/profile");
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || "An error occurred";
-      setError(errorMessage);
+      showSuccess("Profile updated successfully!");
+    } catch (error: any) {
+      if (error.response?.status === 422) {
+        showValidationErrors(error.response.data.errors);
+      } else {
+        showError("Something went wrong!");
+      }
     } finally {
       setSaving(false);
     }
