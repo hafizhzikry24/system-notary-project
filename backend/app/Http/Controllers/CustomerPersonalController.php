@@ -105,7 +105,7 @@ class CustomerPersonalController extends Controller
        try {
             DB::beginTransaction();
             // Update a customer personal by ID
-            $customerPersonal = $this->customerPersonalService->update($id, $request->validated());
+            $customerPersonal = $this->customerPersonalService->update((int) $id, $request->validated());
             if (!$customerPersonal) {
                 return $this->errorResponse('Customer Personal not found', 404);
             }

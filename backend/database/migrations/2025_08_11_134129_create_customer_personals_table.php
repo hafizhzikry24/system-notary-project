@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('province')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('npwp')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes()->index('cp_da');
         });

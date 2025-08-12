@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\CustomerPersonal;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Enums\CustomerPersonal\CustomerPersonalGenderEnum;
@@ -51,13 +52,13 @@ class CustomerPersonalRepository implements RoleRepositoryInterface
         ));
 
         if ($requestedSortBy && in_array($requestedSortBy, $sortable, true)) {
-            $dir = in_array($requestedSortDir, ['asc','desc'], true) ? $requestedSortDir : 'asc';
+            $dir = in_array($requestedSortDir, ['asc', 'desc'], true) ? $requestedSortDir : 'asc';
             $query->orderBy($requestedSortBy, $dir);
         } else {
 
             $query->orderBy(
                 $defaultOrder['column_name'] ?? 'id',
-                in_array(strtolower($defaultOrder['direction'] ?? 'asc'), ['asc','desc'], true)
+                in_array(strtolower($defaultOrder['direction'] ?? 'asc'), ['asc', 'desc'], true)
                     ? strtolower($defaultOrder['direction'])
                     : 'asc'
             );
@@ -74,8 +75,33 @@ class CustomerPersonalRepository implements RoleRepositoryInterface
      */
     public function create(array $data)
     {
-        $createCustomerPersonal = CustomerPersonal::create($data);
-        return $createCustomerPersonal;
+        return DB::transaction(function () use ($data) {
+            $customerPersonal = CustomerPersonal::create($data);
+
+            // initialize attachments
+            $attachments = [];
+
+            // handle for single attachment
+            if (!empty($data['file_name']) && !empty($data['file_path'])) {
+                $attachments[] = [
+                    'file_name' => $data['file_name'],
+                    'file_path' => $data['file_path'],
+                    'note'      => $data['note'] ?? null,
+                ];
+            }
+
+            // handle for multiple attachments
+            if (!empty($data['attachments']) && is_array($data['attachments'])) {
+                $attachments = array_merge($attachments, $data['attachments']);
+            }
+
+            // create attachments
+            if (!empty($attachments)) {
+                $customerPersonal->attachments()->createMany($attachments);
+            }
+
+            return $customerPersonal;
+        });
     }
 
     /**
@@ -99,9 +125,38 @@ class CustomerPersonalRepository implements RoleRepositoryInterface
      */
     public function updateById(int $id, array $data)
     {
-        $editCustomerPersonal = CustomerPersonal::findOrFail($id);
-        $editCustomerPersonal->update($data);
-        return $editCustomerPersonal;
+        return DB::transaction(function () use ($id, $data) {
+            $customerPersonal = CustomerPersonal::findOrFail($id);
+
+            // Update data customer personal
+            $customerPersonal->update($data);
+
+            // Initialize attachments
+            $attachments = [];
+
+            // handle for single attachment
+            if (!empty($data['file_name']) && !empty($data['file_path'])) {
+                $attachments[] = [
+                    'file_name' => $data['file_name'],
+                    'file_path' => $data['file_path'],
+                    'note'      => $data['note'] ?? null,
+                ];
+            }
+
+            // handle for multiple attachments
+            if (!empty($data['attachments']) && is_array($data['attachments'])) {
+                $attachments = array_merge($attachments, $data['attachments']);
+            }
+
+            // update attachments
+            if (!empty($attachments)) {
+                $customerPersonal->attachments()->delete(); // delete first
+                $customerPersonal->attachments()->createMany($attachments); // create again
+            }
+
+            // return updated customer personal
+            return $customerPersonal;
+        });
     }
 
     /**

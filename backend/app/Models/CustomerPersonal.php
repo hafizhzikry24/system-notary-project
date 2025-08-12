@@ -5,7 +5,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +34,7 @@ class CustomerPersonal extends Model
         'province',
         'postal_code',
         'npwp',
+        'note',
     ];
 
     /**
@@ -88,6 +88,19 @@ class CustomerPersonal extends Model
         ];
     }
 
+    /**
+     * Get the customer personal attchments.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Attchments(){
+        return $this->hasMany(CustomerPersonalAttchment::class);
+    }
+
+    /**
+     * Get the full name.
+     *
+     * @return string
+     */
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");

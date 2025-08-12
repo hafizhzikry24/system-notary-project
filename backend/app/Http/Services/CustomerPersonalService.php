@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 
 class CustomerPersonalService
@@ -65,7 +66,11 @@ class CustomerPersonalService
      */
     public function update(int $id, array $data)
     {
-        return $this->customerPersonalRepository->updateById($id, $data);
+        try {
+            return $this->customerPersonalRepository->updateById($id, $data);
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
     }
 
     /**

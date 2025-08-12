@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerPersonalRequest extends FormRequest
@@ -21,10 +22,10 @@ class CustomerPersonalRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'first_name' => 'required|string',
             'last_name' => 'nullable|string',
-            'nik' => 'nullable|string',
+            'nik' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date',
             'birth_place' => 'nullable|string',
             'gender' => 'nullable|string',
@@ -36,7 +37,27 @@ class CustomerPersonalRequest extends FormRequest
             'province' => 'nullable|string',
             'postal_code' => 'nullable|string',
             'npwp' => 'required|string',
+            'note' => 'nullable|string',
+
+            // For single file attachment (optional)
+            'file_name' => 'nullable|string',
+            'file_path' => 'nullable|string',
+
+            // For multiple attachments (optional)
+            'attachments' => 'nullable|array',
+            'attachments.*.file_name' => 'required_with:attachments|string',
+            'attachments.*.file_path' => 'required_with:attachments|string',
+            'attachments.*.note' => 'nullable|string',
         ];
+
+        // Unique email rule for both create and update
+        $rules['email'] = [
+            'required',
+            'email',
+            Rule::unique('customer_personals')->ignore($this->route('id')),
+        ];
+
+        return $rules;
     }
 
     /**
@@ -66,6 +87,19 @@ class CustomerPersonalRequest extends FormRequest
             'postal_code.string' => 'Postal code must be a string.',
             'phone.string' => 'Phone must be a string.',
             'npwp.string' => 'NPWP must be a string.',
+            'note.string' => 'Note must be a string.',
+
+            // For single file attachment (optional)
+            'file_name.string' => 'File name must be a string.',
+            'file_path.string' => 'File path must be a string.',
+
+            // For multiple attachments (optional)
+            'attachments.array' => 'Attachments must be an array.',
+            'attachments.*.file_name.required_with' => 'File name is required when attachments are provided.',
+            'attachments.*.file_name.string' => 'File name in attachments must be a string.',
+            'attachments.*.file_path.required_with' => 'File path is required when attachments are provided.',
+            'attachments.*.file_path.string' => 'File path in attachments must be a string.',
+            'attachments.*.note.string' => 'Note in attachments must be a string.',
         ];
     }
 }
