@@ -12,7 +12,7 @@ export default function ProfileSettingsPage() {
     <ProtectedRoute>
       <Layout>
         <div className="min-h-screen bg-white text-blue-950 flex items-center justify-center p-4 overflow-hidden">
-          <div className="shadow-input mx-auto w-full max-w-3xl rounded-xl bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+          <div className="shadow-input mx-auto w-full max-w-5xl rounded-xl bg-white p-4 md:rounded-2xl md:p-4 dark:bg-black">
             <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">Profile Settings</h2>
             <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">update data diri anda.</p>
             <ProfileSettingsForm />

@@ -243,7 +243,7 @@ export function ProfileSettingsForm() {
         </Label>
 
         {/* MapDynamic is client-only; passing latitude/longitude values (primitive strings) */}
-        <div className="h-56 rounded-md border overflow-hidden">
+        <div className="h-72 rounded-md border overflow-hidden">
           <MapDynamic
             initialLatitude={latitude}
             initialLongitude={longitude}
