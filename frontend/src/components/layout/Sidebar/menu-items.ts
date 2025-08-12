@@ -15,7 +15,7 @@ export const navItems: MenuItem[] = [
   // },
   {
     title: "Pelanggan",
-    href: "/pelaggan",
+    href: "/pelanggan",
     icon: Landmark,
     children: [
       { title: "Perorangan", href: "/perorangan" },
