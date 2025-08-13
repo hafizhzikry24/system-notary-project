@@ -24,7 +24,7 @@ class CustomerPersonalController extends Controller
     protected CustomerPersonalService $customerPersonalService;
 
     /**
-     * RoleController constructor.
+     * Customer PersonalController constructor.
      *
      * @param CustomerPersonalService $customerPersonalService;
      */
@@ -111,14 +111,14 @@ class CustomerPersonalController extends Controller
             }
 
             DB::commit();
-            return $this->successResponse('customer_personal', $customerPersonal, 'Role updated successfully');
+            return $this->successResponse('customer_personal', $customerPersonal, 'Customer Personal updated successfully');
 
         } catch (ValidationException $e) {
             DB::rollBack();
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->errorResponse('Failed to update role: ' . $e->getMessage(), 500);
+            return $this->errorResponse('Failed to update Customer Personal: ' . $e->getMessage(), 500);
         }
     }
 
