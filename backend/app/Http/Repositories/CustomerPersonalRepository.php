@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Enums\CustomerPersonal\CustomerPersonalGenderEnum;
-use App\Http\Repositories\Interface\RoleRepositoryInterface;
+use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 use App\Enums\CustomerPersonal\CustomerPersonalMaritalStatusEnum;
 
-class CustomerPersonalRepository implements RoleRepositoryInterface
+class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
 {
     /**
      * Get all customer personals with optional filters.
@@ -167,8 +167,11 @@ class CustomerPersonalRepository implements RoleRepositoryInterface
      */
     public function deleteById(int $id)
     {
-        $deleteCustomerPersonal = CustomerPersonal::findOrFail($id);
-        return $deleteCustomerPersonal->delete();
+        $customerPersonal = CustomerPersonal::findOrFail($id);
+
+        $customerPersonal->attachments()->delete();
+
+        return $customerPersonal->delete();
     }
 
     /**

@@ -92,8 +92,8 @@ class CustomerPersonal extends Model
      * Get the customer personal attchments.
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function Attchments(){
-        return $this->hasMany(CustomerPersonalAttchment::class);
+    public function attachments(){
+        return $this->hasMany(CustomerPersonalAttchment::class, 'customer_personal_id', 'id');
     }
 
     /**
