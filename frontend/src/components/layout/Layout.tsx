@@ -51,7 +51,7 @@ export default function Layout({ children }: LayoutProps) {
           closeSidebar={() => setSidebarOpen(false)}
         />
 
-        <main className="flex-1 overflow-y-auto bg-gray-50 w-full">
+        <main className="flex-1 overflow-y-auto bg-white w-full">
           <Toaster position="top-right" />
           {children}
         </main>
