@@ -7,11 +7,13 @@ use App\Http\Repositories\AuthRepository;
 use App\Http\Repositories\RoleRepository;
 use App\Http\Repositories\CustomerBankRepository;
 use App\Http\Repositories\ProfileSettingRepository;
+use App\Http\Repositories\CustomerCompanyRepository;
 use App\Http\Repositories\CustomerPersonalRepository;
 use App\Http\Repositories\Interface\AuthRepositoryInterface;
 use App\Http\Repositories\Interface\RoleRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
 use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
+use App\Http\Repositories\Interface\CustomerCompanyRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProfileSettingRepositoryInterface::class, ProfileSettingRepository::class); // Bind the ProfileSettingRepositoryInterface to ProfileSettingRepository
         $this->app->bind(CustomerPersonalRepositoryInterface::class, CustomerPersonalRepository::class); // Bind the CustomerPersonalRepositoryInterface to CustomerPersonalRepository
         $this->app->bind(CustomerBankRepositoryInterface::class, CustomerBankRepository::class); // Bind the CustomerBankRepositoryInterface to CustomerBankRepository
+        $this->app->bind(CustomerCompanyRepositoryInterface::class, CustomerCompanyRepository::class); // Bind the CustomerCompanyRepositoryInterface to CustomerCompanyRepository
     }
 
     /**
