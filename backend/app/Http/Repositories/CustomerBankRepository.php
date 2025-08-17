@@ -10,7 +10,7 @@ use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
 class CustomerBankRepository implements CustomerBankRepositoryInterface
 {
     /**
-     * Get all customer personals with optional filters.
+     * Get all customer banks with optional filters.
      *
      * @param array $filters
      * @return LengthAwarePaginator
