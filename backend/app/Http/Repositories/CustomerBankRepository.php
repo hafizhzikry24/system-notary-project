@@ -63,7 +63,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
     }
 
     /**
-     * Create a new customer personal.
+     * Create a new customer bank.
      *
      * @param array $data
      * @return mixed
@@ -100,7 +100,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
     }
 
     /**
-     * Find a customer personal by ID.
+     * Find a customer bank by ID.
      *
      * @param int $id
      * @return mixed
@@ -112,7 +112,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
     }
 
     /**
-     * Update a customer personal by ID.
+     * Update a customer bank by ID.
      *
      * @param int $id
      * @param array $data
@@ -123,7 +123,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
         return DB::transaction(function () use ($id, $data) {
             $customerBank = CustomerBank::findOrFail($id);
 
-            // Update data customer personal
+            // Update data customer bank
             $customerBank->update($data);
 
             // Initialize attachments
@@ -149,13 +149,13 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                 $customerBank->attachments()->createMany($attachments); // create again
             }
 
-            // return updated customer personal
+            // return updated customer bank
             return $customerBank;
         });
     }
 
     /**
-     * Delete a customer personal by ID.
+     * Delete a customer bank by ID.
      *
      * @param int $id
      * @return mixed
