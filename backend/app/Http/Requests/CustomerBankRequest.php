@@ -26,7 +26,7 @@ class CustomerBankRequest extends FormRequest
             'name' => 'nullable|string',
             'contact_person' => 'nullable|string',
             'license_number' => 'nullable|string',
-            'email' => 'required|email|unique:customer_personals,email,' . $this->route('id'),
+            'email' => 'required|email|unique:customer_banks,email,' . $this->route('id'),
             'phone' => 'required|string',
             'address' => 'nullable|string',
             'city' => 'nullable|string',
