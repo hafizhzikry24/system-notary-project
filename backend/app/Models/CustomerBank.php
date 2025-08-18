@@ -67,7 +67,7 @@ class CustomerBank extends Model
     public function getDefaultOrderBy()
     {
         return [
-            'column_name' => 'first_name',
+            'column_name' => 'name',
             'direction' => 'asc',
         ];
     }

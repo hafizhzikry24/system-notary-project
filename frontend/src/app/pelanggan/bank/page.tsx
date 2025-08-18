@@ -71,7 +71,7 @@ export default function CustomerBankPage() {
     fetchBank();
   }, [fetchBank]);
 
-  const handleEditBank = (id: number) => router.push(`/pelanggan/perorangan/${id}`);
+  const handleEditBank = (id: number) => router.push(`/pelanggan/bank/${id}`);
 
   // Single delete modal
   const handleDelete = (id: number) => setDeleteModal({ isOpen: true, bankId: id, isBatch: false });
@@ -187,12 +187,15 @@ export default function CustomerBankPage() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
               {/* Optional add button (uncomment if route ready) */}
-              {/* <button
-                onClick={() => router.push("/pelanggan/perorangan/create")}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
+              <button
+                onClick={() => router.push("/pelanggan/bank/create")}
+                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
               >
-                <Plus className="h-4 w-4" /> Add Customer
-              </button> */}
+                <Plus className="h-4 w-4" />  
+                <div className="inline md:hidden sm:hidden lg:inline">
+                  Bank/Leasing
+                </div>
+              </button>
             </div>
           </div>
 

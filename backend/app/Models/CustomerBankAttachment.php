@@ -25,6 +25,14 @@ class CustomerBankAttachment extends Model
         'note',
     ];
 
+
+    /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['file_url'];
+
     /**
      * Get the options for logging activity.
      *
@@ -44,5 +52,14 @@ class CustomerBankAttachment extends Model
     public function customerBank()
     {
         return $this->belongsTo(CustomerBank::class);
+    }
+
+    /**
+     * Get the file path.
+     * @return string
+     */
+    public function getFileUrlAttribute()
+    {
+        return asset('storage/' . $this->attributes['file_path']);
     }
 }
