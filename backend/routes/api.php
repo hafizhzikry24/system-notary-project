@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerPersonalController;
@@ -51,5 +52,14 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [CustomerBankController::class, 'store']);
         Route::put('/{id}', [CustomerBankController::class, 'update']);
         Route::delete('/{id}', [CustomerBankController::class, 'destroy']);
+    });
+  
+  //customer company endpoint
+    Route::prefix('customer-companies')->group(function () {
+        Route::get('/', [CustomerCompanyController::class, 'index']);
+        Route::get('/{id}', [CustomerCompanyController::class, 'show']);
+        Route::post('/', [CustomerCompanyController::class, 'store']);
+        Route::put('/{id}', [CustomerCompanyController::class, 'update']);
+        Route::delete('/{id}', [CustomerCompanyController::class, 'destroy']);
     });
 });
