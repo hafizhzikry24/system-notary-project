@@ -71,7 +71,7 @@ export default function CustomerCompanyPage() {
     fetchCompany();
   }, [fetchCompany]);
 
-  const handleEditCompany = (id: number) => router.push(`/pelanggan/perorangan/${id}`);
+  const handleEditCompany = (id: number) => router.push(`/pelanggan/perusahaan/${id}`);
 
   // Single delete modal
   const handleDelete = (id: number) => setDeleteModal({ isOpen: true, companyId: id, isBatch: false });
@@ -149,10 +149,10 @@ export default function CustomerCompanyPage() {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                Pelanggan Company & Leasing
+                Pelanggan Perusahaan
               </h2>
               <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                Kelola data pelanggan company/leasing. Cari, pilih, hapus batch, dan edit dengan cepat.
+                Kelola data pelanggan Peruahaan. Cari, pilih, hapus batch, dan edit dengan cepat.
               </p>
             </div>
             <div className="flex w-full md:w-auto items-center gap-2">
@@ -161,7 +161,7 @@ export default function CustomerCompanyPage() {
                 <input
                   id="search"
                   type="text"
-                  placeholder="Cari nama company, PIC, atau kota..."
+                  placeholder="Cari nama perusahaan, PIC, atau kota..."
                   className="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-9 py-2.5 text-sm outline-none ring-2 ring-transparent focus:ring-neutral-300 dark:focus:ring-neutral-700 transition"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -187,12 +187,15 @@ export default function CustomerCompanyPage() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
               {/* Optional add button (uncomment if route ready) */}
-              {/* <button
-                onClick={() => router.push("/pelanggan/perorangan/create")}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
+              <button
+                onClick={() => router.push("/pelanggan/perusahaan/create")}
+                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
               >
-                <Plus className="h-4 w-4" /> Add Customer
-              </button> */}
+                <Plus className="h-4 w-4" />  
+                <div className="inline md:hidden sm:hidden lg:inline">
+                  Perusahaan
+                </div>
+              </button>
             </div>
           </div>
 
@@ -260,13 +263,13 @@ export default function CustomerCompanyPage() {
                         </div>
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Nama Company/Leasing
+                        Nama Perusahaan
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
                         Utusan
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Nomor Company/Leasing
+                        Nomor Perusahaan
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
                         Kota
