@@ -3,7 +3,9 @@
 namespace App\Http\Repositories;
 
 use App\Models\CustomerBank;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
 
@@ -73,26 +75,30 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
         return DB::transaction(function () use ($data) {
             $customerBank = CustomerBank::create($data);
 
-            // initialize attachments
-            $attachments = [];
+            // handle single attachment (legacy)
+            if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
+                $path = $data['file']->store('customer_bank_attachments', 'public');
 
-            // handle for single attachment
-            if (!empty($data['file_name']) && !empty($data['file_path'])) {
-                $attachments[] = [
-                    'file_name' => $data['file_name'],
-                    'file_path' => $data['file_path'],
+                $customerBank->attachments()->create([
+                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_path' => $path,
                     'note'      => $data['note'] ?? null,
-                ];
+                ]);
             }
 
-            // handle for multiple attachments
+            // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
-                $attachments = array_merge($attachments, $data['attachments']);
-            }
+                foreach ($data['attachments'] as $attachment) {
+                    if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
+                        $path = $attachment['file']->store('customer_bank_attachments', 'public');
 
-            // create attachments
-            if (!empty($attachments)) {
-                $customerBank->attachments()->createMany($attachments);
+                        $customerBank->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    }
+                }
             }
 
             return $customerBank;
@@ -107,7 +113,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
      */
     public function findById(int $id)
     {
-        $findcustomerBank = CustomerBank::findOrFail($id);
+        $findcustomerBank = CustomerBank::with('attachments')->findOrFail($id);
         return $findcustomerBank;
     }
 
@@ -126,27 +132,30 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
             // Update data customer bank
             $customerBank->update($data);
 
-            // Initialize attachments
-            $attachments = [];
+            // handle single attachment (legacy)
+            if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
+                $path = $data['file']->store('customer_bank_attachments', 'public');
 
-            // handle for single attachment
-            if (!empty($data['file_name']) && !empty($data['file_path'])) {
-                $attachments[] = [
-                    'file_name' => $data['file_name'],
-                    'file_path' => $data['file_path'],
+                $customerBank->attachments()->create([
+                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_path' => $path,
                     'note'      => $data['note'] ?? null,
-                ];
+                ]);
             }
 
-            // handle for multiple attachments
+            // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
-                $attachments = array_merge($attachments, $data['attachments']);
-            }
+                foreach ($data['attachments'] as $attachment) {
+                    if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
+                        $path = $attachment['file']->store('customer_bank_attachments', 'public');
 
-            // update attachments
-            if (!empty($attachments)) {
-                $customerBank->attachments()->delete(); // delete first
-                $customerBank->attachments()->createMany($attachments); // create again
+                        $customerBank->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    }
+                }
             }
 
             // return updated customer bank
