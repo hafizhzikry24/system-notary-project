@@ -41,8 +41,9 @@ class CustomerCompanyRequest extends FormRequest
 
             // For multiple attachments (optional)
             'attachments' => 'nullable|array',
+            'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,csv,xlsx',
             'attachments.*.file_name' => 'required_with:attachments|string',
-            'attachments.*.file_path' => 'required_with:attachments|string',
+            'attachments.*.file_path' => 'nullable|string',
             'attachments.*.note' => 'nullable|string',
         ];
 

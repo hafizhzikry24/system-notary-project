@@ -5,6 +5,7 @@ export interface CustomerCompany {
     name: string,
     contact_person: string,
     license_number: string,
+    deed_number: string,
     email: string,
     phone: string,
     address: string,
