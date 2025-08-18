@@ -21,7 +21,7 @@ export interface CustomerPersonal {
     note: string,
     created_at: string,
     updated_at: string
-    customer_personal_attachments: CustomerPersonalAttachment[]
+    attachments: CustomerPersonalAttachment[]
 }
 
 export interface PaginationData {

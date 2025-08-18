@@ -26,6 +26,13 @@ class CustomerPersonalAttchment extends Model
     ];
 
     /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['file_url'];
+
+    /**
      * Get the options for logging activity.
      *
      * @return LogOptions
@@ -44,5 +51,14 @@ class CustomerPersonalAttchment extends Model
     public function customerPersonal()
     {
         return $this->belongsTo(CustomerPersonal::class, 'customer_personal_id', 'id');
+    }
+
+    /**
+     * Get the file path.
+     * @return string
+     */
+    public function getFileUrlAttribute()
+    {
+        return asset('storage/' . $this->attributes['file_path']);
     }
 }

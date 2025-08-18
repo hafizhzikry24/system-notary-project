@@ -3,12 +3,13 @@
 namespace App\Http\Repositories;
 
 use App\Models\CustomerPersonal;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Enums\CustomerPersonal\CustomerPersonalGenderEnum;
-use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 use App\Enums\CustomerPersonal\CustomerPersonalMaritalStatusEnum;
+use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 
 class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
 {
@@ -78,26 +79,30 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
         return DB::transaction(function () use ($data) {
             $customerPersonal = CustomerPersonal::create($data);
 
-            // initialize attachments
-            $attachments = [];
+            // handle single attachment (legacy)
+            if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
+                $path = $data['file']->store('customer_personal_attachments', 'public');
 
-            // handle for single attachment
-            if (!empty($data['file_name']) && !empty($data['file_path'])) {
-                $attachments[] = [
-                    'file_name' => $data['file_name'],
-                    'file_path' => $data['file_path'],
+                $customerPersonal->attachments()->create([
+                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_path' => $path,
                     'note'      => $data['note'] ?? null,
-                ];
+                ]);
             }
 
-            // handle for multiple attachments
+            // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
-                $attachments = array_merge($attachments, $data['attachments']);
-            }
+                foreach ($data['attachments'] as $attachment) {
+                    if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
+                        $path = $attachment['file']->store('customer_personal_attachments', 'public');
 
-            // create attachments
-            if (!empty($attachments)) {
-                $customerPersonal->attachments()->createMany($attachments);
+                        $customerPersonal->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    }
+                }
             }
 
             return $customerPersonal;
@@ -112,7 +117,7 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
      */
     public function findById(int $id)
     {
-        $findCustomerPersonal = CustomerPersonal::findOrFail($id);
+        $findCustomerPersonal = CustomerPersonal::with('attachments')->findOrFail($id);
         return $findCustomerPersonal;
     }
 
@@ -131,27 +136,30 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
             // Update data customer personal
             $customerPersonal->update($data);
 
-            // Initialize attachments
-            $attachments = [];
+           // handle single attachment (legacy)
+            if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
+                $path = $data['file']->store('customer_personal_attachments', 'public');
 
-            // handle for single attachment
-            if (!empty($data['file_name']) && !empty($data['file_path'])) {
-                $attachments[] = [
-                    'file_name' => $data['file_name'],
-                    'file_path' => $data['file_path'],
+                $customerPersonal->attachments()->create([
+                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_path' => $path,
                     'note'      => $data['note'] ?? null,
-                ];
+                ]);
             }
 
-            // handle for multiple attachments
+            // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
-                $attachments = array_merge($attachments, $data['attachments']);
-            }
+                foreach ($data['attachments'] as $attachment) {
+                    if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
+                        $path = $attachment['file']->store('customer_personal_attachments', 'public');
 
-            // update attachments
-            if (!empty($attachments)) {
-                $customerPersonal->attachments()->delete(); // delete first
-                $customerPersonal->attachments()->createMany($attachments); // create again
+                        $customerPersonal->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    }
+                }
             }
 
             // return updated customer personal

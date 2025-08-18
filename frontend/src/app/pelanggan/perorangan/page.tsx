@@ -188,12 +188,15 @@ export default function CustomerPersonalPage() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
               {/* Optional add button (uncomment if route ready) */}
-              {/* <button
+              <button
                 onClick={() => router.push("/pelanggan/perorangan/create")}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
+                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
               >
-                <Plus className="h-4 w-4" /> Add Customer
-              </button> */}
+                <Plus className="h-4 w-4" />  
+                <div className="inline md:hidden sm:hidden lg:inline">
+                  Pelanggan
+                </div>
+              </button>
             </div>
           </div>
 
@@ -471,4 +474,3 @@ function EmptyState({ onReset }: { onReset: () => void }) {
     </div>
   );
 }
-
