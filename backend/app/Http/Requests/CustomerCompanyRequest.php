@@ -51,7 +51,7 @@ class CustomerCompanyRequest extends FormRequest
         $rules['email'] = [
             'required',
             'email',
-            Rule::unique('customer_personals')->ignore($this->route('id')),
+            Rule::unique('customer_companies')->ignore($this->route('id')),
         ];
 
         return $rules;
