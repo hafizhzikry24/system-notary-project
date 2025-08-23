@@ -5,12 +5,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Repositories\AuthRepository;
 use App\Http\Repositories\RoleRepository;
+use App\Http\Repositories\EventRepository;
 use App\Http\Repositories\CustomerBankRepository;
 use App\Http\Repositories\ProfileSettingRepository;
 use App\Http\Repositories\CustomerCompanyRepository;
 use App\Http\Repositories\CustomerPersonalRepository;
 use App\Http\Repositories\Interface\AuthRepositoryInterface;
 use App\Http\Repositories\Interface\RoleRepositoryInterface;
+use App\Http\Repositories\Interface\EventRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
 use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerCompanyRepositoryInterface;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CustomerPersonalRepositoryInterface::class, CustomerPersonalRepository::class); // Bind the CustomerPersonalRepositoryInterface to CustomerPersonalRepository
         $this->app->bind(CustomerBankRepositoryInterface::class, CustomerBankRepository::class); // Bind the CustomerBankRepositoryInterface to CustomerBankRepository
         $this->app->bind(CustomerCompanyRepositoryInterface::class, CustomerCompanyRepository::class); // Bind the CustomerCompanyRepositoryInterface to CustomerCompanyRepository
+        $this->app->bind(EventRepositoryInterface::class, EventRepository::class); // Bind the EventRepositoryInterface to EventRepository
     }
 
     /**

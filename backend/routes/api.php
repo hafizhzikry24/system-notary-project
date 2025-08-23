@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\CustomerCompanyController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\ProfilesettingController;
+use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\CustomerPersonalController;
 
 // endpoint for authentication
@@ -33,7 +34,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/gender-options', [ProfilesettingController::class, 'getGenderValues']);
         Route::put('/', [ProfilesettingController::class, 'update']);
     });
-  
+
     //customer personals endpoint
     Route::prefix('customer-personals')->group(function () {
         Route::get('/gender-options', [CustomerPersonalController::class, 'getGenderValues']);
@@ -44,7 +45,7 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{id}', [CustomerPersonalController::class, 'update']);
         Route::delete('/{id}', [CustomerPersonalController::class, 'destroy']);
     });
-  
+
     //customer bank endpoint
     Route::prefix('customer-banks')->group(function () {
         Route::get('/', [CustomerBankController::class, 'index']);
@@ -53,13 +54,23 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{id}', [CustomerBankController::class, 'update']);
         Route::delete('/{id}', [CustomerBankController::class, 'destroy']);
     });
-  
-  //customer company endpoint
+
+    //customer company endpoint
     Route::prefix('customer-companies')->group(function () {
         Route::get('/', [CustomerCompanyController::class, 'index']);
         Route::get('/{id}', [CustomerCompanyController::class, 'show']);
         Route::post('/', [CustomerCompanyController::class, 'store']);
         Route::put('/{id}', [CustomerCompanyController::class, 'update']);
         Route::delete('/{id}', [CustomerCompanyController::class, 'destroy']);
+    });
+
+    //event endpoint
+    Route::prefix('events')->group(function () {
+        Route::get('/priority-options', [EventController::class, 'getPriorityEvents']);
+        Route::get('/', [EventController::class, 'index']);
+        Route::get('/{id}', [EventController::class, 'show']);
+        Route::post('/', [EventController::class, 'store']);
+        Route::put('/{id}', [EventController::class, 'update']);
+        Route::delete('/{id}', [EventController::class, 'destroy']);
     });
 });
