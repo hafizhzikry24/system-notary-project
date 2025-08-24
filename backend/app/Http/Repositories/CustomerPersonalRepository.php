@@ -81,10 +81,17 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('customer_personal_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'customer_personal_attachments',
+                    $filePath,
+                    'public'
+                );
 
                 $customerPersonal->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -94,10 +101,17 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('customer_personal_attachments', 'public');
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'customer_personal_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $customerPersonal->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
                             'note'      => $attachment['note'] ?? null,
                         ]);
@@ -138,10 +152,19 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
 
            // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('customer_personal_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'customer_personal_attachments',
+                    $filePath,
+                    'public'
+                );
+
+                $customerPersonal->attachments()->delete();
 
                 $customerPersonal->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -149,13 +172,29 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
 
             // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
+                $customerPersonal->attachments()->delete();
+
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('customer_personal_attachments', 'public');
+
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'customer_personal_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $customerPersonal->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    } elseif (!empty($attachment['file_path'])) {
+                        $customerPersonal->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? '',
+                            'file_path' => $attachment['file_path'],
                             'note'      => $attachment['note'] ?? null,
                         ]);
                     }
@@ -163,7 +202,7 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
             }
 
             // return updated customer personal
-            return $customerPersonal;
+            return $customerPersonal->load('attachments');
         });
     }
 
@@ -202,5 +241,39 @@ class CustomerPersonalRepository implements CustomerPersonalRepositoryInterface
         $maritalStatusValues = CustomerPersonalMaritalStatusEnum::values();
 
         return $maritalStatusValues;
+    }
+
+    /**
+     * Generate a file name for the uploaded file.
+     *
+     * @param UploadedFile $file
+     * @param string|null $customName
+     * @return string
+     */
+    private function makeFileName(?string $customName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $customName
+                ? pathinfo($customName, PATHINFO_FILENAME)
+                : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        }
+
+        return pathinfo($customName ?? $file, PATHINFO_FILENAME);
+    }
+
+    /**
+     * Generate a file path for the uploaded file.
+     *
+     * @param string $fileName
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function makeFilePath(string $fileName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $fileName . '.' . $file->getClientOriginalExtension();
+        }
+
+        return $fileName;
     }
 }
