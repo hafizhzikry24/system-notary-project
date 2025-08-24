@@ -47,7 +47,7 @@ export const navItems: MenuItem[] = [
     icon: Grid2x2Check,
     children: [
       { title: "Partner", href: "/partner" },
-      { title: "Template Akta", href: "/template" },
+      { title: "Template Akta", href: "/template-akta" },
     ],
   },
   {

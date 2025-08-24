@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\CustomerBankController;
+use App\Http\Controllers\TemplateDeedController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\CustomerPersonalController;
@@ -72,5 +74,23 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [EventController::class, 'store']);
         Route::put('/{id}', [EventController::class, 'update']);
         Route::delete('/{id}', [EventController::class, 'destroy']);
+     });
+
+    //partner endpoint
+    Route::prefix('partners')->group(function () {
+        Route::get('/', [PartnerController::class, 'index']);
+        Route::get('/{id}', [PartnerController::class, 'show']);
+        Route::post('/', [PartnerController::class, 'store']);
+        Route::put('/{id}', [PartnerController::class, 'update']);
+        Route::delete('/{id}', [PartnerController::class, 'destroy']);
+    });
+
+    //template deed endpoint
+    Route::prefix('template-deeds')->group(function () {
+        Route::get('/', [TemplateDeedController::class, 'index']);
+        Route::get('/{id}', [TemplateDeedController::class, 'show']);
+        Route::post('/', [TemplateDeedController::class, 'store']);
+        Route::put('/{id}', [TemplateDeedController::class, 'update']);
+        Route::delete('/{id}', [TemplateDeedController::class, 'destroy']);
     });
 });
