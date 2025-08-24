@@ -27,7 +27,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             size="icon"
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
-            className="lg:hidden"
+            className="lg:hidden cursor-pointer"
           >
             <Menu className="h-6 w-6" />
           </Button>
@@ -35,13 +35,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className='cursor-pointer'>
             <Bell className="h-5 w-5" />
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2">
+              <Button variant="ghost" className="flex items-center gap-2 cursor-pointer">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback>
                     {user?.name?.charAt(0).toUpperCase()}

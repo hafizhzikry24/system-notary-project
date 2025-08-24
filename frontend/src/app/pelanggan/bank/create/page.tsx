@@ -276,7 +276,7 @@ export default function CreateCustomerBank() {
                 <DialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="gap-2 hover:bg-slate-50 transition-colors bg-transparent"
+                    className="gap-2 cursor-pointer hover:bg-slate-50 transition-colors bg-transparent"
                   >
                     <Paperclip className="w-4 h-4" />
                     Manage Attachments
@@ -310,7 +310,7 @@ export default function CreateCustomerBank() {
                         <p className="text-sm text-slate-500 mb-6">
                           Start by adding your first attachment
                         </p>
-                        <Button onClick={addAttachment} className="gap-2">
+                        <Button onClick={addAttachment} className="gap-2 cursor-pointer">
                           <Plus className="w-4 h-4" />
                           Add First Attachment
                         </Button>
@@ -414,7 +414,7 @@ export default function CreateCustomerBank() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => removeAttachment(i)}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 hover:bg-red-50"
+                                className="opacity-0 cursor-pointer group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 hover:bg-red-50"
                               >
                                 <X className="w-4 h-4" />
                               </Button>
@@ -430,7 +430,7 @@ export default function CreateCustomerBank() {
                       <Button
                         variant="outline"
                         onClick={addAttachment}
-                        className="w-full gap-2 border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors bg-transparent"
+                        className="w-full gap-2 cursor-pointer border-dashed border-slate-300 hover:border-blue-400 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors bg-transparent"
                       >
                         <Plus className="w-4 h-4" />
                         Add Another Attachment
@@ -439,12 +439,12 @@ export default function CreateCustomerBank() {
                   )}
 
                   <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
-                    <Button variant="outline" onClick={() => setOpen(false)}>
+                    <Button variant="outline" className="cursor-pointer" onClick={() => setOpen(false)}>
                       Cancel
                     </Button>
                     <Button
                       onClick={() => setOpen(false)}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-blue-600 hover:bg-blue-700 cursor-pointer"
                     >
                       Save Changes
                     </Button>
@@ -453,7 +453,7 @@ export default function CreateCustomerBank() {
               </Dialog>
             </div>
 
-            <Button type="submit" className="w-full" disabled={saving}>
+            <Button type="submit" className="w-full cursor-pointer" disabled={saving}>
               {saving ? "Creating..." : "Create Customer Bank"}
             </Button>
           </form>

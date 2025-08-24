@@ -42,7 +42,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
             <h2 className="text-xl mb-2 font-semibold">Menu</h2>
             <button
               onClick={closeSidebar}
-              className="rounded-md p-2 mb-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+              className="rounded-md p-2 mb-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
             >
               <svg
                 className="h-6 w-6"

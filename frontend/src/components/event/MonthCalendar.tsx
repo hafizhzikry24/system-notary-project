@@ -72,7 +72,7 @@ export function MonthCalendar({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={onToday} className="px-3 py-2 text-sm font-medium bg-transparent">
+            <Button variant="outline" onClick={onToday} className="px-3 py-2 text-sm font-medium bg-transparent cursor-pointer">
               Today
             </Button>
             <div className="flex items-center rounded-lg border">
@@ -80,7 +80,7 @@ export function MonthCalendar({
                 variant="ghost"
                 size="sm"
                 onClick={onPrevMonth}
-                className="rounded-r-none border-r px-3 py-2 hover:bg-gray-50"
+                className="rounded-r-none border-r px-3 py-2 hover:bg-gray-50 cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Previous month</span>
@@ -89,7 +89,7 @@ export function MonthCalendar({
                 variant="ghost"
                 size="sm"
                 onClick={onNextMonth}
-                className="rounded-l-none px-3 py-2 hover:bg-gray-50"
+                className="rounded-l-none px-3 py-2 hover:bg-gray-50 cursor-pointer"
               >
                 <ChevronRight className="h-4 w-4" />
                 <span className="sr-only">Next month</span>
@@ -122,7 +122,7 @@ export function MonthCalendar({
                 key={day.toISOString()}
                 onClick={() => onSelectDay(day)}
                 className={[
-                  "flex flex-col rounded-lg border p-1 sm:p-2 text-left transition-all duration-200 min-h-[50px] sm:min-h-[100px] sm:min-w-[155px] max-w-[50px]",
+                  "flex flex-col cursor-pointer rounded-lg border p-1 sm:p-2 text-left transition-all duration-200 min-h-[50px] sm:min-h-[100px] sm:min-w-[155px] max-w-[50px]",
                   inMonth
                     ? "bg-white hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm"
                     : "bg-gray-50/50 hover:bg-gray-100",
