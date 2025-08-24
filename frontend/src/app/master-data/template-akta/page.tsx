@@ -281,7 +281,7 @@ export default function TemplateDeedPage() {
                           className="text-center py-10 text-gray-700 dark:text-gray-300"
                         >
                           <p className="text-lg font-semibold">
-                            No templatDeed data found.
+                            No Template Deed data found.
                           </p>
                           <p className="mt-2">
                             Try adjusting your search criteria or add a new.

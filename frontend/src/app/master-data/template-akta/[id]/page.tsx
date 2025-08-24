@@ -56,17 +56,30 @@ export default function CreateTemplateDeed() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [TemplateDeed] = await Promise.all([
-          api.get(`/template-deeds/${id}`),
-        ]);
+        const { data } = await api.get(`/template-deeds/${id}`);
 
-        const template_deed = TemplateDeed.data.template_deed;
+        const template_deed = data.template_deed;
+
         setFormData({
-          ...template_deed,
-          attachments: template_deed.attachments, // mapping manual
+          id: template_deed.id,
+          type: template_deed.type,
+          description: template_deed.description,
         });
-        setAttachments(template_deed.attachments || []);
 
+        // ⚡ Pastikan semua field ada
+        const mappedAttachments = (template_deed.attachments || []).map((att: any) => ({
+          id: att.id,
+          template_deed_id: att.template_deed_id,
+          file_name: att.file_name || "",
+          file_path: att.file_path || "",
+          file_url: att.file_url || "",
+          note: att.note || "",
+          created_at: att.created_at,
+          updated_at: att.updated_at,
+          file: null,
+        }));
+
+        setAttachments(mappedAttachments);
       } catch (err: any) {
         showError("Failed to load data!");
       } finally {
@@ -76,7 +89,6 @@ export default function CreateTemplateDeed() {
 
     if (id) fetchData();
   }, [id]);
-
 
   const handleInputChange = (name: keyof TemplateDeed, value: string) => {
     setFormData((prev) => ({
@@ -133,26 +145,35 @@ export default function CreateTemplateDeed() {
       });
       // attachments
       attachments.forEach((att, i) => {
+        if (att.id) {
+          formDataToSend.append(`attachments[${i}][id]`, String(att.id));
+        }
+
         if (att.file) {
+          // ada file baru → kirim binary
           formDataToSend.append(`attachments[${i}][file]`, att.file);
         }
-        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name);
-        if (att.note) {
-          formDataToSend.append(`attachments[${i}][note]`, att.note);
-        }
+
+        formDataToSend.append(
+          `attachments[${i}][file_path]`,
+          att.file_path || att.file_url || ""
+        );
+
+        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name || "");
+        formDataToSend.append(`attachments[${i}][note]`, att.note || "");
       });
 
-      await api.post("/template-deeds", formDataToSend, {
+      await api.post(`/template-deeds/${id}?_method=PUT`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showSuccess("Template Deed created successfully!");
+      showSuccess("Template Deed updated successfully!");
       router.push("/master-data/template-akta");
     } catch (error: any) {
       if (error.response?.status === 422) {
         showValidationErrors(error.response.data.errors);
       } else {
-        showError("Failed to create Template Deed!");
+        showError("Failed to update Template Deed!");
       }
     } finally {
       setSaving(false);
@@ -172,7 +193,7 @@ export default function CreateTemplateDeed() {
     <ProtectedRoute>
       <Layout>
         <div className="container mx-auto px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Create Template Deed</h1>
+          <h1 className="text-2xl font-bold mb-6">Edit Template Deed</h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
               <LabelInputContainer>
@@ -283,7 +304,7 @@ export default function CreateTemplateDeed() {
                                     <input
                                       id={`attachment-${i}`}
                                       type="file"
-                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx"
+                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx,.doc,.docx,application/msword"
                                       onChange={(e) =>
                                         updateAttachment(
                                           i,
@@ -394,7 +415,7 @@ export default function CreateTemplateDeed() {
             </div>
 
             <Button type="submit" className="w-full" disabled={saving}>
-              {saving ? "Creating..." : "Create Template Deed"}
+              {saving ? "Saving..." : "Save Template Deed"}
             </Button>
           </form>
         </div>

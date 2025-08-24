@@ -77,10 +77,17 @@ class TemplateDeedRepository implements TemplateDeedRepositoryInterface
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('template_deed_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'template_deed_attachments',
+                    $filePath,
+                    'public'
+                );
 
                 $templateDeed->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -90,10 +97,17 @@ class TemplateDeedRepository implements TemplateDeedRepositoryInterface
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('template_deed_attachments', 'public');
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'template_deed_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $templateDeed->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
                             'note'      => $attachment['note'] ?? null,
                         ]);
@@ -124,20 +138,29 @@ class TemplateDeedRepository implements TemplateDeedRepositoryInterface
      * @param array $data
      * @return mixed
      */
-    public function updateById(int $id, array $data)
+   public function updateById(int $id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
             $templateDeed = TemplateDeed::findOrFail($id);
 
-            // Update data template deed
+            // update data template deed
             $templateDeed->update($data);
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('template_deed_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'template_deed_attachments',
+                    $filePath,
+                    'public'
+                );
+
+                $templateDeed->attachments()->delete();
 
                 $templateDeed->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -145,23 +168,39 @@ class TemplateDeedRepository implements TemplateDeedRepositoryInterface
 
             // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
+                $templateDeed->attachments()->delete();
+
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('template_deed_attachments', 'public');
+
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'template_deed_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $templateDeed->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    } elseif (!empty($attachment['file_path'])) {
+                        $templateDeed->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? '',
+                            'file_path' => $attachment['file_path'],
                             'note'      => $attachment['note'] ?? null,
                         ]);
                     }
                 }
             }
 
-            // return updated template deed
-            return $templateDeed;
+            return $templateDeed->load('attachments');
         });
-    }
+}
+
 
     /**
      * Delete a template deed by ID.
@@ -176,5 +215,39 @@ class TemplateDeedRepository implements TemplateDeedRepositoryInterface
         $templateDeed->attachments()->delete();
 
         return $templateDeed->delete();
+    }
+
+    /**
+     * Generate a file name for the uploaded file.
+     *
+     * @param UploadedFile $file
+     * @param string|null $customName
+     * @return string
+     */
+    private function makeFileName(?string $customName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $customName
+                ? pathinfo($customName, PATHINFO_FILENAME)
+                : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        }
+
+        return pathinfo($customName ?? $file, PATHINFO_FILENAME);
+    }
+
+    /**
+     * Generate a file path for the uploaded file.
+     *
+     * @param string $fileName
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function makeFilePath(string $fileName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $fileName . '.' . $file->getClientOriginalExtension();
+        }
+
+        return $fileName;
     }
 }
