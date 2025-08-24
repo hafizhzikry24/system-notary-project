@@ -1,4 +1,4 @@
-import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check } from "lucide-react";
+import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock } from "lucide-react";
 import { MenuItem } from "@/types/layout/sidebar";
 
 export const navItems: MenuItem[] = [
@@ -47,8 +47,13 @@ export const navItems: MenuItem[] = [
     icon: Grid2x2Check,
     children: [
       { title: "Partner", href: "/partner" },
-      { title: "Template Akta", href: "/template" },
+      { title: "Template Akta", href: "/template-akta" },
     ],
+  },
+  {
+    title: "Agenda & Acara",
+    href: "/event",
+    icon: CalendarClock,
   },
   {
     title: "Notaris & PPAT Profil",
