@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\TemplateDeedController;
@@ -56,7 +57,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{id}', [CustomerBankController::class, 'destroy']);
     });
 
-  //customer company endpoint
+    //customer company endpoint
     Route::prefix('customer-companies')->group(function () {
         Route::get('/', [CustomerCompanyController::class, 'index']);
         Route::get('/{id}', [CustomerCompanyController::class, 'show']);
@@ -64,6 +65,16 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{id}', [CustomerCompanyController::class, 'update']);
         Route::delete('/{id}', [CustomerCompanyController::class, 'destroy']);
     });
+
+    //event endpoint
+    Route::prefix('events')->group(function () {
+        Route::get('/priority-options', [EventController::class, 'getPriorityEvents']);
+        Route::get('/', [EventController::class, 'index']);
+        Route::get('/{id}', [EventController::class, 'show']);
+        Route::post('/', [EventController::class, 'store']);
+        Route::put('/{id}', [EventController::class, 'update']);
+        Route::delete('/{id}', [EventController::class, 'destroy']);
+     });
 
     //partner endpoint
     Route::prefix('partners')->group(function () {
