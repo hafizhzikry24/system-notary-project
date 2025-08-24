@@ -16,7 +16,8 @@ class ProfileSettingRepository implements ProfileSettingRepositoryInterface
      */
     public function findBy()
     {
-        return ProfileSetting::first();
+        $profileSetting = ProfileSetting::first();
+        return $profileSetting;
     }
 
     /**
