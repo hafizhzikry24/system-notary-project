@@ -2,28 +2,28 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\CustomerBank;
+use App\Models\TemplateDeed;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
+use App\Http\Repositories\Interface\TemplateDeedRepositoryInterface;
 
-class CustomerBankRepository implements CustomerBankRepositoryInterface
+class TemplateDeedRepository implements TemplateDeedRepositoryInterface
 {
     /**
-     * Get all customer banks with optional filters.
+     * Get all template deeds with optional filters.
      *
      * @param array $filters
      * @return LengthAwarePaginator
      */
     public function getAll(array $filters): LengthAwarePaginator
     {
-        $model = new CustomerBank();
+        $model = new TemplateDeed();
         $searchables = $model->getSearchables();
         $defaultOrder = $model->getDefaultOrderBy();
 
-        $query = CustomerBank::query();
+        $query = TemplateDeed::query();
 
         if (!empty($filters['search'])) {
             $term = trim($filters['search']);
@@ -65,7 +65,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
     }
 
     /**
-     * Create a new customer bank.
+     * Create a new template deed.
      *
      * @param array $data
      * @return mixed
@@ -73,7 +73,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
     public function create(array $data)
     {
         return DB::transaction(function () use ($data) {
-            $customerBank = CustomerBank::create($data);
+            $templateDeed = TemplateDeed::create($data);
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
@@ -81,12 +81,12 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                 $filePath = $this->makeFilePath($fileName, $data['file']);
 
                 $path = $data['file']->storeAs(
-                    'customer_bank_attachments',
+                    'template_deed_attachments',
                     $filePath,
                     'public'
                 );
 
-                $customerBank->attachments()->create([
+                $templateDeed->attachments()->create([
                     'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
@@ -101,12 +101,12 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                         $filePath = $this->makeFilePath($fileName, $attachment['file']);
 
                         $path = $attachment['file']->storeAs(
-                            'customer_bank_attachments',
+                            'template_deed_attachments',
                             $filePath,
                             'public'
                         );
 
-                        $customerBank->attachments()->create([
+                        $templateDeed->attachments()->create([
                             'file_name' => $fileName,
                             'file_path' => $path,
                             'note'      => $attachment['note'] ?? null,
@@ -115,36 +115,36 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                 }
             }
 
-            return $customerBank;
+            return $templateDeed;
         });
     }
 
     /**
-     * Find a customer bank by ID.
+     * Find a template deed by ID.
      *
      * @param int $id
      * @return mixed
      */
     public function findById(int $id)
     {
-        $findcustomerBank = CustomerBank::with('attachments')->findOrFail($id);
-        return $findcustomerBank;
+        $findDeed = TemplateDeed::with('attachments')->findOrFail($id);
+        return $findDeed;
     }
 
     /**
-     * Update a customer bank by ID.
+     * Update a template deed by ID.
      *
      * @param int $id
      * @param array $data
      * @return mixed
      */
-    public function updateById(int $id, array $data)
+   public function updateById(int $id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
-            $customerBank = CustomerBank::findOrFail($id);
+            $templateDeed = TemplateDeed::findOrFail($id);
 
-            // Update data customer bank
-            $customerBank->update($data);
+            // update data template deed
+            $templateDeed->update($data);
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
@@ -152,14 +152,14 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                 $filePath = $this->makeFilePath($fileName, $data['file']);
 
                 $path = $data['file']->storeAs(
-                    'customer_bank_attachments',
+                    'template_deed_attachments',
                     $filePath,
                     'public'
                 );
 
-                $customerBank->attachments()->delete();
+                $templateDeed->attachments()->delete();
 
-                $customerBank->attachments()->create([
+                $templateDeed->attachments()->create([
                     'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
@@ -168,7 +168,7 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
 
             // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
-                $customerBank->attachments()->delete();
+                $templateDeed->attachments()->delete();
 
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
@@ -177,18 +177,18 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                         $filePath = $this->makeFilePath($fileName, $attachment['file']);
 
                         $path = $attachment['file']->storeAs(
-                            'customer_bank_attachments',
+                            'template_deed_attachments',
                             $filePath,
                             'public'
                         );
 
-                        $customerBank->attachments()->create([
+                        $templateDeed->attachments()->create([
                             'file_name' => $fileName,
                             'file_path' => $path,
                             'note'      => $attachment['note'] ?? null,
                         ]);
                     } elseif (!empty($attachment['file_path'])) {
-                        $customerBank->attachments()->create([
+                        $templateDeed->attachments()->create([
                             'file_name' => $attachment['file_name'] ?? '',
                             'file_path' => $attachment['file_path'],
                             'note'      => $attachment['note'] ?? null,
@@ -197,24 +197,24 @@ class CustomerBankRepository implements CustomerBankRepositoryInterface
                 }
             }
 
-            // return updated customer bank
-            return $customerBank->load('attachments');
+            return $templateDeed->load('attachments');
         });
-    }
+}
+
 
     /**
-     * Delete a customer bank by ID.
+     * Delete a template deed by ID.
      *
      * @param int $id
      * @return mixed
      */
     public function deleteById(int $id)
     {
-        $customerBank = CustomerBank::findOrFail($id);
+        $templateDeed = TemplateDeed::findOrFail($id);
 
-        $customerBank->attachments()->delete();
+        $templateDeed->attachments()->delete();
 
-        return $customerBank->delete();
+        return $templateDeed->delete();
     }
 
     /**

@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { format } from "date-fns";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
-  CalendarCog,
   Paperclip,
   Plus,
   X,
@@ -23,19 +22,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -44,52 +30,56 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { CustomerPersonal } from "@/types/pelanggan/perorangan/customer-personal";
-import { CustomerPersonalAttachment } from "@/types/pelanggan/perorangan/customer-personal-attachment";
+import { TemplateDeed } from "@/types/master-data/template-deed/template-deed";
+import { TemplateDeedAttachment } from "@/types/master-data/template-deed/template-deed-attachment";
 
-export default function EditCustomerPersonal() {
+// ------------------- Component -------------------
+export default function CreateTemplateDeed() {
   const router = useRouter();
-  const params = useParams(); // ambil id dari URL
-  const { id } = params;
-
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const params = useParams();
+  const { id } = params;
 
-  const [formData, setFormData] = useState<Partial<CustomerPersonal>>({});
-  const [date, setDate] = useState<Date | undefined>(undefined);
-
-  const [genderOptions, setGenderOptions] = useState<string[]>([]);
-  const [maritalOptions, setMaritalOptions] = useState<string[]>([]);
-
-  const [attachments, setAttachments] = useState<
-    (CustomerPersonalAttachment & { file?: File | null })[]
-  >([]);
+  const [formData, setFormData] = useState<Partial<TemplateDeed>>({
+    type: "",
+    description: "",
+  });
 
   const [open, setOpen] = useState(false);
 
-  // fetch data awal
+  const [attachments, setAttachments] = useState<
+    (TemplateDeedAttachment & { file?: File | null })[]
+  >([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [custRes, genderRes, maritalRes] = await Promise.all([
-          api.get(`/customer-personals/${id}`),
-          api.get("/customer-personals/gender-options"),
-          api.get("/customer-personals/marital-options"),
-        ]);
+        const { data } = await api.get(`/template-deeds/${id}`);
 
-        const customer = custRes.data.customer_personal;
+        const template_deed = data.template_deed;
+
         setFormData({
-          ...customer,
-          attachments: customer.attachments, // mapping manual
+          id: template_deed.id,
+          type: template_deed.type,
+          description: template_deed.description,
         });
-        setDate(
-          customer.birth_date ? new Date(customer.birth_date) : undefined
-        );
-        setAttachments(customer.attachments || []);
 
-        setGenderOptions(genderRes.data.gender_values);
-        setMaritalOptions(maritalRes.data.marital_status);
+        // ⚡ Pastikan semua field ada
+        const mappedAttachments = (template_deed.attachments || []).map((att: any) => ({
+          id: att.id,
+          template_deed_id: att.template_deed_id,
+          file_name: att.file_name || "",
+          file_path: att.file_path || "",
+          file_url: att.file_url || "",
+          note: att.note || "",
+          created_at: att.created_at,
+          updated_at: att.updated_at,
+          file: null,
+        }));
+
+        setAttachments(mappedAttachments);
       } catch (err: any) {
         showError("Failed to load data!");
       } finally {
@@ -100,30 +90,20 @@ export default function EditCustomerPersonal() {
     if (id) fetchData();
   }, [id]);
 
-  const handleInputChange = (name: keyof CustomerPersonal, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = (name: keyof TemplateDeed, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const updateAttachment = (
-    index: number,
-    field: keyof (CustomerPersonalAttachment & { file?: File | null }),
-    value: any
-  ) => {
-    setAttachments((prev) =>
-      prev.map((att, i) => (i === index ? { ...att, [field]: value } : att))
-    );
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments((prev) => prev.filter((_, i) => i !== index));
-  };
-
+  // ------------------- Attachment handlers -------------------
   const addAttachment = () => {
     setAttachments((prev) => [
       ...prev,
       {
         id: 0,
-        customer_id: Number(id),
+        template_deed_id: 0,
         file_name: "",
         file_path: "",
         file_url: "",
@@ -135,7 +115,21 @@ export default function EditCustomerPersonal() {
     ]);
   };
 
-  // submit update
+  const updateAttachment = (
+    index: number,
+    field: keyof (TemplateDeedAttachment & { file?: File | null }),
+    value: any
+  ) => {
+    setAttachments((prev) =>
+      prev.map((att, i) => (i === index ? { ...att, [field]: value } : att))
+    );
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // ------------------- Submit -------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -143,46 +137,42 @@ export default function EditCustomerPersonal() {
     try {
       const formDataToSend = new FormData();
 
-      // Add basic form fields
+      // basic fields
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           formDataToSend.append(key, value as string);
         }
       });
-
-      if (date) {
-        formDataToSend.append("birth_date", format(date, "yyyy-MM-dd"));
-      }
-
-      attachments.forEach((att, i) =>{
-        if (att.id){
+      // attachments
+      attachments.forEach((att, i) => {
+        if (att.id) {
           formDataToSend.append(`attachments[${i}][id]`, String(att.id));
         }
 
-        if (att.file){
+        if (att.file) {
           formDataToSend.append(`attachments[${i}][file]`, att.file);
         }
-        
+
         formDataToSend.append(
           `attachments[${i}][file_path]`,
           att.file_path || att.file_url || ""
-        )
+        );
 
         formDataToSend.append(`attachments[${i}][file_name]`, att.file_name || "");
         formDataToSend.append(`attachments[${i}][note]`, att.note || "");
-      })
+      });
 
-      await api.post(`/customer-personals/${id}?_method=PUT`, formDataToSend, {
+      await api.post(`/template-deeds/${id}?_method=PUT`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showSuccess("Customer Personal updated successfully!");
-      router.push("/pelanggan/perorangan");
+      showSuccess("Template Deed updated successfully!");
+      router.push("/master-data/template-akta");
     } catch (error: any) {
       if (error.response?.status === 422) {
         showValidationErrors(error.response.data.errors);
       } else {
-        showError("Failed to update customer personal!");
+        showError("Failed to update Template Deed!");
       }
     } finally {
       setSaving(false);
@@ -197,217 +187,32 @@ export default function EditCustomerPersonal() {
     );
   }
 
+  // ------------------- Render -------------------
   return (
     <ProtectedRoute>
       <Layout>
         <div className="container mx-auto px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Edit Customer Personal</h1>
+          <h1 className="text-2xl font-bold mb-6">Edit Template Deed</h1>
+
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <LabelInputContainer>
-                <Label htmlFor="first_name">First Name</Label>
+                <Label htmlFor="type">Tipe Akta</Label>
                 <Input
-                  id="first_name"
-                  value={formData.first_name || ""}
+                  id="type"
+                  value={formData.type || ""}
                   onChange={(e) =>
-                    handleInputChange("first_name", e.target.value)
+                    handleInputChange("type", e.target.value)
                   }
-                  placeholder="First Name"
+                  placeholder="Tipe Akta"
                 />
               </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="last_name">Last Name</Label>
-                <Input
-                  id="last_name"
-                  value={formData.last_name || ""}
-                  onChange={(e) =>
-                    handleInputChange("last_name", e.target.value)
-                  }
-                  placeholder="Last Name"
-                />
-              </LabelInputContainer>
-            </div>
 
-            {/* NIK + Birth Place */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="nik">NIK</Label>
-                <Input
-                  id="nik"
-                  value={formData.nik || ""}
-                  onChange={(e) => handleInputChange("nik", e.target.value)}
-                  placeholder="NIK"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="birth_place">Birth Place</Label>
-                <Input
-                  id="birth_place"
-                  value={formData.birth_place || ""}
-                  onChange={(e) =>
-                    handleInputChange("birth_place", e.target.value)
-                  }
-                  placeholder="Birth Place"
-                />
-              </LabelInputContainer>
-            </div>
-
-            {/* Birth Date */}
             <LabelInputContainer>
-              <Label>Birth Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarCog className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </Popover>
-            </LabelInputContainer>
-
-            {/* Gender + Marital */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="gender">Gender</Label>
-                <Select
-                  value={formData.gender || ""}
-                  onValueChange={(value) => handleInputChange("gender", value)}
-                >
-                  <SelectTrigger id="gender" className="w-full">
-                    <SelectValue placeholder="Select Gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {genderOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </LabelInputContainer>
-
-              <LabelInputContainer>
-                <Label htmlFor="marital_status">Marital Status</Label>
-                <Select
-                  value={formData.marital_status || ""}
-                  onValueChange={(value) =>
-                    handleInputChange("marital_status", value)
-                  }
-                >
-                  <SelectTrigger id="marital_status" className="w-full">
-                    <SelectValue placeholder="Select Marital Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {maritalOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </LabelInputContainer>
-            </div>
-
-            {/* Email, Phone, Address */}
-            <LabelInputContainer>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="description">Deskripsi</Label>
               <Input
-                id="email"
-                type="email"
-                value={formData.email || ""}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                placeholder="Email"
-              />
-            </LabelInputContainer>
-
-            <LabelInputContainer>
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                value={formData.phone || ""}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                placeholder="Phone Number"
-              />
-            </LabelInputContainer>
-
-            <LabelInputContainer>
-              <Label htmlFor="address">Address</Label>
-              <Input
-                id="address"
-                value={formData.address || ""}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                placeholder="Address"
-              />
-            </LabelInputContainer>
-
-            {/* City, Province, Postal Code, NPWP */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={formData.city || ""}
-                  onChange={(e) => handleInputChange("city", e.target.value)}
-                  placeholder="City"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="province">Province</Label>
-                <Input
-                  id="province"
-                  value={formData.province || ""}
-                  onChange={(e) =>
-                    handleInputChange("province", e.target.value)
-                  }
-                  placeholder="Province"
-                />
-              </LabelInputContainer>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="postal_code">Postal Code</Label>
-                <Input
-                  id="postal_code"
-                  value={formData.postal_code || ""}
-                  onChange={(e) =>
-                    handleInputChange("postal_code", e.target.value)
-                  }
-                  placeholder="Postal Code"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="npwp">NPWP</Label>
-                <Input
-                  id="npwp"
-                  value={formData.npwp || ""}
-                  onChange={(e) => handleInputChange("npwp", e.target.value)}
-                  placeholder="NPWP"
-                  type="number"
-                />
-              </LabelInputContainer>
-            </div>
-
-            <LabelInputContainer>
-              <Label htmlFor="note">Note</Label>
-              <Input
-                id="note"
-                value={formData.note || ""}
-                onChange={(e) => handleInputChange("note", e.target.value)}
+                id="description"
+                value={formData.description || ""}
+                onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Note"
               />
             </LabelInputContainer>
@@ -498,7 +303,7 @@ export default function EditCustomerPersonal() {
                                     <input
                                       id={`attachment-${i}`}
                                       type="file"
-                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx"
+                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx,.doc,.docx,application/msword"
                                       onChange={(e) =>
                                         updateAttachment(
                                           i,
@@ -609,7 +414,7 @@ export default function EditCustomerPersonal() {
             </div>
 
             <Button type="submit" className="w-full" disabled={saving}>
-              {saving ? "Updating..." : "Update Customer Personal"}
+              {saving ? "Saving..." : "Save Template Deed"}
             </Button>
           </form>
         </div>
@@ -618,6 +423,7 @@ export default function EditCustomerPersonal() {
   );
 }
 
+// ------------------- Helper -------------------
 function LabelInputContainer({
   children,
   className,

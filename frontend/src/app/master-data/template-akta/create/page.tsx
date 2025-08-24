@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Paperclip,
   Plus,
@@ -29,61 +29,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { CustomerBank } from "@/types/pelanggan/bank/customer-bank";
-import { CustomerBankAttachment } from "@/types/pelanggan/bank/customer-bank-attachment";
+import { TemplateDeed } from "@/types/master-data/template-deed/template-deed";
+import { TemplateDeedAttachment } from "@/types/master-data/template-deed/template-deed-attachment";
 
 // ------------------- Component -------------------
-export default function UpdateCustomerBank() {
+export default function CreateTemplateDeed() {
   const router = useRouter();
-  const params = useParams();
-  const { id } = params;
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [formData, setFormData] = useState<Partial<CustomerBank>>({
-    name: "",
-    contact_person: "",
-    license_number: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    province: "",
-    postal_code: "",
-    note: "",
+  const [formData, setFormData] = useState<Partial<TemplateDeed>>({
+    type: "",
+    description: "",
   });
 
   const [open, setOpen] = useState(false);
 
   const [attachments, setAttachments] = useState<
-    (CustomerBankAttachment & { file?: File | null })[]
+    (TemplateDeedAttachment & { file?: File | null })[]
   >([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [custBank] = await Promise.all([
-          api.get(`/customer-banks/${id}`),
-        ]);
 
-        const customer = custBank.data.customer_bank;
-        setFormData({
-          ...customer,
-          attachments: customer.attachments, // mapping manual
-        });
-        setAttachments(customer.attachments || []);
-      } catch (err: any) {
-        showError("Failed to load data!");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) fetchData();
-  }, [id]);
-
-  const handleInputChange = (name: keyof CustomerBank, value: string) => {
+  const handleInputChange = (name: keyof TemplateDeed, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -96,7 +63,7 @@ export default function UpdateCustomerBank() {
       ...prev,
       {
         id: 0,
-        customer_bank_id: 0,
+        template_deed_id: 0,
         file_name: "",
         file_path: "",
         file_url: "",
@@ -110,7 +77,7 @@ export default function UpdateCustomerBank() {
 
   const updateAttachment = (
     index: number,
-    field: keyof (CustomerBankAttachment & { file?: File | null }),
+    field: keyof (TemplateDeedAttachment & { file?: File | null }),
     value: any
   ) => {
     setAttachments((prev) =>
@@ -136,37 +103,28 @@ export default function UpdateCustomerBank() {
           formDataToSend.append(key, value as string);
         }
       });
-
       // attachments
       attachments.forEach((att, i) => {
-        if (att.id) {
-          formDataToSend.append(`attachments[${i}][id]`, String(att.id));
-        }
-
         if (att.file) {
           formDataToSend.append(`attachments[${i}][file]`, att.file);
         }
-
-        formDataToSend.append(
-          `attachments[${i}][file_path]`,
-          att.file_path || att.file_url || ""
-        );
-
-        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name || "");
-        formDataToSend.append(`attachments[${i}][note]`, att.note || "");
+        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name);
+        if (att.note) {
+          formDataToSend.append(`attachments[${i}][note]`, att.note);
+        }
       });
 
-      await api.post(`/customer-banks/${id}?_method=PUT`, formDataToSend, {
+      await api.post("/template-deeds", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showSuccess("Customer bank created successfully!");
-      router.push("/pelanggan/bank");
+      showSuccess("Template Deed created successfully!");
+      router.push("/master-data/template-akta");
     } catch (error: any) {
       if (error.response?.status === 422) {
         showValidationErrors(error.response.data.errors);
       } else {
-        showError("Failed to create customer bank!");
+        showError("Failed to create Template Deed!");
       }
     } finally {
       setSaving(false);
@@ -186,122 +144,27 @@ export default function UpdateCustomerBank() {
     <ProtectedRoute>
       <Layout>
         <div className="container mx-auto px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Create Customer Bank</h1>
+          <h1 className="text-2xl font-bold mb-6">Create Template Deed</h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <LabelInputContainer>
-                <Label htmlFor="name">Nama Bank/Leasing</Label>
+                <Label htmlFor="type">Tipe Akta</Label>
                 <Input
-                  id="name"
-                  value={formData.name || ""}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="Nama Bank/Leasing"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="contact_person">Penanggung Jawab</Label>
-                <Input
-                  id="contact_person"
-                  value={formData.contact_person || ""}
+                  id="type"
+                  value={formData.type || ""}
                   onChange={(e) =>
-                    handleInputChange("contact_person", e.target.value)
+                    handleInputChange("type", e.target.value)
                   }
-                  placeholder="Penanggung Jawab"
+                  placeholder="Tipe Akta"
                 />
               </LabelInputContainer>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="license_number">
-                  No Identitas Bank/Leasing
-                </Label>
-                <Input
-                  id="license_number"
-                  type="number"
-                  value={formData.license_number || ""}
-                  onChange={(e) =>
-                    handleInputChange("license_number", e.target.value)
-                  }
-                  placeholder="No Identitas Bank/Leasing"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="address">Address</Label>
-                <Input
-                  id="address"
-                  value={formData.address || ""}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  placeholder="Address"
-                />
-              </LabelInputContainer>
-            </div>
-
-            {/* Email, Phone, Address */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email || ""}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  placeholder="Email"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone || ""}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  placeholder="Phone Number"
-                />
-              </LabelInputContainer>
-            </div>
-
-            {/* City, Province, Postal Code, NPWP */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <LabelInputContainer>
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={formData.city || ""}
-                  onChange={(e) => handleInputChange("city", e.target.value)}
-                  placeholder="City"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="province">Province</Label>
-                <Input
-                  id="province"
-                  value={formData.province || ""}
-                  onChange={(e) =>
-                    handleInputChange("province", e.target.value)
-                  }
-                  placeholder="Province"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="postal_code">Postal Code</Label>
-                <Input
-                  id="postal_code"
-                  value={formData.postal_code || ""}
-                  onChange={(e) =>
-                    handleInputChange("postal_code", e.target.value)
-                  }
-                  placeholder="Postal Code"
-                />
-              </LabelInputContainer>
-            </div>
 
             <LabelInputContainer>
-              <Label htmlFor="note">Note</Label>
+              <Label htmlFor="description">Deskripsi</Label>
               <Input
-                id="note"
-                value={formData.note || ""}
-                onChange={(e) => handleInputChange("note", e.target.value)}
+                id="description"
+                value={formData.description || ""}
+                onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Note"
               />
             </LabelInputContainer>
@@ -392,7 +255,7 @@ export default function UpdateCustomerBank() {
                                     <input
                                       id={`attachment-${i}`}
                                       type="file"
-                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx"
+                                      accept=".jpg,.jpeg,.png,.pdf,.csv,.xlsx.doc,.docx,application/msword"
                                       onChange={(e) =>
                                         updateAttachment(
                                           i,
@@ -412,7 +275,7 @@ export default function UpdateCustomerBank() {
                                       <span>Choose File</span>
                                     </label>
 
-                                    {att.file ? (
+                                    {att.file && (
                                       <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-2 rounded-md">
                                         <FileText className="w-3 h-3" />
                                         <span className="font-medium">
@@ -423,20 +286,7 @@ export default function UpdateCustomerBank() {
                                           KB)
                                         </span>
                                       </div>
-                                    ) : att.file_path ? (
-                                      // kalau data lama dari backend
-                                      <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-2 rounded-md">
-                                        <FileText className="w-3 h-3" />
-                                        <a
-                                          href={`${att.file_url}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-blue-600 hover:underline"
-                                        >
-                                          {att.file_name || "Download file"}
-                                        </a>
-                                      </div>
-                                    ) : null}
+                                    )}
                                   </div>
                                 </div>
 
@@ -503,7 +353,7 @@ export default function UpdateCustomerBank() {
             </div>
 
             <Button type="submit" className="w-full" disabled={saving}>
-              {saving ? "Updating..." : "Update Customer Bank"}
+              {saving ? "Creating..." : "Create Template Deed"}
             </Button>
           </form>
         </div>
