@@ -158,7 +158,6 @@ export default function Page() {
                               className="flex items-center gap-1.5 px-3 py-1.5"
                             >
                               <Pencil className="h-3.5 w-3.5" />
-                              <span className="hidden sm:inline">Edit</span>
                             </Button>
                             <Button
                               variant="destructive"
@@ -167,7 +166,6 @@ export default function Page() {
                               className="flex items-center gap-1.5 px-3 py-1.5"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
-                              <span className="hidden sm:inline">Delete</span>
                             </Button>
                           </div>
                         </div>
