@@ -384,7 +384,7 @@ export default function CustomerCompanyPage() {
                             handlePageChange(company.current_page - 1)
                           }
                           disabled={company.current_page === 1}
-                          className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center cursor-pointer justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Previous
                         </button>
@@ -396,7 +396,7 @@ export default function CustomerCompanyPage() {
                         <li key={pageNumber}>
                           <button
                             onClick={() => handlePageChange(pageNumber)}
-                            className={`flex items-center justify-center px-3 h-8 leading-tight ${
+                            className={`flex items-center justify-center cursor-pointer px-3 h-8 leading-tight ${
                               pageNumber === company.current_page
                                 ? "text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
                                 : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -414,7 +414,7 @@ export default function CustomerCompanyPage() {
                           disabled={
                             company.current_page === company.last_page
                           }
-                          className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center cursor-pointer justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Next
                         </button>
@@ -459,7 +459,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
       <div className="mt-6 flex items-center gap-3">
         <button
           onClick={onReset}
-          className="rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800"
+          className="rounded-xl cursor-pointer bg-neutral-900 text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800"
         >
           Reset Search
         </button>

@@ -171,7 +171,7 @@ export default function CustomerPersonalPage() {
                 {search && (
                   <button
                     onClick={() => setSearch("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
                     aria-label="Clear search"
                   >
                     Clear
@@ -180,7 +180,7 @@ export default function CustomerPersonalPage() {
               </div>
               <button
                 onClick={onRefresh}
-                className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-50 cursor-pointer"
                 disabled={refreshing || loading}
                 aria-label="Refresh"
               >
@@ -190,7 +190,7 @@ export default function CustomerPersonalPage() {
               {/* Optional add button (uncomment if route ready) */}
               <button
                 onClick={() => router.push("/pelanggan/perorangan/create")}
-                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800"
+                className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800 cursor-pointer"
               >
                 <Plus className="h-4 w-4" />  
                 <div className="inline md:hidden sm:hidden lg:inline">
@@ -225,7 +225,7 @@ export default function CustomerPersonalPage() {
             <div className="flex items-center gap-2">
                 <button
                 onClick={handleDeleteSelected}
-                className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-700"
+                className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-700 cursor-pointer"
                 >
                 <Trash2 className="h-4 w-4" /> Hapus Terpilih
                 </button>
@@ -336,13 +336,13 @@ export default function CustomerPersonalPage() {
                           <td className="px-6 py-4 text-center space-x-2">
                             <button
                               onClick={() => handleEditPersonal(customer.id)}
-                              className="font-medium text-blue-600 dark:text-blue-500 hover:underline px-2 py-1 rounded"
+                              className="font-medium text-blue-600 dark:text-blue-500 hover:underline px-2 py-1 rounded cursor-pointer"
                             >
                               <Pencil className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(customer.id)}
-                              className="font-medium text-red-600 dark:text-red-500 hover:underline px-2 py-1 rounded"
+                              className="font-medium text-red-600 dark:text-red-500 hover:underline px-2 py-1 rounded cursor-pointer"
                               disabled={deletingId === customer.id}
                             >
                               <Trash className="h-4 w-4" />
@@ -385,7 +385,7 @@ export default function CustomerPersonalPage() {
                             handlePageChange(personal.current_page - 1)
                           }
                           disabled={personal.current_page === 1}
-                          className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center justify-center cursor-pointer px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Previous
                         </button>
@@ -397,7 +397,7 @@ export default function CustomerPersonalPage() {
                         <li key={pageNumber}>
                           <button
                             onClick={() => handlePageChange(pageNumber)}
-                            className={`flex items-center justify-center px-3 h-8 leading-tight ${
+                            className={`flex cursor-pointer items-center justify-center px-3 h-8 leading-tight ${
                               pageNumber === personal.current_page
                                 ? "text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
                                 : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -415,7 +415,7 @@ export default function CustomerPersonalPage() {
                           disabled={
                             personal.current_page === personal.last_page
                           }
-                          className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center cursor-pointer justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Next
                         </button>
@@ -460,7 +460,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
       <div className="mt-6 flex items-center gap-3">
         <button
           onClick={onReset}
-          className="rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800"
+          className="rounded-xl cursor-pointer bg-neutral-900 text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800"
         >
           Reset Search
         </button>

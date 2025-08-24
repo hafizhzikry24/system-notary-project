@@ -283,10 +283,10 @@ export function EventModal({
         </div>
 
         <div className="pt-6 border-t border-gray-200 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose} disabled={saving} className="w-full sm:w-auto bg-transparent">
+          <Button variant="outline" onClick={onClose} disabled={saving} className="w-full sm:w-auto bg-transparent cursor-pointer">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={saving} className="w-full sm:w-auto bg-gray-800 hover:bg-gray-800">
+          <Button onClick={handleSubmit} disabled={saving} className="w-full sm:w-auto bg-gray-800 hover:bg-gray-800 cursor-pointer">
             {saving ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>

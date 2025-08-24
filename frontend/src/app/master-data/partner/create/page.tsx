@@ -210,7 +210,7 @@ export default function CreatePartner() {
               />
             </LabelInputContainer>
 
-            <Button type="submit" className="w-full" disabled={saving}>
+            <Button type="submit" className="w-full cursor-pointer" disabled={saving}>
               {saving ? "Creating..." : "Create partner"}
             </Button>
           </form>

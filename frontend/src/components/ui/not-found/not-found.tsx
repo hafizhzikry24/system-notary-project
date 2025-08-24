@@ -30,7 +30,7 @@ export default function NotFound() {
 
         {/* Glitchy Button */}
         <div className="pt-4">
-          <Button asChild size="lg" className="hover:bg-neutral-950 bg-neutral-900 text-neutral-100">
+          <Button asChild size="lg" className="hover:bg-neutral-950 bg-neutral-900 text-neutral-100 cursor-pointer">
             <Link href="/" className="flex items-center gap-2">
               <Home className="w-4 h-4 transition-transform group-hover:scale-110" />
               Go Home
