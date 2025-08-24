@@ -139,13 +139,21 @@ export default function UpdateCustomerBank() {
 
       // attachments
       attachments.forEach((att, i) => {
+        if (att.id) {
+          formDataToSend.append(`attachments[${i}][id]`, String(att.id));
+        }
+
         if (att.file) {
           formDataToSend.append(`attachments[${i}][file]`, att.file);
         }
-        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name);
-        if (att.note) {
-          formDataToSend.append(`attachments[${i}][note]`, att.note);
-        }
+
+        formDataToSend.append(
+          `attachments[${i}][file_path]`,
+          att.file_path || att.file_url || ""
+        );
+
+        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name || "");
+        formDataToSend.append(`attachments[${i}][note]`, att.note || "");
       });
 
       await api.post(`/customer-banks/${id}?_method=PUT`, formDataToSend, {

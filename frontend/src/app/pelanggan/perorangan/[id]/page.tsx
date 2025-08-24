@@ -154,20 +154,23 @@ export default function EditCustomerPersonal() {
         formDataToSend.append("birth_date", format(date, "yyyy-MM-dd"));
       }
 
-      // Handle attachments
-      attachments.forEach((att, i) => {
-        if (att.file) {
-          // New file upload
+      attachments.forEach((att, i) =>{
+        if (att.id){
+          formDataToSend.append(`attachments[${i}][id]`, String(att.id));
+        }
+
+        if (att.file){
           formDataToSend.append(`attachments[${i}][file]`, att.file);
-        } else if (att.file_path) {
-          // Existing file path
-          formDataToSend.append(`attachments[${i}][file_path]`, att.file_path);
         }
-        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name);
-        if (att.note) {
-          formDataToSend.append(`attachments[${i}][note]`, att.note);
-        }
-      });
+        
+        formDataToSend.append(
+          `attachments[${i}][file_path]`,
+          att.file_path || att.file_url || ""
+        )
+
+        formDataToSend.append(`attachments[${i}][file_name]`, att.file_name || "");
+        formDataToSend.append(`attachments[${i}][note]`, att.note || "");
+      })
 
       await api.post(`/customer-personals/${id}?_method=PUT`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },

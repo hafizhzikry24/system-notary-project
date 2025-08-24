@@ -150,7 +150,6 @@ export default function CreateTemplateDeed() {
         }
 
         if (att.file) {
-          // ada file baru → kirim binary
           formDataToSend.append(`attachments[${i}][file]`, att.file);
         }
 

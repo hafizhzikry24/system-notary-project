@@ -76,10 +76,17 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
 
             // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('customer_company_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'customer_company_attachments',
+                    $filePath,
+                    'public'
+                );
 
                 $customerCompany->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -89,10 +96,17 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('customer_company_attachments', 'public');
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'customer_company_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $customerCompany->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
                             'note'      => $attachment['note'] ?? null,
                         ]);
@@ -133,10 +147,19 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
 
            // handle single attachment (legacy)
             if (!empty($data['file']) && $data['file'] instanceof UploadedFile) {
-                $path = $data['file']->store('customer_company_attachments', 'public');
+                $fileName = $this->makeFileName($data['file_name'] ?? null, $data['file']);
+                $filePath = $this->makeFilePath($fileName, $data['file']);
+
+                $path = $data['file']->storeAs(
+                    'customer_company_attachments',
+                    $filePath,
+                    'public'
+                );
+
+                $customerCompany->attachments()->delete();
 
                 $customerCompany->attachments()->create([
-                    'file_name' => $data['file_name'] ?? $data['file']->getClientOriginalName(),
+                    'file_name' => $fileName,
                     'file_path' => $path,
                     'note'      => $data['note'] ?? null,
                 ]);
@@ -144,13 +167,29 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
 
             // handle multiple attachments
             if (!empty($data['attachments']) && is_array($data['attachments'])) {
+                $customerCompany->attachments()->delete();
+
                 foreach ($data['attachments'] as $attachment) {
                     if (!empty($attachment['file']) && $attachment['file'] instanceof UploadedFile) {
-                        $path = $attachment['file']->store('customer_company_attachments', 'public');
+
+                        $fileName = $this->makeFileName($attachment['file_name'] ?? null, $attachment['file']);
+                        $filePath = $this->makeFilePath($fileName, $attachment['file']);
+
+                        $path = $attachment['file']->storeAs(
+                            'customer_company_attachments',
+                            $filePath,
+                            'public'
+                        );
 
                         $customerCompany->attachments()->create([
-                            'file_name' => $attachment['file_name'] ?? $attachment['file']->getClientOriginalName(),
+                            'file_name' => $fileName,
                             'file_path' => $path,
+                            'note'      => $attachment['note'] ?? null,
+                        ]);
+                    } elseif (!empty($attachment['file_path'])) {
+                        $customerCompany->attachments()->create([
+                            'file_name' => $attachment['file_name'] ?? '',
+                            'file_path' => $attachment['file_path'],
                             'note'      => $attachment['note'] ?? null,
                         ]);
                     }
@@ -158,7 +197,7 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
             }
 
             // return updated customer company
-            return $customerCompany;
+            return $customerCompany->load('attachments');
         });
     }
 
@@ -175,5 +214,39 @@ class CustomerCompanyRepository implements CustomerCompanyRepositoryInterface
         $customerCompany->attachments()->delete();
 
         return $customerCompany->delete();
+    }
+
+    /**
+     * Generate a file name for the uploaded file.
+     *
+     * @param UploadedFile $file
+     * @param string|null $customName
+     * @return string
+     */
+    private function makeFileName(?string $customName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $customName
+                ? pathinfo($customName, PATHINFO_FILENAME)
+                : pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        }
+
+        return pathinfo($customName ?? $file, PATHINFO_FILENAME);
+    }
+
+    /**
+     * Generate a file path for the uploaded file.
+     *
+     * @param string $fileName
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function makeFilePath(string $fileName, $file): string
+    {
+        if ($file instanceof UploadedFile) {
+            return $fileName . '.' . $file->getClientOriginalExtension();
+        }
+
+        return $fileName;
     }
 }
