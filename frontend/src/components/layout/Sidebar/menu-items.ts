@@ -28,8 +28,8 @@ export const navItems: MenuItem[] = [
     href: "/perjanjian-kerja",
     icon: LayoutList,
     children: [
+      { title: "Monitoring", href: "/monitoring" },
       { title: "Lembar Kerja", href: "/worksheet" },
-      { title: "Daftar Akta", href: "/list-akta" },
     ],
   },
   {
@@ -47,7 +47,7 @@ export const navItems: MenuItem[] = [
     icon: Grid2x2Check,
     children: [
       { title: "Partner", href: "/partner" },
-      { title: "Template Akta", href: "/template-akta" },
+      { title: "Akta(Layanan)", href: "/template-akta" },
     ],
   },
   {
