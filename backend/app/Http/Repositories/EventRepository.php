@@ -81,19 +81,19 @@ class EventRepository implements EventRepositoryInterface
      *
      * @return mixed
      */
-public function getPriorityEvents()
-{
-    $priorityCases = PriorityEventEnum::cases();
+    public function getPriorityEvents()
+    {
+        $priorityCases = PriorityEventEnum::cases();
 
-    // Map the enum cases to an array of associative arrays
-    // with 'name' and 'value' keys.
-    $priorityOptions = array_map(function($case) {
-        return [
-            'name' => $case->name,  // The name of the case (e.g., 'LOW')
-            'value' => $case->value, // The value of the case (e.g., 'Low')
-        ];
-    }, $priorityCases);
+        // Map the enum cases to an array of associative arrays
+        // with 'name' and 'value' keys.
+        $priorityOptions = array_map(function($case) {
+            return [
+                'name' => $case->name,  // The name of the case (e.g., 'LOW')
+                'value' => $case->value, // The value of the case (e.g., 'Low')
+            ];
+        }, $priorityCases);
 
-    return $priorityOptions;
-}
+        return $priorityOptions;
+    }
 }
