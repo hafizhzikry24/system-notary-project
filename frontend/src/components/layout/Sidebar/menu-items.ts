@@ -29,7 +29,7 @@ export const navItems: MenuItem[] = [
     icon: LayoutList,
     children: [
       { title: "Monitoring", href: "/monitoring" },
-      { title: "Lembar Kerja", href: "/worksheet" },
+      { title: "Lembar Kerja", href: "/lembar-kerja" },
     ],
   },
   {

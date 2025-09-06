@@ -5,11 +5,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PartnerController;
+use App\Http\Repositories\WorksheetRepository;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\TemplateDeedController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\CustomerPersonalController;
+use App\Http\Controllers\WorksheetNotaryController;
 
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
@@ -92,5 +94,16 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [TemplateDeedController::class, 'store']);
         Route::put('/{id}', [TemplateDeedController::class, 'update']);
         Route::delete('/{id}', [TemplateDeedController::class, 'destroy']);
+    });
+
+    //worksheet notary endpoint
+    Route::prefix('worksheet-notaries')->group(function () {
+        Route::get('/type-customer-options', [WorksheetNotaryController::class, 'getTypeCustomerOptions']);
+        Route::get('/status-order-options', [WorksheetNotaryController::class, 'getStatusOrderOptions']);
+        Route::get('/', [WorksheetNotaryController::class, 'index']);
+        Route::get('/{id}', [WorksheetNotaryController::class, 'show']);
+        Route::post('/', [WorksheetNotaryController::class, 'store']);
+        Route::put('/{id}', [WorksheetNotaryController::class, 'update']);
+        Route::delete('/{id}', [WorksheetNotaryController::class, 'destroy']);
     });
 });

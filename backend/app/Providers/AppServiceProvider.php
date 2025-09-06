@@ -7,6 +7,7 @@ use App\Http\Repositories\AuthRepository;
 use App\Http\Repositories\RoleRepository;
 use App\Http\Repositories\EventRepository;
 use App\Http\Repositories\PartnerRepository;
+use App\Http\Repositories\WorksheetRepository;
 use App\Http\Repositories\CustomerBankRepository;
 use App\Http\Repositories\TemplateDeedRepository;
 use App\Http\Repositories\ProfileSettingRepository;
@@ -16,6 +17,7 @@ use App\Http\Repositories\Interface\AuthRepositoryInterface;
 use App\Http\Repositories\Interface\RoleRepositoryInterface;
 use App\Http\Repositories\Interface\EventRepositoryInterface;
 use App\Http\Repositories\Interface\PartnerRepositoryInterface;
+use App\Http\Repositories\Interface\WorksheetRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
 use App\Http\Repositories\Interface\TemplateDeedRepositoryInterface;
 use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
@@ -38,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class); // Bind the EventRepositoryInterface to EventRepository
         $this->app->bind(PartnerRepositoryInterface::class, PartnerRepository::class); // Bind the PartnerRepositoryInterface to PartnerRepository
         $this->app->bind(TemplateDeedRepositoryInterface::class, TemplateDeedRepository::class); // Bind the TemplateDeedRepositoryInterface to TemplateDeedRepository
+        $this->app->bind(WorksheetRepositoryInterface::class, WorksheetRepository::class); // Bind the WorksheetRepositoryInterface to WorksheetRepository
     }
 
     /**
