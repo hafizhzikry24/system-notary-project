@@ -9,20 +9,20 @@ use Illuminate\Support\Facades\DB;
 class MonitoringService
 {
     /**
-     * The WorksheetRepository instance.
+     * The MonitoringRepository instance.
      *
      * @var MonitoringRepositoryInterface
      */
-    protected MonitoringRepositoryInterface $worksheetRepository;
+    protected MonitoringRepositoryInterface $monitoringRepository;
 
     /**
      * MonitoringService constructor.
      *
-     * @param MonitoringRepositoryInterface $worksheetRepository
+     * @param MonitoringRepositoryInterface $monitoringRepository
      */
-    public function __construct(MonitoringRepositoryInterface $worksheetRepository)
+    public function __construct(MonitoringRepositoryInterface $monitoringRepository)
     {
-        $this->worksheetRepository = $worksheetRepository;
+        $this->monitoringRepository = $monitoringRepository;
     }
 
     /**
@@ -33,7 +33,7 @@ class MonitoringService
      */
     public function getAll(array $filters)
     {
-        return $this->worksheetRepository->getAll($filters);
+        return $this->monitoringRepository->getAll($filters);
     }
 
     /**
@@ -83,12 +83,12 @@ class MonitoringService
         }
 
         // Grouping count by status
-        $monitoring =$query->select('status', DB::raw('COUNT(*) as count'))
+        $monitorings = $query->select('status', DB::raw('COUNT(*) as count'))
         ->groupBy('status')
         ->pluck('count', 'status')
         ->toArray();
 
-        return $this->worksheetRepository->getHeaderData($monitoring);
+        return $this->monitoringRepository->getHeaderData($monitorings);
     }
     /**
      * Export data monitoring to excel.
@@ -114,6 +114,6 @@ class MonitoringService
         }
 
         $monitoring = $query->get();
-        return $this->worksheetRepository->exportData($monitoring);
+        return $this->monitoringRepository->exportData($monitoring);
     }
 }
