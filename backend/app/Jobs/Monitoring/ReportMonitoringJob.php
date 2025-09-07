@@ -2,11 +2,12 @@
 
 namespace App\Jobs\Monitoring;
 
-use App\Http\Services\TelegramBot\TelegramService;
+use Carbon\Carbon;
 use App\Models\WorksheetNotary;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Http\Services\TelegramBot\TelegramService;
 use App\Http\Repositories\Interface\MonitoringRepositoryInterface;
 
 class ReportMonitoringJob implements ShouldQueue
@@ -28,8 +29,13 @@ class ReportMonitoringJob implements ShouldQueue
         MonitoringRepositoryInterface $monitoringRepository,
         TelegramService $telegram
     ): void { {
+            $now = Carbon::now();
+            $startOfMonth = $now->copy()->startOfMonth();
+            $endOfMonth = $now->copy()->endOfMonth();
+
             $query = WorksheetNotary::query()
-                ->with(['customerPersonal', 'customerBank', 'customerCompany', 'templateDeed']);
+                ->with(['customerPersonal', 'customerBank', 'customerCompany', 'templateDeed'])
+                ->whereBetween('order_date', [$startOfMonth, $endOfMonth]);
 
             // Get the counts for each status
             $monitorings = $query->select('status', DB::raw('COUNT(*) as count'))
