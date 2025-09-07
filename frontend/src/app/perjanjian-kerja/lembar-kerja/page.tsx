@@ -276,13 +276,7 @@ export default function LembarKerjaPage() {
                         Nama Lembar Kerja
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Tanggal Jatuh Tempo
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center">
-                        Status
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center">
-                        Biaya
+                        Tanggal Pesanan
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
                         Action
@@ -343,13 +337,7 @@ export default function LembarKerjaPage() {
                             {worksheet.name_worksheet}
                           </td>
                           <td className="px-6 py-4 text-center">
-                            {worksheet.deadline_date_formatted}
-                          </td>
-                          <td className="px-6 py-4 text-center">
-                            {worksheet.status}
-                          </td>
-                          <td className="px-6 py-4 text-center">
-                            {worksheet.fee_formatted}
+                            {worksheet.order_date_formatted}
                           </td>
                           <td className="px-6 py-4 text-center space-x-2">
                             <button
