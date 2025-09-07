@@ -24,7 +24,7 @@ class WorksheetNotaryController extends Controller
     protected WorksheetService $worksheetNotaryService;
 
     /**
-     * TemplateDeedController constructor.
+     * WorksheetNotaryController constructor.
      *
      * @param WorksheetService $worksheetNotaryService;
      */
@@ -39,10 +39,10 @@ class WorksheetNotaryController extends Controller
     public function index(Request $request)
     {
          try {
-            // Retrieve all Template Deeds with optional filters
-            $templateDeed = $this->worksheetNotaryService->getAll($request->all());
+            // Retrieve all Worksheet Notary with optional filters
+            $worksheetNotary = $this->worksheetNotaryService->getAll($request->all());
 
-            return $this->successResponse('worksheet', $templateDeed, 'Worksheet retrieved successfully');
+            return $this->successResponse('worksheet', $worksheetNotary, 'Worksheet retrieved successfully');
 
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
@@ -59,11 +59,11 @@ class WorksheetNotaryController extends Controller
         try {
             DB::beginTransaction();
             // Create a new Worksheet
-            $templateDeed = $this->worksheetNotaryService->create($request->validated());
+            $worksheetNotary = $this->worksheetNotaryService->create($request->validated());
 
             DB::commit();
 
-            return $this->successResponse('worksheet', $templateDeed, 'Worksheet created successfully', 201);
+            return $this->successResponse('worksheet', $worksheetNotary, 'Worksheet created successfully', 201);
         } catch (ValidationException $e) {
             DB::rollBack();
             return $this->validationErrorResponse($e);
@@ -80,12 +80,12 @@ class WorksheetNotaryController extends Controller
     {
         try {
             // Find a template deed personal by ID
-            $templateDeed = $this->worksheetNotaryService->getById($id);
-            if (!$templateDeed) {
+            $worksheetNotary = $this->worksheetNotaryService->getById($id);
+            if (!$worksheetNotary) {
                 return $this->errorResponse('Worksheet not found', 404);
             }
 
-            return $this->successResponse('worksheet', $templateDeed, 'Worksheet retrieved successfully');
+            return $this->successResponse('worksheet', $worksheetNotary, 'Worksheet retrieved successfully');
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
@@ -101,13 +101,13 @@ class WorksheetNotaryController extends Controller
         try {
             DB::beginTransaction();
             // Update a Worksheet by ID
-            $templateDeed = $this->worksheetNotaryService->update((int) $id, $request->validated());
-            if (!$templateDeed) {
+            $worksheetNotary = $this->worksheetNotaryService->update((int) $id, $request->validated());
+            if (!$worksheetNotary) {
                 return $this->errorResponse('Worksheet not found', 404);
             }
 
             DB::commit();
-            return $this->successResponse('worksheet', $templateDeed, 'Worksheet updated successfully');
+            return $this->successResponse('worksheet', $worksheetNotary, 'Worksheet updated successfully');
 
         } catch (ValidationException $e) {
             DB::rollBack();
@@ -126,8 +126,8 @@ class WorksheetNotaryController extends Controller
         try {
             DB::beginTransaction();
             // Delete a Worksheet by ID
-            $templateDeed = $this->worksheetNotaryService->getById($id);
-            if (!$templateDeed) {
+            $worksheetNotary = $this->worksheetNotaryService->getById($id);
+            if (!$worksheetNotary) {
                 return $this->errorResponse('Worksheet not found', 404);
             }
 
