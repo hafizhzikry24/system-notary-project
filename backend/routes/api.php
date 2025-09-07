@@ -10,8 +10,9 @@ use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\TemplateDeedController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
-use App\Http\Controllers\CustomerPersonalController;
 use App\Http\Controllers\WorksheetNotaryController;
+use App\Http\Controllers\CustomerPersonalController;
+use App\Http\Controllers\MonitoringNotaryController;
 
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
@@ -105,5 +106,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [WorksheetNotaryController::class, 'store']);
         Route::put('/{id}', [WorksheetNotaryController::class, 'update']);
         Route::delete('/{id}', [WorksheetNotaryController::class, 'destroy']);
+    });
+
+    //monitoring worksheet notary endpoint
+    Route::prefix('monitoring-worksheet')->group(function () {
+        Route::get('/', [MonitoringNotaryController::class, 'index']);
+        Route::get('/header-data', [MonitoringNotaryController::class, 'monitoringHeaderData']);
+        Route::get('/export', [MonitoringNotaryController::class, 'exportData']);
     });
 });
