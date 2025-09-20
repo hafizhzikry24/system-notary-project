@@ -8,6 +8,7 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Repositories\WorksheetRepository;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\TemplateDeedController;
+use App\Http\Controllers\FinanceNotaryController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\WorksheetNotaryController;
@@ -113,5 +114,12 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/', [MonitoringNotaryController::class, 'index']);
         Route::get('/header-data', [MonitoringNotaryController::class, 'monitoringHeaderData']);
         Route::get('/export', [MonitoringNotaryController::class, 'exportData']);
+    });
+
+    //finance report notary endpoint
+    Route::prefix('finance-report')->group(function () {
+        Route::get('/', [FinanceNotaryController::class, 'index']);
+        Route::get('/header-data', [FinanceNotaryController::class, 'financeReportHeaderData']);
+        Route::get('/export', [FinanceNotaryController::class, 'exportData']);
     });
 });

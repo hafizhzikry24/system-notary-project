@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Schedule for report monitoring worksheet every month seconds
 Schedule::command('app:report-monitoring-worksheet')->lastDayOfMonth();
+
+// Schedule for report finance every month seconds
+Schedule::command('app:report-finance')->lastDayOfMonth();
