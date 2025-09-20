@@ -123,7 +123,7 @@ class FinanceReportRepository implements FinanceReportRepositoryInterface
      */
     public function exportData($monitoring)
     {
-        $exportExcel= Excel::download(new FinanceReportExport($monitoring), 'data-monitoring.xlsx');
+        $exportExcel= Excel::download(new FinanceReportExport($monitoring), 'finance_report.xlsx');
 
         return $exportExcel;
     }
