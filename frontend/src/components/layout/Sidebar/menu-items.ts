@@ -38,7 +38,7 @@ export const navItems: MenuItem[] = [
     icon: Banknote,
     children: [
       { title: "Keuangan", href: "/keuangan" },
-      { title: "Kas & Dana Bank", href: "/kas" },
+      { title: "Kas & Dana Bank", href: "/kas-bank" },
     ],
   },
   {
