@@ -26,10 +26,12 @@ export default function Page() {
 
   const { monthDate, onPrevMonth, onNextMonth, onToday } = useMonthNav()
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (month?: number, year?: number) => {
     setLoading(true)
     try {
-      const res = await api.get("/events")
+      const res = await api.get("/events", {
+        params: { month, year },
+      })
       console.log("Fetched events:", res.data.events)
       setEvents(res.data.events ?? [])
     } catch (err: any) {
@@ -41,8 +43,10 @@ export default function Page() {
   }
 
   useEffect(() => {
-    fetchEvents()
-  }, [])
+    const month = monthDate.getMonth() + 1; // getMonth is zero-based
+    const year = monthDate.getFullYear();
+    fetchEvents(month, year);
+  }, [monthDate])
 
   // Handlers
   const onSelectDay = (day: Date) => {
@@ -54,12 +58,6 @@ export default function Page() {
   const onSelectEvent = (ev: Event) => {
     setSelectedEvent(ev)
     setCreateDate(null)
-    setModalOpen(true)
-  }
-
-  const onNewEvent = () => {
-    setSelectedEvent(null)
-    setCreateDate(new Date())
     setModalOpen(true)
   }
 
