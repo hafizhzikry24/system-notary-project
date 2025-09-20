@@ -2,9 +2,10 @@
 
 namespace App\Http\Repositories;
 
+use Carbon\Carbon;
+use App\Models\Event;
 use App\Enums\Event\PriorityEventEnum;
 use App\Http\Repositories\Interface\EventRepositoryInterface;
-use App\Models\Event;
 
 class EventRepository implements EventRepositoryInterface
 {
@@ -16,6 +17,12 @@ class EventRepository implements EventRepositoryInterface
     public function getAll(array $filters)
     {
         $query = Event::query();
+
+        $month = $filters['month'] ?? Carbon::now()->month;
+        $year  = $filters['year']  ?? Carbon::now()->year;
+
+        $query->whereMonth('start_date', $month)
+            ->whereYear('start_date', $year);
 
         return $query->get();
     }
