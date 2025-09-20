@@ -114,8 +114,15 @@ export default function FinanceReportPage() {
       });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
       link.href = url;
-      link.setAttribute("download", "finance_report.xlsx");
+      link.setAttribute("download", "finance_report_" + formattedDate + ".xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -139,8 +146,14 @@ export default function FinanceReportPage() {
       });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
       link.href = url;
-      link.setAttribute("download", "selected_finance_report.xlsx");
+      link.setAttribute("download", "finance_report_" + formattedDate + ".xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
