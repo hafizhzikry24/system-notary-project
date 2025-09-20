@@ -34,7 +34,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Rekap Keuangan",
-    href: "/financial",
+    href: "/rekap-keuangan",
     icon: Banknote,
     children: [
       { title: "Keuangan", href: "/keuangan" },
