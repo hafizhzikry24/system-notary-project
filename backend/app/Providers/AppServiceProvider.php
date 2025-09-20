@@ -10,11 +10,12 @@ use App\Http\Repositories\PartnerRepository;
 use App\Http\Repositories\WorksheetRepository;
 use App\Http\Repositories\MonitoringRepository;
 use App\Http\Repositories\CustomerBankRepository;
+use App\Http\Repositories\FundCashBankRepository;
 use App\Http\Repositories\TemplateDeedRepository;
+use App\Http\Repositories\FinanceReportRepository;
 use App\Http\Repositories\ProfileSettingRepository;
 use App\Http\Repositories\CustomerCompanyRepository;
 use App\Http\Repositories\CustomerPersonalRepository;
-use App\Http\Repositories\FinanceReportRepository;
 use App\Http\Repositories\Interface\AuthRepositoryInterface;
 use App\Http\Repositories\Interface\RoleRepositoryInterface;
 use App\Http\Repositories\Interface\EventRepositoryInterface;
@@ -22,13 +23,12 @@ use App\Http\Repositories\Interface\PartnerRepositoryInterface;
 use App\Http\Repositories\Interface\WorksheetRepositoryInterface;
 use App\Http\Repositories\Interface\MonitoringRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerBankRepositoryInterface;
+use App\Http\Repositories\Interface\FundCashBankRepositoryInterface;
 use App\Http\Repositories\Interface\TemplateDeedRepositoryInterface;
+use App\Http\Repositories\Interface\FinanceReportRepositoryInterface;
 use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerCompanyRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
-use App\Http\Repositories\Interface\FinanceReportRepositoryInterface;
-use App\Http\Repositories\Interface\FundCashBankRepositoryInterface;
-use App\Models\FundCashBank;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(WorksheetRepositoryInterface::class, WorksheetRepository::class); // Bind the WorksheetRepositoryInterface to WorksheetRepository
         $this->app->bind(MonitoringRepositoryInterface::class, MonitoringRepository::class); // Bind the MonitoringRepositoryInterface to MonitoringRepository
         $this->app->bind(FinanceReportRepositoryInterface::class, FinanceReportRepository::class); // Bind the FinanceReportRepositoryInterface to FinanceReportRepository
-        $this->app->bind(FundCashBankRepositoryInterface::class, FundCashBank::class); // Bind the FundCashBankRepositoryInterface to FundCashBankRepository
+        $this->app->bind(FundCashBankRepositoryInterface::class, FundCashBankRepository::class); // Bind the FundCashBankRepositoryInterface to FundCashBankRepository
     }
 
     /**

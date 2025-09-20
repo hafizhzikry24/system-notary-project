@@ -70,7 +70,7 @@ class FundCashBank extends Model
     public function getDefaultOrderBy()
     {
         return [
-            'column_name' => 'name',
+            'column_name' => 'fund_name',
             'direction' => 'asc',
         ];
     }

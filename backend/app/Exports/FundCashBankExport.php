@@ -30,7 +30,7 @@ class FundCashBankExport implements FromCollection, WithHeadings, WithStyles
             'Kas/Bank',
             'Tipe',
             'Atas Nama',
-            'Nomor Account',
+            'Nomor Akun/Rekening',
             'Jumlah',
         ];
     }

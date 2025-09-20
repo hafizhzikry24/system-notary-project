@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use App\Models\FundCashBank;
 use App\Exports\FundCashBankExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Enums\Finance\FundCashBankTypeEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Http\Repositories\Interface\FundCashBankRepositoryInterface;
 
@@ -124,7 +125,7 @@ class FundCashBankRepository implements FundCashBankRepositoryInterface
      */
     public function getFundTypeValues()
     {
-        $fundTypes = FundCashBank::getTypeValues();
+        $fundTypes = FundCashBankTypeEnum::values();
         return $fundTypes;
     }
 

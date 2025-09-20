@@ -2,7 +2,7 @@
 
 namespace App\Enums\Finance;
 
-enum FundCashBankType
+enum FundCashBankTypeEnum
 {
     const CASH = 'Kas';
     const BANK = 'Bank';
