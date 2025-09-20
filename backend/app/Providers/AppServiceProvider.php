@@ -27,6 +27,8 @@ use App\Http\Repositories\Interface\ProfileSettingRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerCompanyRepositoryInterface;
 use App\Http\Repositories\Interface\CustomerPersonalRepositoryInterface;
 use App\Http\Repositories\Interface\FinanceReportRepositoryInterface;
+use App\Http\Repositories\Interface\FundCashBankRepositoryInterface;
+use App\Models\FundCashBank;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(WorksheetRepositoryInterface::class, WorksheetRepository::class); // Bind the WorksheetRepositoryInterface to WorksheetRepository
         $this->app->bind(MonitoringRepositoryInterface::class, MonitoringRepository::class); // Bind the MonitoringRepositoryInterface to MonitoringRepository
         $this->app->bind(FinanceReportRepositoryInterface::class, FinanceReportRepository::class); // Bind the FinanceReportRepositoryInterface to FinanceReportRepository
+        $this->app->bind(FundCashBankRepositoryInterface::class, FundCashBank::class); // Bind the FundCashBankRepositoryInterface to FundCashBankRepository
     }
 
     /**
