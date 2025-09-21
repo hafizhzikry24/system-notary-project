@@ -57,7 +57,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Notaris & PPAT Profil",
-    href: "/profile",
+    href: "/profil-perusahaaan",
     icon: UserRoundPen,
   },
 ];
