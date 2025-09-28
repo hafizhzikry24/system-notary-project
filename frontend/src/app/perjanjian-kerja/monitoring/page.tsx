@@ -63,8 +63,14 @@ export default function MonitoringLembarKerjaPage() {
       });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
       link.href = url;
-      link.setAttribute("download", "worksheet.xlsx");
+      link.setAttribute("download", "worksheet_monitoring" + formattedDate + ".xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -175,8 +181,15 @@ export default function MonitoringLembarKerjaPage() {
       });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
       link.href = url;
-      link.setAttribute("download", "selected_worksheet.xlsx");
+      link.setAttribute("download", "worksheet_monitoring_" + formattedDate + ".xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
