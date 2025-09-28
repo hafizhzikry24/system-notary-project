@@ -1,4 +1,4 @@
-import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock } from "lucide-react";
+import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock, Shield } from "lucide-react";
 import { MenuItem } from "@/types/layout/sidebar";
 
 export const navItems: MenuItem[] = [
@@ -7,12 +7,6 @@ export const navItems: MenuItem[] = [
     href: "/dashboard",
     icon: Home,
   },
-  // currently unused
-  // {
-  //   title: "Roles",
-  //   href: "/role",
-  //   icon: Shield,
-  // },
   {
     title: "Pelanggan",
     href: "/pelanggan",
@@ -59,5 +53,10 @@ export const navItems: MenuItem[] = [
     title: "Notaris & PPAT Profil",
     href: "/profil-perusahaaan",
     icon: UserRoundPen,
+  },
+  {
+    title: "Roles",
+    href: "/role",
+    icon: Shield,
   },
 ];
