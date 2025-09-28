@@ -35,9 +35,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className='cursor-pointer'>
+          {/* <Button variant="ghost" size="icon" className='cursor-pointer'>
             <Bell className="h-5 w-5" />
-          </Button>
+          </Button> */}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

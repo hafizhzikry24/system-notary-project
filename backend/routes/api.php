@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PartnerController;
-use App\Http\Repositories\WorksheetRepository;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\FundCashBankController;
 use App\Http\Controllers\TemplateDeedController;
@@ -29,11 +29,13 @@ Route::middleware('auth:api')->group(function () {
         ]);
     });
 
-    //endpoint for logout
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    //roles endpoint
-    Route::resource('roles', RoleController::class);
+    //dashboard endpoint
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/project-information', [DashboardController::class, 'projectInformationData']);
+        Route::get('/graphic-work-information', [DashboardController::class, 'graphicWorkInformationData']);
+        Route::get('/progress-information', [DashboardController::class, 'progressInformationData']);
+        Route::get('/client-progress-information', [DashboardController::class, 'clientProgressInformationData']);
+    });
 
     //profile settings endpoint
     Route::prefix('profile-settings')->group(function () {
@@ -134,4 +136,10 @@ Route::middleware('auth:api')->group(function () {
         Route::put('/{id}', [FundCashBankController::class, 'update']);
         Route::delete('/{id}', [FundCashBankController::class, 'destroy']);
     });
+
+    //roles endpoint
+    Route::resource('roles', RoleController::class);
+
+    //endpoint for logout
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
