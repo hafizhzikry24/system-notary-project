@@ -52,7 +52,12 @@ class DashboardService
      */
     public function progressInformation()
     {
-        return $this->dashboardRepository->progressInformation();
+        $monitorings = DB::table('worksheet_notaries')->select('status', DB::raw('COUNT(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        return $this->dashboardRepository->progressInformation($monitorings);
     }
 
     /**

@@ -26,7 +26,7 @@ interface DashboardRepositoryInterface
      * @param array $dashboard
      * @return mixed
      */
-    public function progressInformation();
+    public function progressInformation($monitoring);
 
     /**
      * Get client progress information for the dashboard(client progress for customer).

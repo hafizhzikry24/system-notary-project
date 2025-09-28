@@ -21,7 +21,6 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->unionAll(DB::table('customer_banks')->select(DB::raw('COUNT(*) as total')))
             ->get()->sum('total');
         $worksheet = DB::table('worksheet_notaries')->select(DB::raw('COUNT(*) as total'))
-            ->groupBy('status_order')
             ->get()->sum('total');
         $partner = DB::table('partners')->select(DB::raw('COUNT(*) as total'))
             ->get()->sum('total');
@@ -57,7 +56,7 @@ class DashboardRepository implements DashboardRepositoryInterface
      *
      * @param array $filters
      */
-    public function progressInformation()
+    public function progressInformation($monitoring)
     {
         $draft = $monitoring[StatusOrderEnum::DRAFT->value] ?? 0;
         $pending = $monitoring[StatusOrderEnum::PENDING->value] ?? 0;
