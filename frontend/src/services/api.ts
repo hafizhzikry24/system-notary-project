@@ -32,6 +32,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
+        if (typeof window !== 'undefined') {
+          window.location.href = '/auth/login'; // redirect ke halaman login
+        }
     }
     return Promise.reject(error);
   }
