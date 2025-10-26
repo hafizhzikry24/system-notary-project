@@ -17,6 +17,9 @@ class RoleRepository implements RoleRepositoryInterface
     {
         $query = Role::query();
 
+        // Exclude role Admin
+        $query->where('name', '!=', 'Admin');
+
         if (!empty($filters['search'])) {
             $query->where('name', 'like', '%' . $filters['search'] . '%');
         }

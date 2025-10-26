@@ -64,6 +64,11 @@ export const authService = {
     return response.data;
   },
 
+  async getPermissions(): Promise<string[]> {
+    const response = await api.get('/permissions');
+    return response.data.permissions;
+  },
+
   getToken(): string | null {
     return localStorage.getItem('access_token');
   },

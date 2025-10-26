@@ -35,6 +35,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [permissions, setPermissions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const isAuthenticated = !!user;
@@ -44,7 +45,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         if (authService.isAuthenticated()) {
           const userData = await authService.getUser();
-          setUser(userData.data);
+          const permissionsData = await authService.getPermissions();
+          setUser(userData);
+          setPermissions(permissionsData);
         }
       } catch (error) {
         console.error('Failed to get user data:', error);
@@ -64,7 +67,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.access_token) {
         try {
           const userData = await authService.getUser();
-          setUser(userData.data);
+          const permissionsData = await authService.getPermissions();
+          setPermissions(permissionsData);
+          setUser(userData);
         } catch (userError) {
           setUser({
             id: 0,

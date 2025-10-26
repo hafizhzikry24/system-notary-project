@@ -23,12 +23,18 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // endpoint for all module operations with middleware protection
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', function () {
-        return response()->json([
-            'data' => auth('api')->user(),
-            'message' => 'User data retrieved successfully'
-        ]);
-    });
+    // Route::get('/user', function () {
+    //     return response()->json([
+    //         'data' => auth('api')->user(),
+    //         'message' => 'User data retrieved successfully'
+    //     ]);
+    // });
+
+    //endpoint for get authenticated user
+    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+
+    //endpoint for get user permissions
+    Route::get('/permissions', [AuthController::class, 'getUserPermissions']);
 
     //dashboard endpoint
     Route::prefix('dashboard')->group(function () {
