@@ -1,4 +1,4 @@
-import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock, Shield } from "lucide-react";
+import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock, Shield, UserRound } from "lucide-react";
 import { MenuItem } from "@/types/layout/sidebar";
 
 export const navItems: MenuItem[] = [
@@ -58,5 +58,10 @@ export const navItems: MenuItem[] = [
     title: "Roles",
     href: "/role",
     icon: Shield,
+  },
+  {
+    title: "Pengguna",
+    href: "/user",
+    icon: UserRound,
   },
 ];
