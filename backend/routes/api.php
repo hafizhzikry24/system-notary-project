@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\DashboardController;
@@ -139,6 +140,9 @@ Route::middleware('auth:api')->group(function () {
 
     //roles endpoint
     Route::resource('roles', RoleController::class);
+
+    //users endpoint
+    Route::resource('users', UserController::class);
 
     //endpoint for logout
     Route::post('/logout', [AuthController::class, 'logout']);
