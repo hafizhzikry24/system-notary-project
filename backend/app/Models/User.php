@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -27,6 +28,7 @@ class User extends Authenticatable
         'uuid',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -40,6 +42,34 @@ class User extends Authenticatable
     ];
 
     /**
+     * The method to get the searchables.
+     *
+     * @var array
+     */
+    public function getSearchables()
+    {
+        return[
+            'name' => 'like',
+            'email' => 'like',
+            'username' => 'like',
+        ];
+
+    }
+
+    /**
+     * The method to get the default order by.
+     *
+     * @return array
+     */
+    public function getDefaultOrderBy()
+    {
+        return [
+            'column_name' => 'name',
+            'direction' => 'asc',
+        ];
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -50,5 +80,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role(){
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+
     }
 }
