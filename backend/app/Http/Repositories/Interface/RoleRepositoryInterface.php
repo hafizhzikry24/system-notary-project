@@ -46,4 +46,11 @@ interface RoleRepositoryInterface
      * @return mixed
      */
     public function deleteById(int $id);
+
+    /**
+     * Get all permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllPermissions();
 }

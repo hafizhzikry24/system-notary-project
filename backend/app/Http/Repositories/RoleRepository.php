@@ -2,8 +2,9 @@
 
 namespace App\Http\Repositories;
 
-use App\Http\Repositories\Interface\RoleRepositoryInterface;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Http\Repositories\Interface\RoleRepositoryInterface;
 
 class RoleRepository implements RoleRepositoryInterface
 {
@@ -41,7 +42,14 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function create(array $data)
     {
-        return Role::create($data);
+        $role = Role::create($data);
+
+        //if has permissions, sync permissions
+        if (!empty($data['permissions'])) {
+            $role->syncPermissions($data['permissions']);
+        }
+
+        return $role->load('permissions:name');
     }
 
     /**
@@ -52,7 +60,15 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function findById(int $id)
     {
-        return Role::findOrFail($id);
+        $role = Role::with('permissions:name')->findOrFail($id);
+
+        //change relation to only return permission names
+        $permissions = $role->permissions->pluck('name');
+
+        //set relation
+        $role->setRelation('permissions', collect($permissions));
+
+        return $role;
     }
 
     /**
@@ -65,8 +81,14 @@ class RoleRepository implements RoleRepositoryInterface
     public function updateById(int $id, array $data)
     {
         $role = Role::findOrFail($id);
-        $role->update($data);
-        return $role;
+        $role->update(['name' => $data['name']]);
+
+        //if has permissions, sync permissions
+        if (!empty($data['permissions'])) {
+            $role->syncPermissions($data['permissions']);
+        }
+
+        return $role->load('permissions:name');
     }
 
     /**
@@ -79,5 +101,16 @@ class RoleRepository implements RoleRepositoryInterface
     {
         $role = Role::findOrFail($id);
         return $role->delete();
+    }
+
+    /**
+     * Get all permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllPermissions()
+    {
+        $permissions = Permission::orderBy('id', 'asc')->pluck('name');
+        return $permissions;
     }
 }
