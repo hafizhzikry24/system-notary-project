@@ -155,4 +155,21 @@ class RoleController extends Controller
             return $this->errorResponse('Failed to delete role: ' . $e->getMessage(), 500);
         }
     }
+
+     /**
+      * Get all permissions.
+      *
+      * @return JsonResponse
+      */
+    public function getAllPermissions()
+    {
+        try {
+            // Retrieve all permissions
+            $permissions = $this->roleService->getAllPermissions();
+
+            return $this->successResponse('permissions', $permissions, 'Permissions retrieved successfully');
+        } catch (\Exception $e) {
+            return $this->errorResponse('Failed to retrieve permissions: ' . $e->getMessage(), 500);
+        }
+    }
 }

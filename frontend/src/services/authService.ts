@@ -61,7 +61,23 @@ export const authService = {
 
   async getUser(): Promise<any> {
     const response = await api.get('/user');
-    return response.data;
+    return response.data.user;
+  },
+
+  /**
+   * Get all permissions for the current logged-in user
+   */
+  async getPermissions(): Promise<string[]> {
+    const response = await api.get('/permissions');
+    return response.data.permissions;
+  },
+
+  /**
+   * Check if user has a specific permission
+   */
+  async hasPermission(permission: string): Promise<boolean> {
+    const permissions = await this.getPermissions();
+    return permissions.includes(permission);
   },
 
   getToken(): string | null {
