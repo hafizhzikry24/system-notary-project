@@ -146,10 +146,11 @@ export default function RolesPage() {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-                Roles Management
+                Hak Akses
               </h2>
               <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                Manage system roles. Search, edit, and delete roles easily.
+                Manajemen hak akses pengguna. Cari, edit, dan hapus hak akses
+                pengguna dengan mudah.
               </p>
             </div>
             <div className="flex w-full md:w-auto items-center gap-2">
@@ -160,7 +161,7 @@ export default function RolesPage() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search roles..."
+                  placeholder="Cari hak akses..."
                   className="w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-9 py-2.5 text-sm outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-700"
                 />
                 {search && (
@@ -168,7 +169,7 @@ export default function RolesPage() {
                     onClick={() => setSearch("")}
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-neutral-500 hover:text-neutral-700"
                   >
-                    Clear
+                    Hapus
                   </button>
                 )}
               </div>
@@ -187,7 +188,7 @@ export default function RolesPage() {
               </button>
               {/* Add New */}
               <button
-                onClick={() => router.push("/role/create")}
+                onClick={() => router.push("/role/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-3 py-2 text-sm font-semibold hover:bg-neutral-800"
               >
                 <Plus className="h-4 w-4" /> Role
@@ -234,15 +235,15 @@ export default function RolesPage() {
                       disabled={!roles || roles.data.length === 0}
                     />
                   </th>
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3 text-center">Action</th>
+                  <th className="px-6 py-3">Nama Hak Akses</th>
+                  <th className="px-6 py-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {!roles || roles.data.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="text-center py-10">
-                      No roles found.
+                      Tidak ada hak akses yang ditemukan.
                     </td>
                   </tr>
                 ) : (

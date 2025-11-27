@@ -42,14 +42,14 @@ function useCountUp(target: number, duration = 800) {
 export function ProjectCards({ data, loading }: ProjectCardsProps) {
   const items = [
     {
-      label: "Total Worksheets",
+      label: "Total Lembar Kerja",
       value: data?.worksheet ?? 0,
       icon: FileText,
       color: "text-blue-600",
       bg: "bg-blue-100",
     },
     {
-      label: "Total Customers",
+      label: "Total Pelanggan",
       value: data?.customer ?? 0,
       icon: Users,
       color: "text-green-600",
@@ -63,7 +63,7 @@ export function ProjectCards({ data, loading }: ProjectCardsProps) {
       bg: "bg-purple-100",
     },
     {
-      label: "Template Deeds",
+      label: "Template Akta",
       value: data?.template_deed ?? 0,
       icon: ScrollText,
       color: "text-orange-600",

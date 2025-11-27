@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\FundCashBankController;
 use App\Http\Controllers\TemplateDeedController;
 use App\Http\Controllers\FinanceNotaryController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\WorksheetNotaryController;
@@ -20,6 +21,12 @@ use App\Http\Controllers\MonitoringNotaryController;
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::prefix('auth')->group(function () {
+    Route::post('/forgot-password', ResetPasswordController::class);
+    Route::get('/check-token', [ResetPasswordController::class, 'checkToken']);
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']);
+});
 
 // endpoint for all module operations with middleware protection
 Route::middleware('auth:api')->group(function () {

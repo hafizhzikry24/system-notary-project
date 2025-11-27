@@ -685,7 +685,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
           Reset Search
         </button>
         {/* <button
-          onClick={() => router.push("/pelanggan/perorangan/create")}
+          onClick={() => router.push("/pelanggan/perorangan/tambah")}
           className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           <Plus className="h-4 w-4" /> Add worksheet

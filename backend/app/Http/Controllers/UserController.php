@@ -115,10 +115,17 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             // Update a user by ID
-            $user = $this->userService->update($id, $request->validated());
+            $result = $this->userService->update($id, $request->validated());
+
+            // Check if repository returned an error response (e.g., incorrect current password)
+            if ($result instanceof \Illuminate\Http\JsonResponse) {
+                DB::rollBack();
+                return $result;
+            }
 
             DB::commit();
 
+            return $this->successResponse('user', $result, 'User updated successfully');
         } catch (ValidationException $e) {
             DB::rollBack();
             return $this->validationErrorResponse($e);

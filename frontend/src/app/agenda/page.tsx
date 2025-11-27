@@ -86,8 +86,8 @@ export default function Page() {
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Calendar</h1>
-                <p className="mt-1 text-sm text-gray-600">Manage your events and schedule</p>
+                <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Kalender Acara</h1>
+                <p className="mt-1 text-sm text-gray-600">Manajemen acara dan jadwal</p>
               </div>
             </div>
 
@@ -95,7 +95,7 @@ export default function Page() {
               {loading ? (
                 <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
                   <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-                  <p className="mt-4 text-gray-600">Loading events…</p>
+                  <p className="mt-4 text-gray-600">Memuat acara...</p>
                 </div>
               ) : (
                 <MonthCalendar
@@ -111,8 +111,8 @@ export default function Page() {
 
               <div className="rounded-xl border bg-white shadow-sm">
                 <div className="border-b border-gray-100 px-4 py-4 sm:px-6">
-                  <h2 className="text-lg font-semibold text-gray-900">All Events</h2>
-                  <p className="mt-1 text-sm text-gray-500">{events.length} total events</p>
+                  <h2 className="text-lg font-semibold text-gray-900">Semua Acara</h2>
+                  <p className="mt-1 text-sm text-gray-500">{events.length} total acara</p>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {events.length === 0 ? (
@@ -120,8 +120,8 @@ export default function Page() {
                       <div className="mx-auto h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                         <Plus className="h-6 w-6 text-gray-400" />
                       </div>
-                      <p className="text-gray-500">No events yet.</p>
-                      <p className="mt-1 text-sm text-gray-400">Create your first event to get started.</p>
+                      <p className="text-gray-500">Belum ada acara.</p>
+                      <p className="mt-1 text-sm text-gray-400">Buat acara pertama Anda untuk memulai.</p>
                     </div>
                   ) : (
                     events.map((ev) => (

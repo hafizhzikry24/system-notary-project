@@ -29,12 +29,13 @@ export default function CreateRole() {
   const [loading, setLoading] = useState(false);
   const [roleResponse, setRoleResponse] = useState<any[]>([]);
 
-  const [formData, setFormData] = useState<{ name: string, username: string, email: string, password: string, role_id: string }>({
+  const [formData, setFormData] = useState<{ name: string, username: string, email: string, password: string, role_id: string, password_confirmation: string }>({
     name: "",
     username: "",
     email: "",
     password: "",
     role_id: "",
+    password_confirmation: "",
   });
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
@@ -68,7 +69,7 @@ export default function CreateRole() {
         role_id: Number(formData.role_id),
       });
       showSuccess("User created successfully!");
-      router.push("/user");
+      router.push("/pengguna");
     } catch (error: any) {
       if (error.response?.status === 422) {
         showValidationErrors(error.response.data.errors);
@@ -85,17 +86,17 @@ export default function CreateRole() {
     <ProtectedRoute>
       <Layout>
         <div className="container mx-auto px-6 sm:px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Create User</h1>
+          <h1 className="text-2xl font-bold mb-6">Tambah User</h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="flex space-x-6">
               <LabelInputContainer>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Nama</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="Enter name"
+                  placeholder="Masukkan nama"
                   required
                 />
               </LabelInputContainer>
@@ -104,8 +105,10 @@ export default function CreateRole() {
                 <Input
                   id="username"
                   value={formData.username}
-                  onChange={(e) => handleInputChange("username", e.target.value)}
-                  placeholder="Enter user name"
+                  onChange={(e) =>
+                    handleInputChange("username", e.target.value)
+                  }
+                  placeholder="Masukkan user name"
                   required
                 />
               </LabelInputContainer>
@@ -117,7 +120,7 @@ export default function CreateRole() {
                   id="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  placeholder="Enter email"
+                  placeholder="Masukkan email"
                   required
                 />
               </LabelInputContainer>
@@ -125,42 +128,61 @@ export default function CreateRole() {
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
+                  type="password"
                   value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  placeholder="Enter password"
+                  onChange={(e) =>
+                    handleInputChange("password", e.target.value)
+                  }
+                  placeholder="Masukkan password"
                   required
                 />
               </LabelInputContainer>
-            </div>
               <LabelInputContainer>
-                <Label htmlFor="role_id">Role</Label>
-                <Select
-                  value={formData.role_id}
-                  onValueChange={(value) => handleInputChange("role_id", value)}
-                >
-                  <SelectTrigger id="role_id" className="w-full">
-                    <SelectValue placeholder="Select Role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roleResponse.length > 0 ? (
-                      roleResponse.map((option: any) => (
-                        <SelectItem key={option.id} value={option.id.toString()}>
-                          {option.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <p className="px-3 py-2 text-sm text-gray-500">No roles available</p>
-                    )}
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="password_confirmation">
+                  Konfirmasi Password
+                </Label>
+                <Input
+                  id="password_confirmation"
+                  type="password"
+                  placeholder="Masukkan konfirmasi password"
+                  value={formData.password_confirmation}
+                  onChange={(e) =>
+                    handleInputChange("password_confirmation", e.target.value)
+                  }
+                />
               </LabelInputContainer>
+            </div>
+            <LabelInputContainer>
+              <Label htmlFor="role_id">Role</Label>
+              <Select
+                value={formData.role_id}
+                onValueChange={(value) => handleInputChange("role_id", value)}
+              >
+                <SelectTrigger id="role_id" className="w-full">
+                  <SelectValue placeholder="Pilih Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roleResponse.length > 0 ? (
+                    roleResponse.map((option: any) => (
+                      <SelectItem key={option.id} value={option.id.toString()}>
+                        {option.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <p className="px-3 py-2 text-sm text-gray-500">
+                      Tidak ada role tersedia
+                    </p>
+                  )}
+                </SelectContent>
+              </Select>
+            </LabelInputContainer>
             <div className="flex justify-end">
               <Button
                 type="submit"
                 className="cursor-pointer px-6"
                 disabled={saving}
               >
-                {saving ? "Saving..." : "Create User"}
+                {saving ? "Menambahkan..." : "Tambah Pengguna"}
               </Button>
             </div>
           </form>

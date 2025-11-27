@@ -5,6 +5,8 @@ namespace App\Http\Repositories;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Models\UserPasswordHistory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Http\Repositories\Interface\UserRepositoryInterface;
 
@@ -73,13 +75,24 @@ class UserRepository implements UserRepositoryInterface
     {
         return DB::transaction(function () use ($data) {
 
-            if (isset($data['password'])) {
-                $data['password'] = bcrypt($data['password']);// Hash the password before saving
+            $data['uuid'] = Str::uuid();
+
+            // Hash before saving
+            if (!empty($data['password'])) {
+                $data['password'] = bcrypt($data['password']);
             }
 
-            $data['uuid'] = Str::uuid(); // Generate UUID for the user
-
+            // Create user first
             $user = User::create($data);
+
+            // Then store password history
+            if (!empty($data['password'])) {
+                UserPasswordHistory::create([
+                    'user_id' => $user->id,
+                    'new_password' => $data['password'],
+                    'password_changed_at' => now()
+                ]);
+            }
 
             return $user;
         });
@@ -107,19 +120,55 @@ class UserRepository implements UserRepositoryInterface
     public function updateById(int $id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
+
             $user = User::findOrFail($id);
 
-            if (isset($data['password'])) {
-                $data['password'] = bcrypt($data['password']);
+            // Update password only if provided
+            if (!empty($data['password'])) {
+
+                // Validate current password
+                if (!isset($data['current_password']) ||
+                    !Hash::check($data['current_password'], $user->password)) {
+
+                    return response()->json([
+                        'error' => true,
+                        'error_message' => 'Current password is incorrect.'
+                    ], 422);
+                }
+
+                // Check last 4 passwords
+                $lastPasswords = UserPasswordHistory::where('user_id', $user->id)
+                    ->orderBy('password_changed_at', 'desc')
+                    ->take(4)
+                    ->pluck('new_password');
+
+                foreach ($lastPasswords as $oldPassword) {
+                    if (Hash::check($data['password'], $oldPassword)) {
+                        return response()->json([
+                            'error' => true,
+                            'error_message' => 'You cannot use any of your last 4 passwords.'
+                        ], 422);
+                    }
+                }
+
+                // Hash password
+                $hashedNewPassword = bcrypt($data['password']);
+                $data['password'] = $hashedNewPassword;
+
+                // Store history
+                UserPasswordHistory::create([
+                    'user_id' => $user->id,
+                    'new_password' => $hashedNewPassword,
+                    'password_changed_at' => now()
+                ]);
+
             } else {
-                // Remove password from data to avoid overwriting with null
                 unset($data['password']);
             }
 
-            // Update data user
+            // Update user
             $user->update($data);
 
-            // return updated user
             return $user;
         });
     }
@@ -137,5 +186,30 @@ class UserRepository implements UserRepositoryInterface
         $user->attachments()->delete();
 
         return $user->delete();
+    }
+
+    /**
+     * Find a user by email.
+     *
+     * @param string $email
+     * @return mixed
+     */
+    public function findByEmail($email)
+    {
+        return User::where('email', $email)->first();
+    }
+
+    /**
+     * Update a user's password.
+     *
+     * @param User $user
+     * @param string $hashedPassword
+     * @return User
+     */
+    public function updatePassword($user, $hashedPassword)
+    {
+        $user->password = $hashedPassword;
+        $user->save();
+        return $user;
     }
 }
