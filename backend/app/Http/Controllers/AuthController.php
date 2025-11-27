@@ -88,4 +88,36 @@ class AuthController extends Controller
             return $this->errorResponse('An error occurred during logout: ' . $e->getMessage(), 500);
         }
     }
+
+    /**
+     * Get the authenticated user's details.
+     *
+     * @return JsonResponse
+     */
+    public function getAuthenticatedUser()
+    {
+        try {
+            $user = $this->authService->getAuthenticatedUser();
+
+            return $this->successResponse('user', $user, 'User retrieved successfully', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred while retrieving user: ' . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Get the authenticated user's permissions.
+     *
+     * @return JsonResponse
+     */
+    public function getUserPermissions(){
+        try {
+            $permissions = $this->authService->getUserPermissions();
+
+            return $this->successResponse('permissions', $permissions, 'User permissions retrieved successfully', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred while retrieving permissions: ' . $e->getMessage(), 500);
+
+        }
+    }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\Auth\StrongPasswordRule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
@@ -36,8 +37,32 @@ class UserRequest extends FormRequest
                 Rule::unique('users', 'username')->ignore($userId),
             ],
             'password' => $this->isMethod('post')
-                ? ['required', 'min:6'] // required when create
-                : ['nullable', 'min:6'], // nullable when edit
+                ? [
+                    'required',
+                    'confirmed',
+                    'min:8',
+                    'regex:/[a-z]/',      // At least one lowercase letter
+                    'regex:/[A-Z]/',      // At least one uppercase letter
+                    'regex:/[0-9]/',      // At least one number
+                    'regex:/[@$!%*?&]/',  // At least one special character
+                    'different:current_password',
+                    new StrongPasswordRule
+                ]   // Custom rule for strong password requirements] // required when create
+                : [
+                    'nullable',
+                    'confirmed',
+                    'min:8',
+                    'regex:/[a-z]/',      // At least one lowercase letter
+                    'regex:/[A-Z]/',      // At least one uppercase letter
+                    'regex:/[0-9]/',      // At least one number
+                    'regex:/[@$!%*?&]/',  // At least one special character
+                    'different:current_password',
+                    new StrongPasswordRule
+                ], // nullable when edit
+            'current_password' => [
+                'required_with:password',
+                'string',
+            ],
             'role_id' => 'required|exists:roles,id',
         ];
     }
@@ -56,8 +81,13 @@ class UserRequest extends FormRequest
             'email.unique' => 'Email has already been taken',
             'username.required' => 'Username is required',
             'username.unique' => 'Username has already been taken',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters',
+            'password.required' => 'The password field is required.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@, $, !, %, *, ?, &).',
+            'password.different' => 'The new password must be different from your current password.',
+            'current_password.required' => 'The current password is required.',
+            'current_password.string' => 'The current password must be a string.',
             'role_id.required' => 'Role is required',
             'role_id.exists' => 'Selected role does not exist',
         ];

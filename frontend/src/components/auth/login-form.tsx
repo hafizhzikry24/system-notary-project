@@ -108,9 +108,9 @@ export function LoginForm({ className }: LoginFormProps) {
               <FormItem>
                 <div className="flex items-center">
                   <FormLabel>Password</FormLabel>
-                  {/* <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
+                  <a href="/auth/forgot-password" className="ml-auto text-sm underline-offset-4 hover:underline">
                     Forgot your password?
-                  </a> */}
+                  </a>
                 </div>
                 <FormControl>
                   <div className="relative">
