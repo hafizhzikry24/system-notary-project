@@ -74,7 +74,7 @@ export default function UserPage() {
     fetchUsers();
   }, [fetchUsers]);
 
-  const handleEdit = (id: number) => router.push(`/user/${id}`);
+  const handleEdit = (id: number) => router.push(`/pengguna/${id}`);
   const handleDelete = (id: number) =>
     setDeleteModal({ isOpen: true, userId: id, isBatch: false });
   const handleDeleteSelected = () =>
@@ -146,10 +146,10 @@ export default function UserPage() {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-                User Management
+                Manajemen Pengguna
               </h2>
               <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                Manage system users. Search, edit, and delete users easily.
+                Manajemen pengguna sistem. Cari, edit, dan hapus pengguna dengan mudah.
               </p>
             </div>
             <div className="flex w-full md:w-auto items-center gap-2">
@@ -187,10 +187,10 @@ export default function UserPage() {
               </button>
               {/* Add New */}
               <button
-                onClick={() => router.push("/user/create")}
+                onClick={() => router.push("/pengguna/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-3 py-2 text-sm font-semibold hover:bg-neutral-800"
               >
-                <Plus className="h-4 w-4" /> User
+                <Plus className="h-4 w-4" /> Pengguna
               </button>
             </div>
           </div>
@@ -234,10 +234,10 @@ export default function UserPage() {
                       disabled={!users || users.data.length === 0}
                     />
                   </th>
-                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Nama</th>
                   <th className="px-6 py-3">Username</th>
                   <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3 text-center">Action</th>
+                  <th className="px-6 py-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody>

@@ -188,7 +188,7 @@ export default function TemplateDeedPage() {
               </button>
               {/* Optional add button (uncomment if route ready) */}
               <button
-                onClick={() => router.push("/master-data/template-akta/create")}
+                onClick={() => router.push("/master-data/template-akta/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800 cursor-pointer"
               >
                 <Plus className="h-4 w-4" />  

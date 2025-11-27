@@ -189,7 +189,7 @@ export default function LembarKerjaPage() {
               </button>
               {/* Optional add button (uncomment if route ready) */}
               <button
-                onClick={() => router.push("/perjanjian-kerja/lembar-kerja/create")}
+                onClick={() => router.push("/perjanjian-kerja/lembar-kerja/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800 cursor-pointer"
               >
                 <Plus className="h-4 w-4" />  
@@ -471,7 +471,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
           Reset Search
         </button>
         {/* <button
-          onClick={() => router.push("/pelanggan/perorangan/create")}
+          onClick={() => router.push("/pelanggan/perorangan/tambah")}
           className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           <Plus className="h-4 w-4" /> Add worksheet

@@ -46,7 +46,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Agenda & Acara",
-    href: "/event",
+    href: "/agenda",
     icon: CalendarClock,
   },
   {
@@ -61,7 +61,7 @@ export const navItems: MenuItem[] = [
   },
   {
     title: "Pengguna",
-    href: "/user",
+    href: "/pengguna",
     icon: UserRound,
   },
 ];

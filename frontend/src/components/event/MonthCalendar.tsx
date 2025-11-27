@@ -55,7 +55,7 @@ export function MonthCalendar({
   const end = endOfWeek(endOfMonth(monthDate), { weekStartsOn: 1 })
   const days = eachDayOfInterval({ start, end })
 
-  const weekLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  const weekLabels = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"]
 
   return (
     <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
@@ -68,12 +68,12 @@ export function MonthCalendar({
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900 sm:text-2xl">{format(monthDate, "MMMM yyyy")}</h2>
-              <p className="text-sm text-gray-500">{events.length} events this month</p>
+              <p className="text-sm text-gray-500">{events.length} acara ini bulan ini</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={onToday} className="px-3 py-2 text-sm font-medium bg-transparent cursor-pointer">
-              Today
+              Hari Ini
             </Button>
             <div className="flex items-center rounded-lg border">
               <Button
@@ -83,7 +83,7 @@ export function MonthCalendar({
                 className="rounded-r-none border-r px-3 py-2 hover:bg-gray-50 cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Previous month</span>
+                <span className="sr-only">Bulan sebelumnya</span>
               </Button>
               <Button
                 variant="ghost"
@@ -92,7 +92,7 @@ export function MonthCalendar({
                 className="rounded-l-none px-3 py-2 hover:bg-gray-50 cursor-pointer"
               >
                 <ChevronRight className="h-4 w-4" />
-                <span className="sr-only">Next month</span>
+                <span className="sr-only">Bulan selanjutnya</span>
               </Button>
             </div>
           </div>
@@ -141,7 +141,7 @@ export function MonthCalendar({
                   </span>
                   {isNow && (
                     <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-600 text-[10px] font-semibold text-white">
-                      Today
+                      Hari Ini
                     </span>
                   )}
                 </div>

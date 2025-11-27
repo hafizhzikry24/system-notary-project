@@ -47,7 +47,7 @@ export default function Dashboard() {
       <Layout>
         <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-            Dashboard Overview
+            Dashboard Statistik
           </h1>
           <div className="space-y-6">
             <ProjectCards data={projectData} loading={loading} />
@@ -55,21 +55,23 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-4">
-                  Work Distribution
+                  Distribusi Pekerjaan
                 </h3>
                 <GraphicWorkChart data={graphicData} loading={loading} />
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-4">
-                  Client Distribution
+                  Distribusi Klien
                 </h3>
                 <ClientDistributionChart data={clientData} loading={loading} />
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4">Work Progress Overview</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Progress Pekerjaan
+              </h3>
               <ProgressGaugeChart data={progressData} loading={loading} />
             </div>
           </div>

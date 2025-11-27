@@ -59,10 +59,9 @@ class UserRequest extends FormRequest
                     'different:current_password',
                     new StrongPasswordRule
                 ], // nullable when edit
-            'current_password' => [
-                'required_with:password',
-                'string',
-            ],
+            'current_password' => $this->isMethod('post')
+                ? ['nullable']  // CREATE → not required when create
+                : ['required_with:password', 'string'], // UPDATE → required when update
             'role_id' => 'required|exists:roles,id',
         ];
     }

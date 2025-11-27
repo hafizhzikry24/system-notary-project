@@ -97,23 +97,23 @@ export default function CreateRole() {
     <ProtectedRoute>
       <Layout>
         <div className="container mx-auto px-6 sm:px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Create Role</h1>
+          <h1 className="text-2xl font-bold mb-6">Buat Hak Akses</h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <LabelInputContainer>
-              <Label htmlFor="name">Role Name</Label>
+              <Label htmlFor="name">Nama Hak Akses</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Enter role name"
+                placeholder="Masukkan nama hak akses"
                 required
               />
             </LabelInputContainer>
 
             {/* Permissions */}
               <div>
-                <h2 className="text-lg font-semibold mb-2">Permissions</h2>
+                <h2 className="text-lg font-semibold mb-2">Izin Akses</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 border rounded-lg p-4 max-h-[400px] overflow-y-auto">
                   {allPermissions.map((perm) => (
                     <Label key={perm} className="flex items-center space-x-2">
