@@ -34,11 +34,13 @@ export default function CreateUser() {
   const [roleResponse, setRoleResponse] = useState<any[]>([]);
 
 
-  const [formData, setFormData] = useState<{ name: string, username: string, email: string, password: string, role_id: string }>({
+  const [formData, setFormData] = useState<{ name: string, username: string, email: string, password: string, password_confirmation: string, current_password: string, role_id: string }>({
     name: "",
     username: "",
     email: "",
     password: "",
+    password_confirmation: "",
+    current_password: "",
     role_id: "",
   });
 
@@ -85,14 +87,25 @@ export default function CreateUser() {
     setSaving(true);
 
     try {
-      await api.post(`/users/${id}?_method=PUT`, formData);
+      const response = await api.post(`/users/${id}?_method=PUT`, formData);
       showSuccess("User updated successfully!");
       router.push("/user");
     } catch (error: any) {
       if (error.response?.status === 422) {
-        showValidationErrors(error.response.data.errors);
+        // Handle validation errors
+        if (error.response.data.errors) {
+          showValidationErrors(error.response.data.errors);
+        } else if (error.response.data.error_message) {
+          // Handle error message from repository (e.g., incorrect current password)
+          showError(error.response.data.error_message);
+        } else {
+          showError("Validation failed. Please check your input.");
+        }
+      } else if (error.response?.data?.error_message) {
+        // Handle error message from repository
+        showError(error.response.data.error_message);
       } else {
-        showError("Failed to update user!");
+        showError(error.response?.data?.message || "Failed to update user!");
       }
     } finally {
       setSaving(false);
@@ -141,15 +154,46 @@ export default function CreateUser() {
                 />
               </LabelInputContainer>
               <LabelInputContainer>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="current_password">Current Password</Label>
                 <Input
-                  id="password"
-                  value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  placeholder="Enter password"
+                  id="current_password"
+                  type="password"
+                  value={formData.current_password}
+                  onChange={(e) => handleInputChange("current_password", e.target.value)}
+                  placeholder="Enter current password to change password"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Leave password fields empty if you don't want to change the password
+                </p>
               </LabelInputContainer>
             </div>
+            {(formData.current_password || formData.password || formData.password_confirmation) && (
+              <div className="flex space-x-6">
+                <LabelInputContainer>
+                  <Label htmlFor="password">New Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    placeholder="Enter new password"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Must contain at least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)
+                  </p>
+                </LabelInputContainer>
+                <LabelInputContainer>
+                  <Label htmlFor="password_confirmation">Confirm New Password</Label>
+                  <Input
+                    id="password_confirmation"
+                    type="password"
+                    value={formData.password_confirmation}
+                    onChange={(e) => handleInputChange("password_confirmation", e.target.value)}
+                    placeholder="Confirm new password"
+                  />
+                </LabelInputContainer>
+              </div>
+            )}
               <LabelInputContainer>
                 <Label htmlFor="role_id">Role</Label>
                 <Select

@@ -44,6 +44,11 @@ class ResetPasswordController extends Controller
 
             $response = $this->service->sendResetLink($data['email']);
 
+            // Check if the service returned an error response
+            if (isset($response['success']) && !$response['success']) {
+                return response()->json($response, 404);
+            }
+
             return response()->json($response);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);

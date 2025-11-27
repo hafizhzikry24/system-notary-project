@@ -23,7 +23,6 @@ class ForgotPasswordRequest extends FormRequest
     {
         return [
             'email' => 'required|email|string|max:320',
-            'company_type' => 'required|string|max:100'
         ];
     }
 }

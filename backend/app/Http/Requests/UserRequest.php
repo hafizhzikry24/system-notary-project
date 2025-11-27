@@ -40,7 +40,7 @@ class UserRequest extends FormRequest
                 ? [
                     'required',
                     'confirmed',
-                    'min:6',
+                    'min:8',
                     'regex:/[a-z]/',      // At least one lowercase letter
                     'regex:/[A-Z]/',      // At least one uppercase letter
                     'regex:/[0-9]/',      // At least one number
@@ -51,7 +51,7 @@ class UserRequest extends FormRequest
                 : [
                     'nullable',
                     'confirmed',
-                    'min:6',
+                    'min:8',
                     'regex:/[a-z]/',      // At least one lowercase letter
                     'regex:/[A-Z]/',      // At least one uppercase letter
                     'regex:/[0-9]/',      // At least one number
@@ -59,6 +59,10 @@ class UserRequest extends FormRequest
                     'different:current_password',
                     new StrongPasswordRule
                 ], // nullable when edit
+            'current_password' => [
+                'required_with:password',
+                'string',
+            ],
             'role_id' => 'required|exists:roles,id',
         ];
     }
@@ -79,7 +83,7 @@ class UserRequest extends FormRequest
             'username.unique' => 'Username has already been taken',
             'password.required' => 'The password field is required.',
             'password.confirmed' => 'The password confirmation does not match.',
-            'password.min' => 'The password must be at least 6 characters.',
+            'password.min' => 'The password must be at least 8 characters.',
             'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@, $, !, %, *, ?, &).',
             'password.different' => 'The new password must be different from your current password.',
             'current_password.required' => 'The current password is required.',

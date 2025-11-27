@@ -49,6 +49,16 @@ class ResetPasswordService
      */
     public function sendResetLink($email)
     {
+        // Check if the email exists in the users table
+        $user = $this->userRepo->findByEmail($email);
+
+        if (!$user) {
+            return [
+                'success' => false,
+                'message' => 'Email does not exist.',
+            ];
+        }
+
         // Delete old tokens
         $this->passwordRepo->deleteExistingTokens($email);
 
@@ -56,8 +66,9 @@ class ResetPasswordService
         $token = Str::random(60);
         $this->passwordRepo->createToken($email, $token);
 
-        // Generate reset URL
-        $resetUrl = 'http://localhost:300/auth/reset-password?token=' . $token;
+        // Generate reset URL using frontend_url from config
+        $frontendUrl = config('app.frontend_url', 'http://localhost:3000');
+        $resetUrl = rtrim($frontendUrl, '/') . '/auth/reset-password?token=' . $token;
 
         try {
             Mail::to($email)->send(new ResetPasswordMail($resetUrl));
