@@ -40,7 +40,7 @@ export function GraphicWorkChart({ data, loading }: GraphicWorkChartProps) {
     labels: data?.map(item => item.template_deed) ?? [],
     datasets: [
       {
-        label: "Number of Works",
+        label: "Nomor Distribusi",
         data: data?.map(item => item.count) ?? [],
         backgroundColor: "rgba(59, 130, 246, 0.5)",
         borderColor: "rgb(59, 130, 246)",

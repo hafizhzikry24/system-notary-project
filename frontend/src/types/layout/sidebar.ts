@@ -4,7 +4,8 @@ export interface MenuItem {
   title: string;
   href: string;
   icon: ComponentType<{ className: string }>;
-  children?: { title: string; href: string }[];
+  children?: { title: string; href: string, permissions?: string[] }[];
+  permissions?: string[];
 }
 
 export interface SidebarProps {

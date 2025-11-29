@@ -51,7 +51,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem onClick={() => router.push('/')}>
+              <DropdownMenuItem onClick={() => router.push('/informasi-pengguna')}>
                 <User className="mr-2 h-4 w-4" />
                 Profile
               </DropdownMenuItem>

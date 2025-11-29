@@ -17,9 +17,6 @@ class StaffPermissionManagerSeeder extends Seeder
     {
         $this->command->info('Seeding Staff Permissions...');
         $permission = [
-            // Dashboard Permissions
-            'Dashboard-View',
-
             //Pelanggan Permissions
             // Perorangan Permissions
             'Pelanggan-Peorangan-View',

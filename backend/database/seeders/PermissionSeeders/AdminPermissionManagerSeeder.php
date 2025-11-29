@@ -17,9 +17,6 @@ class AdminPermissionManagerSeeder extends Seeder
     {
         $this->command->info('Seeding Admin Permissions...');
         $permission = [
-            // Dashboard Permissions
-            'Dashboard-View',
-
             //Pelanggan Permissions
             // Perorangan Permissions
             'Pelanggan-Peorangan-View',
@@ -77,6 +74,10 @@ class AdminPermissionManagerSeeder extends Seeder
             'Agenda-Create',
             'Agenda-Edit',
             'Agenda-Delete',
+
+            //Profile Perusahaan Permission
+            'Profile-View',
+            'Profile-edit',
 
             //Role Management Permissions
             'Role-View',

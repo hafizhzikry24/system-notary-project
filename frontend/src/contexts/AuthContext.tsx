@@ -8,6 +8,7 @@ interface User {
   name: string;
   username: string;
   email: string;
+  created_at: any;
 }
 
 interface AuthContextType {
@@ -77,6 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             name: 'User',
             username: credentials.username,
             email: '',
+            created_at: null,
           });
         }
       } else {
