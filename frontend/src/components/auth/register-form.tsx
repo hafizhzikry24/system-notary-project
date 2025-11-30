@@ -85,8 +85,8 @@ export function RegisterForm({ className }: RegisterFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Create Account</h1>
-        <p className="text-balance text-sm text-muted-foreground">Sign up to get started with your account</p>
+        <h1 className="text-2xl font-bold">Daftar</h1>
+        <p className="text-balance text-sm text-muted-foreground">Buat akun untuk melanjutkan</p>
       </div>
 
       {error && (
@@ -102,14 +102,14 @@ export function RegisterForm({ className }: RegisterFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>Nama Lengkap</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       {...field}
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Masukkan nama lengkap"
                       className="pl-10"
                       disabled={isLoading}
                     />
@@ -132,7 +132,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
                     <Input
                       {...field}
                       type="text"
-                      placeholder="Choose a username"
+                      placeholder="Masukkan username"
                       className="pl-10"
                       disabled={isLoading}
                     />
@@ -148,14 +148,14 @@ export function RegisterForm({ className }: RegisterFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       {...field}
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="Masukkan email"
                       className="pl-10"
                       disabled={isLoading}
                     />
@@ -178,7 +178,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
                     <Input
                       {...field}
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder="Masukkan password"
                       className="pl-10 pr-10"
                       disabled={isLoading}
                     />
@@ -208,14 +208,14 @@ export function RegisterForm({ className }: RegisterFormProps) {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>Konfirmasi Password</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       {...field}
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
+                      placeholder="Masukkan konfirmasi password"
                       className="pl-10 pr-10"
                       disabled={isLoading}
                     />
@@ -244,19 +244,19 @@ export function RegisterForm({ className }: RegisterFormProps) {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Creating account...
+                Mendaftar...
               </>
             ) : (
-              "Create account"
+              "Mendaftar"
             )}
           </Button>
         </form>
       </Form>
 
       <div className="text-center text-sm">
-        Already have an account?{" "}
+        Sudah punya akun?{" "}
         <a href="/auth/login" className="underline underline-offset-4">
-          Sign in
+          Masuk
         </a>
       </div>
     </div>

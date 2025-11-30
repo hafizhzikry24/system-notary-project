@@ -81,15 +81,15 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Check your email</h1>
+          <h1 className="text-2xl font-bold">Cek Email Anda</h1>
           <p className="text-balance text-sm text-muted-foreground">
-            We've sent a password reset link to {form.getValues('email')}
+            Kami telah mengirimkan link reset password ke {form.getValues('email')}
           </p>
         </div>
 
         <Alert>
           <AlertDescription>
-            Please check your email and click the link to reset your password. If you don't see the email, check your spam folder.
+            Cek email Anda dan klik link untuk reset password. Jika Anda tidak melihat email, cek folder spam.
           </AlertDescription>
         </Alert>
 
@@ -99,7 +99,7 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
           className="w-full"
           onClick={() => router.push("/auth/login")}
         >
-          Back to login
+          Kembali ke login
         </Button>
       </div>
     )
@@ -108,9 +108,9 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Forgot your password?</h1>
+        <h1 className="text-2xl font-bold">Lupa Password?</h1>
         <p className="text-balance text-sm text-muted-foreground">
-          Enter your email address and we'll send you a link to reset your password
+          Masukkan email Anda dan kami akan mengirimkan link reset password
         </p>
       </div>
 
@@ -134,7 +134,7 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
                     <Input
                       {...field}
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="Masukkan email"
                       className="pl-10"
                       disabled={isLoading}
                     />
@@ -149,19 +149,19 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Sending...
+                Mengirim...
               </>
             ) : (
-              "Send reset link"
+              "Kirim Link Reset Password"
             )}
           </Button>
         </form>
       </Form>
 
       <div className="text-center text-sm">
-        Remember your password?{" "}
+        Sudah ingat password?{" "}
         <a href="/auth/login" className="underline underline-offset-4">
-          Sign in
+          Masuk
         </a>
       </div>
     </div>

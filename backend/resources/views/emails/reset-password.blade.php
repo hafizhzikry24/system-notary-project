@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset Request</title>
+    <title>Permintaan Atur Ulang Kata Sandi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,38 +55,38 @@
 </head>
 <body>
     <div class="header">
-        <h1>Password Reset Request</h1>
-        <p>Notary Information System</p>
+        <h1>Permintaan Atur Ulang Kata Sandi</h1>
+        <p>Sistem Informasi Notaris</p>
     </div>
 
     <div class="content">
-        <p>Hello,</p>
+        <p>Halo,</p>
 
-        <p>You have requested to reset your password for the Notary Information System.</p>
+        <p>Anda telah meminta untuk mengatur ulang kata sandi akun Sistem Informasi Notaris.</p>
 
-        <p>Click the button below to reset your password:</p>
+        <p>Klik tombol di bawah ini untuk mengatur ulang kata sandi Anda:</p>
 
         <p style="text-align: center;">
-            <a href="{{ $resetUrl }}" class="button">Reset Password</a>
+            <a href="{{ $resetUrl }}" class="button">Atur Ulang Kata Sandi</a>
         </p>
 
-        <p><strong>Important:</strong></p>
+        <p><strong>Penting:</strong></p>
         <ul>
-            <li>This link will expire in 15 minutes for security reasons</li>
-            <li>If you didn't request this password reset, please ignore this email</li>
-            <li>Never share this reset link with anyone</li>
+            <li>Tautan ini akan kedaluwarsa dalam 15 menit untuk keamanan</li>
+            <li>Jika Anda tidak meminta pengaturan ulang kata sandi, harap abaikan email ini</li>
+            <li>Jangan pernah membagikan tautan ini kepada siapapun</li>
         </ul>
 
-        <p>If the button above doesn't work, you can copy and paste this link into your browser:</p>
+        <p>Jika tombol di atas tidak berfungsi, Anda dapat menyalin dan menempelkan tautan berikut ke browser Anda:</p>
         <p style="word-break: break-all; background-color: #f8f9fa; padding: 10px; border-radius: 3px;">
             {{ $resetUrl }}
         </p>
     </div>
 
     <div class="footer">
-        <p>This is an automated message from the Notary Information System.</p>
-        <p>If you have any questions, please contact your system administrator.</p>
-        <p>&copy; {{ date('Y') }} Notary Information System. All rights reserved.</p>
+        <p>Ini adalah pesan otomatis dari Sistem Informasi Notaris.</p>
+        <p>Jika Anda memiliki pertanyaan, silakan hubungi administrator sistem.</p>
+        <p>&copy; {{ date('Y') }} Sistem Informasi Notaris. Hak Cipta Dilindungi.</p>
     </div>
 </body>
 </html>

@@ -18,14 +18,14 @@ import { authService } from "@/services/authService"
 const resetPasswordSchema = z.object({
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[@$!%*?&]/, "Password must contain at least one special character (@$!%*?&)"),
+    .min(8, "Kata sandi minimal 8 karakter")
+    .regex(/[a-z]/, "Kata sandi harus mengandung huruf kecil")
+    .regex(/[A-Z]/, "Kata sandi harus mengandung huruf kapital")
+    .regex(/[0-9]/, "Kata sandi harus mengandung angka")
+    .regex(/[@$!%*?&]/, "Kata sandi harus mengandung karakter khusus (@$!%*?&)"),
   passwordConfirmation: z.string(),
 }).refine((data) => data.password === data.passwordConfirmation, {
-  message: "Passwords don't match",
+  message: "Kata sandi tidak cocok",
   path: ["passwordConfirmation"],
 })
 
@@ -58,7 +58,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
   useEffect(() => {
     const validateToken = async () => {
       if (!token) {
-        setTokenError("Invalid reset link. Token is missing.")
+        setTokenError("Tautan reset tidak valid. Token tidak ditemukan.")
         setIsValidatingToken(false)
         return
       }
@@ -66,14 +66,14 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
       try {
         const response = await authService.checkResetToken(token)
         if (!response.success) {
-          setTokenError(response.message || "Invalid or expired token.")
+          setTokenError(response.message || "Token tidak valid atau sudah kadaluarsa.")
         }
       } catch (err: any) {
         console.error('Token validation error:', err);
         if (err.response?.data?.message) {
           setTokenError(err.response.data.message);
         } else {
-          setTokenError("Invalid or expired reset token. Please request a new password reset link.");
+          setTokenError("Token reset tidak valid atau sudah kadaluarsa. Silakan minta tautan reset kata sandi baru.");
         }
       } finally {
         setIsValidatingToken(false)
@@ -85,7 +85,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     if (!token) {
-      setError("Invalid reset link. Token is missing.")
+      setError("Tautan reset tidak valid. Token tidak ditemukan.")
       return
     }
 
@@ -110,7 +110,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
       } else if (err.message) {
         setError(err.message);
       } else {
-        setError("Failed to reset password. Please try again.");
+        setError("Gagal mengatur ulang kata sandi. Silakan coba lagi.");
       }
     } finally {
       setIsLoading(false)
@@ -122,7 +122,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
       <div className={cn("flex flex-col gap-6", className)}>
         <div className="flex flex-col items-center gap-2 text-center">
           <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Validating reset token...</p>
+          <p className="text-sm text-muted-foreground"> Validasi token...</p>
         </div>
       </div>
     )
@@ -132,7 +132,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Invalid Reset Link</h1>
+          <h1 className="text-2xl font-bold">Tautan Reset Tidak Valid</h1>
           <p className="text-balance text-sm text-muted-foreground">
             {tokenError}
           </p>
@@ -140,7 +140,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
 
         <Alert variant="destructive">
           <AlertDescription>
-            The password reset link is invalid or has expired. Please request a new password reset link.
+            Tautan reset kata sandi tidak valid atau sudah kedaluwarsa. Silakan minta tautan reset kata sandi baru.
           </AlertDescription>
         </Alert>
 
@@ -150,7 +150,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
           className="w-full"
           onClick={() => router.push("/auth/forgot-password")}
         >
-          Request new reset link
+          Minta Tautan Reset Baru
         </Button>
       </div>
     )
@@ -160,15 +160,15 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Password Reset Successful</h1>
+          <h1 className="text-2xl font-bold">Berhasil Mengatur Ulang Kata Sandi</h1>
           <p className="text-balance text-sm text-muted-foreground">
-            Your password has been reset successfully. Redirecting to login...
+            Kata sandi Anda telah berhasil diatur ulang. Mengarahkan ke halaman login...
           </p>
         </div>
 
         <Alert>
           <AlertDescription>
-            You can now log in with your new password.
+            Anda sekarang dapat masuk dengan kata sandi baru Anda.
           </AlertDescription>
         </Alert>
 
@@ -177,7 +177,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
           className="w-full"
           onClick={() => router.push("/auth/login")}
         >
-          Go to login
+          Masuk Sekarang
         </Button>
       </div>
     )
@@ -186,9 +186,9 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Reset your password</h1>
+        <h1 className="text-2xl font-bold">Atur Ulang Kata Sandi</h1>
         <p className="text-balance text-sm text-muted-foreground">
-          Enter your new password below
+          Masukkan kata sandi baru Anda di bawah ini
         </p>
       </div>
 
@@ -205,14 +205,14 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel>Kata Sandi Baru</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       {...field}
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your new password"
+                      placeholder="Masukkan kata sandi baru"
                       className="pl-10 pr-10"
                       disabled={isLoading}
                     />
@@ -234,7 +234,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
                 </FormControl>
                 <FormMessage />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Password must contain at least 8 characters, including uppercase, lowercase, number, and special character (@$!%*?&)
+                  Kata sandi minimal 8 karakter, termasuk huruf besar, huruf kecil, angka, dan karakter khusus (@$!%*?&)
                 </p>
               </FormItem>
             )}
@@ -245,14 +245,14 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
             name="passwordConfirmation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>Konfirmasi Kata Sandi</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <Input
                       {...field}
                       type={showPasswordConfirmation ? "text" : "password"}
-                      placeholder="Confirm your new password"
+                      placeholder="Konfirmasi kata sandi baru"
                       className="pl-10 pr-10"
                       disabled={isLoading}
                     />
@@ -281,16 +281,14 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Resetting password...
+                Mengatur ulang kata sandi...
               </>
             ) : (
-              "Reset password"
+              "Atur Ulang Kata Sandi"
             )}
           </Button>
         </form>
       </Form>
-
-
     </div>
   )
 }
