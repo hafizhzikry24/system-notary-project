@@ -13,7 +13,7 @@ export const navItems: MenuItem[] = [
     href: "/pelanggan",
     icon: Landmark,
     children: [
-      { title: "Perorangan", href: "/perorangan" , permissions: ["Pelanggan-Peorangan-View"] },
+      { title: "Perorangan", href: "/perorangan" , permissions: ["Pelanggan-Perorangan-View"] },
       { title: "Bank & Leasing", href: "/bank" , permissions: ["Pelanggan-Bank-View"] },
       { title: "Perusahaan", href: "/perusahaan" , permissions: ["Pelanggan-Perusahaan-View"] },
     ],

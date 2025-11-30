@@ -22,6 +22,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { PermissionRoute } from "@/components/PermissionRoute";
 
 import type { CashBank } from "@/types/report-keuangan/kas-bank/kas-bank";
 
@@ -96,96 +97,98 @@ export default function CreateCashBank() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
-        <div className="container mx-auto px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Create Kas & Dana Bank</h1>
+      <PermissionRoute requiredPermissions={['Rekap-Kas-View']}>
+        <Layout>
+          <div className="container mx-auto px-16 py-8">
+            <h1 className="text-2xl font-bold mb-6">Create Kas & Dana Bank</h1>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Fund Name */}
-            <LabelInputContainer>
-              <Label htmlFor="fund_name">Nama Dana/Kas</Label>
-              <Input
-                id="fund_name"
-                value={formData.fund_name || ""}
-                onChange={(e) => handleInputChange("fund_name", e.target.value)}
-                placeholder="Nama dana/kas"
-              />
-            </LabelInputContainer>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Fund Name */}
+              <LabelInputContainer>
+                <Label htmlFor="fund_name">Nama Dana/Kas</Label>
+                <Input
+                  id="fund_name"
+                  value={formData.fund_name || ""}
+                  onChange={(e) => handleInputChange("fund_name", e.target.value)}
+                  placeholder="Nama dana/kas"
+                />
+              </LabelInputContainer>
 
-            {/* Type */}
-            <LabelInputContainer>
-              <Label htmlFor="type">Tipe Dana</Label>
-              <Select
-                name="type"
-                value={formData.type || ""}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, type: value }))
-                }
+              {/* Type */}
+              <LabelInputContainer>
+                <Label htmlFor="type">Tipe Dana</Label>
+                <Select
+                  name="type"
+                  value={formData.type || ""}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, type: value }))
+                  }
+                >
+                  <SelectTrigger id="type" className="w-full">
+                    <SelectValue placeholder="Pilih tipe dana" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {typeOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </LabelInputContainer>
+
+
+              {/* On Behalf Of */}
+              <LabelInputContainer>
+                <Label htmlFor="on_behalf_of">Atas Nama</Label>
+                <Input
+                  id="on_behalf_of"
+                  value={formData.on_behalf_of || ""}
+                  onChange={(e) =>
+                    handleInputChange("on_behalf_of", e.target.value)
+                  }
+                  placeholder="Atas nama rekening"
+                />
+              </LabelInputContainer>
+
+              {/* Account Number */}
+              <LabelInputContainer>
+                <Label htmlFor="account_number">Nomor Rekening</Label>
+                <Input
+                  id="account_number"
+                  value={formData.account_number || ""}
+                  onChange={(e) =>
+                    handleInputChange("account_number", e.target.value)
+                  }
+                  placeholder="Nomor rekening"
+                />
+              </LabelInputContainer>
+
+              {/* Amount */}
+              <LabelInputContainer>
+                <Label htmlFor="amount">Saldo Awal</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={formData.amount ?? ""}
+                  onChange={(e) =>
+                    handleInputChange("amount", parseFloat(e.target.value))
+                  }
+                  placeholder="Saldo awal"
+                />
+              </LabelInputContainer>
+
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={saving}
               >
-                <SelectTrigger id="type" className="w-full">
-                  <SelectValue placeholder="Pilih tipe dana" />
-                </SelectTrigger>
-                <SelectContent>
-                  {typeOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </LabelInputContainer>
-
-
-            {/* On Behalf Of */}
-            <LabelInputContainer>
-              <Label htmlFor="on_behalf_of">Atas Nama</Label>
-              <Input
-                id="on_behalf_of"
-                value={formData.on_behalf_of || ""}
-                onChange={(e) =>
-                  handleInputChange("on_behalf_of", e.target.value)
-                }
-                placeholder="Atas nama rekening"
-              />
-            </LabelInputContainer>
-
-            {/* Account Number */}
-            <LabelInputContainer>
-              <Label htmlFor="account_number">Nomor Rekening</Label>
-              <Input
-                id="account_number"
-                value={formData.account_number || ""}
-                onChange={(e) =>
-                  handleInputChange("account_number", e.target.value)
-                }
-                placeholder="Nomor rekening"
-              />
-            </LabelInputContainer>
-
-            {/* Amount */}
-            <LabelInputContainer>
-              <Label htmlFor="amount">Saldo Awal</Label>
-              <Input
-                id="amount"
-                type="number"
-                value={formData.amount ?? ""}
-                onChange={(e) =>
-                  handleInputChange("amount", parseFloat(e.target.value))
-                }
-                placeholder="Saldo awal"
-              />
-            </LabelInputContainer>
-
-            <Button
-              type="submit"
-              className="w-full cursor-pointer"
-              disabled={saving}
-            >
-              {saving ? "Creating..." : "Create Kas/Bank"}
-            </Button>
-          </form>
-        </div>
-      </Layout>
+                {saving ? "Creating..." : "Create Kas/Bank"}
+              </Button>
+            </form>
+          </div>
+        </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

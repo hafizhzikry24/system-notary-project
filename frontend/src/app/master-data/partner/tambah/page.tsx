@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import { PermissionRoute } from "@/components/PermissionRoute";
 import { Partner } from "@/types/master-data/partner/partner";
 
 // ------------------- Component -------------------
@@ -86,7 +86,8 @@ export default function CreatePartner() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Master-Partner-Create']}>
+        <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Create Partner</h1>
 
@@ -216,6 +217,7 @@ export default function CreatePartner() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

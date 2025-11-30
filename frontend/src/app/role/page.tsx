@@ -22,6 +22,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { PaginationData } from "@/types/role";
+import { useHasPermission } from "@/services/permissions";
 
 export default function RolesPage() {
   const router = useRouter();
@@ -34,6 +35,9 @@ export default function RolesPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const canCreate = useHasPermission("Role-Create");
+  const canEdit = useHasPermission("Role-Edit");
+  const canDelete = useHasPermission("Role-Delete");
 
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -189,12 +193,12 @@ export default function RolesPage() {
                   <span className="hidden sm:inline">Refresh</span>
                 </button>
                 {/* Add New */}
-                <button
+                {canCreate && <button
                   onClick={() => router.push("/role/tambah")}
                   className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-3 py-2 text-sm font-semibold hover:bg-neutral-800"
                 >
                   <Plus className="h-4 w-4" /> Role
-                </button>
+                </button>}
               </div>
             </div>
 
@@ -210,12 +214,12 @@ export default function RolesPage() {
               <span>
                 <strong>{totalSelected}</strong> selected
               </span>
-              <button
+              {canDelete && <button
                 onClick={handleDeleteSelected}
                 className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-700"
               >
                 <Trash2 className="h-4 w-4" /> Delete Selected
-              </button>
+              </button>}
             </div>
 
             {/* Table */}
@@ -267,14 +271,14 @@ export default function RolesPage() {
                             onClick={() => handleEdit(role.id)}
                             className="text-blue-600 hover:underline mr-6"
                           >
-                            <Pencil className="h-4 w-4" />
+                            {canEdit && <Pencil className="h-4 w-4" />}
                           </button>
                           <button
                             onClick={() => handleDelete(role.id)}
                             disabled={deletingId === role.id}
                             className="text-red-600 hover:underline"
                           >
-                            <Trash className="h-4 w-4" />
+                            {canDelete && <Trash className="h-4 w-4" />}
                           </button>
                         </td>
                       </tr>

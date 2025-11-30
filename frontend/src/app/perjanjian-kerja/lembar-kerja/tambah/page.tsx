@@ -64,6 +64,9 @@ import { CustomerPersonal } from "@/types/pelanggan/perorangan/customer-personal
 import { TemplateDeed } from "@/types/master-data/template-deed/template-deed";
 import { CustomerBank } from "@/types/pelanggan/bank/customer-bank";
 import { CustomerCompany } from "@/types/pelanggan/perusahaan/customer-company";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
+
 
 export default function CreateWorksheet() {
   const router = useRouter();
@@ -897,6 +900,7 @@ export default function CreateWorksheet() {
 
   return (
     <ProtectedRoute>
+      <PermissionRoute requiredPermissions={['Perjanjian-Lembar-Create']}>
       <Layout>
         <div className="container mx-auto px-12 py-8">
           <div className="min-w-4xl mx-auto">
@@ -1030,6 +1034,7 @@ export default function CreateWorksheet() {
           </div>
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

@@ -19,10 +19,10 @@ class AdminPermissionManagerSeeder extends Seeder
         $permission = [
             //Pelanggan Permissions
             // Perorangan Permissions
-            'Pelanggan-Peorangan-View',
-            'Pelanggan-Peorangan-Create',
-            'Pelanggan-Peorangan-Edit',
-            'Pelanggan-Peorangan-Delete',
+            'Pelanggan-Perorangan-View',
+            'Pelanggan-Perorangan-Create',
+            'Pelanggan-Perorangan-Edit',
+            'Pelanggan-Perorangan-Delete',
 
             // Perusahaan Permissions
             'Pelanggan-Perusahaan-View',
@@ -77,7 +77,7 @@ class AdminPermissionManagerSeeder extends Seeder
 
             //Profile Perusahaan Permission
             'Profile-View',
-            'Profile-edit',
+            'Profile-Edit',
 
             //Role Management Permissions
             'Role-View',

@@ -22,7 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { PermissionRoute } from "@/components/PermissionRoute";
 import { CustomerCompany } from "@/types/pelanggan/perusahaan/customer-company";
 import { CustomerCompanyAttachment } from "@/types/pelanggan/perusahaan/customer-company-attachment";
 
@@ -178,7 +178,8 @@ export default function UpdateCustomerCompany() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Pelanggan-Perusahaan-Edit']}>            
+        <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">
             Updated Customer Perusahaan
@@ -514,6 +515,7 @@ export default function UpdateCustomerCompany() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>        
     </ProtectedRoute>
   );
 }

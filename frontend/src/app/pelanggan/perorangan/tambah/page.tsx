@@ -47,6 +47,7 @@ import {
 
 import { CustomerPersonal } from "@/types/pelanggan/perorangan/customer-personal";
 import { CustomerPersonalAttachment } from "@/types/pelanggan/perorangan/customer-personal-attachment";
+import { PermissionRoute } from "@/components/PermissionRoute";
 
 // ------------------- Component -------------------
 export default function CreateCustomerPersonal() {
@@ -197,7 +198,8 @@ export default function CreateCustomerPersonal() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Pelanggan-Perorangan-Create']}>              
+        <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Create Customer Personal</h1>
 
@@ -600,6 +602,7 @@ export default function CreateCustomerPersonal() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

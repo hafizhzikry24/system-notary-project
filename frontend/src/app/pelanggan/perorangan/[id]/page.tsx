@@ -43,7 +43,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { PermissionRoute } from "@/components/PermissionRoute";
 import { CustomerPersonal } from "@/types/pelanggan/perorangan/customer-personal";
 import { CustomerPersonalAttachment } from "@/types/pelanggan/perorangan/customer-personal-attachment";
 
@@ -199,7 +199,8 @@ export default function EditCustomerPersonal() {
 
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Pelanggan-Perorangan-Edit']}>         
+        <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Edit Customer Personal</h1>
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -614,6 +615,7 @@ export default function EditCustomerPersonal() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>           
     </ProtectedRoute>
   );
 }

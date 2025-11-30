@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import { PermissionRoute } from "@/components/PermissionRoute";
 import { Partner } from "@/types/master-data/partner/partner";
 
 // ------------------- Component -------------------
@@ -48,7 +48,6 @@ export default function EditPartner() {
 
         const partner = Partner.data.partner;
         setFormData(partner);
-        console.log(partner);
       } catch (err: any) {
         showError("Failed to load data!");
       } finally {
@@ -109,6 +108,7 @@ export default function EditPartner() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
+      <PermissionRoute requiredPermissions={['Master-Partner-Edit']}>
       <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Create Partner</h1>
@@ -239,6 +239,7 @@ export default function EditPartner() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

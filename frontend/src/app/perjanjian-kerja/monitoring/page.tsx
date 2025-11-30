@@ -30,6 +30,9 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { MonitoringHeaderCards } from "@/components/worksheet/headerData";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
+
 
 export default function MonitoringLembarKerjaPage() {
   const [worksheet, setWorksheet] = useState<PaginationData | null>(null);
@@ -275,7 +278,8 @@ export default function MonitoringLembarKerjaPage() {
 
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Perjanjian-Monitoring-View']}>      
+        <Layout>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Page header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -660,6 +664,7 @@ export default function MonitoringLembarKerjaPage() {
           />
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }
