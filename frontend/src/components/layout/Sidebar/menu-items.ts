@@ -1,6 +1,7 @@
 import { Home, Landmark, UserRoundPen, Banknote, LayoutList, Grid2x2Check, CalendarClock, Shield, UserRound } from "lucide-react";
 import { MenuItem } from "@/types/layout/sidebar";
 
+
 export const navItems: MenuItem[] = [
   {
     title: "Dashboard",
@@ -12,9 +13,9 @@ export const navItems: MenuItem[] = [
     href: "/pelanggan",
     icon: Landmark,
     children: [
-      { title: "Perorangan", href: "/perorangan" },
-      { title: "Bank & Leasing", href: "/bank" },
-      { title: "Perusahaan", href: "/perusahaan" },
+      { title: "Perorangan", href: "/perorangan" , permissions: ["Pelanggan-Perorangan-View"] },
+      { title: "Bank & Leasing", href: "/bank" , permissions: ["Pelanggan-Bank-View"] },
+      { title: "Perusahaan", href: "/perusahaan" , permissions: ["Pelanggan-Perusahaan-View"] },
     ],
   },
     {
@@ -22,8 +23,8 @@ export const navItems: MenuItem[] = [
     href: "/perjanjian-kerja",
     icon: LayoutList,
     children: [
-      { title: "Monitoring", href: "/monitoring" },
-      { title: "Lembar Kerja", href: "/lembar-kerja" },
+      { title: "Monitoring", href: "/monitoring" , permissions: ["Perjanjian-Monitoring-View"] },
+      { title: "Lembar Kerja", href: "/lembar-kerja" , permissions: ["Perjanjian-Lembar-View"] },
     ],
   },
   {
@@ -31,8 +32,8 @@ export const navItems: MenuItem[] = [
     href: "/rekap-keuangan",
     icon: Banknote,
     children: [
-      { title: "Keuangan", href: "/keuangan" },
-      { title: "Kas & Dana Bank", href: "/kas-bank" },
+      { title: "Keuangan", href: "/keuangan" , permissions: ["Rekap-Keuangan-View"] },
+      { title: "Kas & Dana Bank", href: "/kas-bank" , permissions: ["Rekap-Kas-View"] },
     ],
   },
   {
@@ -40,28 +41,32 @@ export const navItems: MenuItem[] = [
     href: "/master-data",
     icon: Grid2x2Check,
     children: [
-      { title: "Partner", href: "/partner" },
-      { title: "Akta(Layanan)", href: "/template-akta" },
+      { title: "Partner", href: "/partner" , permissions: ["Master-Partner-View"] },
+      { title: "Akta(Layanan)", href: "/template-akta" , permissions: ["Master-Akta-View"] },
     ],
   },
   {
     title: "Agenda & Acara",
-    href: "/event",
+    href: "/agenda",
     icon: CalendarClock,
+    permissions: ["Agenda-View"],
   },
   {
     title: "Notaris & PPAT Profil",
     href: "/profil-perusahaaan",
     icon: UserRoundPen,
+    permissions: ["Profile-View"],
   },
   {
     title: "Roles",
     href: "/role",
     icon: Shield,
+    permissions: ["Role-View"],
   },
   {
     title: "Pengguna",
-    href: "/user",
+    href: "/pengguna",
     icon: UserRound,
+    permissions: ["User-View"],
   },
 ];

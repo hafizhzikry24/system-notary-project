@@ -46,4 +46,21 @@ interface UserRepositoryInterface
      * @return mixed
      */
     public function deleteById(int $id);
+
+     /**
+      * Find a user by email.
+      *
+      * @param string $email
+      * @return mixed
+      */
+     public function findByEmail($email);
+
+     /**
+      * Update a user's password.
+      *
+      * @param User $user
+      * @param string $hashedPassword
+      * @return User
+      */
+     public function updatePassword($user, $hashedPassword);
 }

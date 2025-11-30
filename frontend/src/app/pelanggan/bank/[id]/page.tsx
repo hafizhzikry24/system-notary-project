@@ -31,6 +31,9 @@ import {
 
 import { CustomerBank } from "@/types/pelanggan/bank/customer-bank";
 import { CustomerBankAttachment } from "@/types/pelanggan/bank/customer-bank-attachment";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
+
 
 // ------------------- Component -------------------
 export default function UpdateCustomerBank() {
@@ -184,7 +187,8 @@ export default function UpdateCustomerBank() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Pelanggan-Bank-Edit']}>      
+        <Layout>
         <div className="container mx-auto px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Create Customer Bank</h1>
 
@@ -508,6 +512,7 @@ export default function UpdateCustomerBank() {
           </form>
         </div>
       </Layout>
+      </PermissionRoute>  
     </ProtectedRoute>
   );
 }

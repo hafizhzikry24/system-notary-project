@@ -61,7 +61,23 @@ export const authService = {
 
   async getUser(): Promise<any> {
     const response = await api.get('/user');
-    return response.data;
+    return response.data.user;
+  },
+
+  /**
+   * Get all permissions for the current logged-in user
+   */
+  async getPermissions(): Promise<string[]> {
+    const response = await api.get('/permissions');
+    return response.data.permissions;
+  },
+
+  /**
+   * Check if user has a specific permission
+   */
+  async hasPermission(permission: string): Promise<boolean> {
+    const permissions = await this.getPermissions();
+    return permissions.includes(permission);
   },
 
   getToken(): string | null {
@@ -75,5 +91,38 @@ export const authService = {
   clearAuth(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
+  },
+
+  /**
+   * Send password reset link to email
+   */
+  async forgotPassword(email: string, companyType: string = 'user'): Promise<{ success: boolean; message: string }> {
+    const response = await api.post('/auth/forgot-password', {
+      email,
+      company_type: companyType,
+    });
+    return response.data;
+  },
+
+  /**
+   * Check if reset token is valid
+   */
+  async checkResetToken(token: string): Promise<{ success: boolean; message: string }> {
+    const response = await api.get('/auth/check-token', {
+      params: { token },
+    });
+    return response.data;
+  },
+
+  /**
+   * Reset password with token
+   */
+  async resetPassword(token: string, password: string, passwordConfirmation: string): Promise<{ success: boolean; message: string }> {
+    const response = await api.post('/auth/reset-password', {
+      token,
+      password,
+      password_confirmation: passwordConfirmation,
+    });
+    return response.data;
   }
 }; 

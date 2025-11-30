@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerBankController;
 use App\Http\Controllers\FundCashBankController;
 use App\Http\Controllers\TemplateDeedController;
 use App\Http\Controllers\FinanceNotaryController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ProfilesettingController;
 use App\Http\Controllers\CustomerCompanyController;
 use App\Http\Controllers\WorksheetNotaryController;
@@ -21,14 +22,20 @@ use App\Http\Controllers\MonitoringNotaryController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::prefix('auth')->group(function () {
+    Route::post('/forgot-password', ResetPasswordController::class);
+    Route::get('/check-token', [ResetPasswordController::class, 'checkToken']);
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']);
+});
+
 // endpoint for all module operations with middleware protection
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', function () {
-        return response()->json([
-            'data' => auth('api')->user(),
-            'message' => 'User data retrieved successfully'
-        ]);
-    });
+
+    //endpoint for get authenticated user
+    Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+
+    //endpoint for get user permissions
+    Route::get('/permissions', [AuthController::class, 'getUserPermissions']);
 
     //dashboard endpoint
     Route::prefix('dashboard')->group(function () {
@@ -139,6 +146,9 @@ Route::middleware('auth:api')->group(function () {
     });
 
     //roles endpoint
+    Route::prefix('roles')->group(function () {
+        Route::get('get-all-permissions', [RoleController::class, 'getAllPermissions']);
+    });
     Route::resource('roles', RoleController::class);
 
     //users endpoint

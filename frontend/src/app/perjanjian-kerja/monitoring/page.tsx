@@ -30,6 +30,9 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { MonitoringHeaderCards } from "@/components/worksheet/headerData";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
+
 
 export default function MonitoringLembarKerjaPage() {
   const [worksheet, setWorksheet] = useState<PaginationData | null>(null);
@@ -275,7 +278,8 @@ export default function MonitoringLembarKerjaPage() {
 
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Perjanjian-Monitoring-View']}>      
+        <Layout>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Page header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -660,6 +664,7 @@ export default function MonitoringLembarKerjaPage() {
           />
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }
@@ -685,7 +690,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
           Reset Search
         </button>
         {/* <button
-          onClick={() => router.push("/pelanggan/perorangan/create")}
+          onClick={() => router.push("/pelanggan/perorangan/tambah")}
           className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           <Plus className="h-4 w-4" /> Add worksheet

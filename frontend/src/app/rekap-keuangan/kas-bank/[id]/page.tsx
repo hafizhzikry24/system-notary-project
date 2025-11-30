@@ -22,6 +22,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { PermissionRoute } from "@/components/PermissionRoute";
 
 import type { CashBank } from "@/types/report-keuangan/kas-bank/kas-bank";
 
@@ -86,106 +87,108 @@ export default function EditCashBank() {
   // ------------------- Render -------------------
   return (
     <ProtectedRoute>
-      <Layout>
-        <div className="container mx-auto px-16 py-8">
-          <h1 className="text-2xl font-bold mb-6">Edit Kas & Dana Bank</h1>
+      <PermissionRoute requiredPermissions={['Rekap-Kas-View']}>
+        <Layout>
+          <div className="container mx-auto px-16 py-8">
+            <h1 className="text-2xl font-bold mb-6">Edit Kas & Dana Bank</h1>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Fund Name */}
-            <LabelInputContainer>
-              <Label htmlFor="fund_name">Nama Dana/Kas</Label>
-              <Input
-                id="fund_name"
-                value={fund?.fund_name || ""}
-                onChange={(e) =>
-                  setFund((prev) =>
-                    prev ? { ...prev, fund_name: e.target.value } : null
-                  )
-                }
-                placeholder="Nama dana/kas"
-              />
-            </LabelInputContainer>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Fund Name */}
+              <LabelInputContainer>
+                <Label htmlFor="fund_name">Nama Dana/Kas</Label>
+                <Input
+                  id="fund_name"
+                  value={fund?.fund_name || ""}
+                  onChange={(e) =>
+                    setFund((prev) =>
+                      prev ? { ...prev, fund_name: e.target.value } : null
+                    )
+                  }
+                  placeholder="Nama dana/kas"
+                />
+              </LabelInputContainer>
 
-            {/* Type */}
-            <LabelInputContainer>
-              <Label htmlFor="type">Tipe Dana</Label>
-              <Select
-                value={fund?.type || ""}
-                onValueChange={(value) =>
-                  setFund((prev) => (prev ? { ...prev, type: value } : null))
-                }
+              {/* Type */}
+              <LabelInputContainer>
+                <Label htmlFor="type">Tipe Dana</Label>
+                <Select
+                  value={fund?.type || ""}
+                  onValueChange={(value) =>
+                    setFund((prev) => (prev ? { ...prev, type: value } : null))
+                  }
+                >
+                  <SelectTrigger id="type" className="w-full">
+                    <SelectValue placeholder="Pilih tipe dana" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {typeOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </LabelInputContainer>
+
+              {/* On Behalf Of */}
+              <LabelInputContainer>
+                <Label htmlFor="on_behalf_of">Atas Nama</Label>
+                <Input
+                  id="on_behalf_of"
+                  value={fund?.on_behalf_of || ""}
+                  onChange={(e) =>
+                    setFund((prev) =>
+                      prev ? { ...prev, on_behalf_of: e.target.value } : null
+                    )
+                  }
+                  placeholder="Atas nama rekening"
+                />
+              </LabelInputContainer>
+
+              {/* Account Number */}
+              <LabelInputContainer>
+                <Label htmlFor="account_number">Nomor Rekening</Label>
+                <Input
+                  id="account_number"
+                  value={fund?.account_number || ""}
+                  onChange={(e) =>
+                    setFund((prev) =>
+                      prev ? { ...prev, account_number: e.target.value } : null
+                    )
+                  }
+                  placeholder="Nomor rekening"
+                />
+              </LabelInputContainer>
+
+              {/* Amount */}
+              <LabelInputContainer>
+                <Label htmlFor="amount">Saldo Awal</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  value={fund?.amount ?? ""}
+                  onChange={(e) =>
+                    setFund((prev) =>
+                      prev
+                        ? { ...prev, amount: parseFloat(e.target.value) || 0 }
+                        : null
+                    )
+                  }
+                  placeholder="Saldo awal"
+                />
+              </LabelInputContainer>
+
+              <Button
+                type="submit"
+                className="w-full cursor-pointer"
+                disabled={saving}
               >
-                <SelectTrigger id="type" className="w-full">
-                  <SelectValue placeholder="Pilih tipe dana" />
-                </SelectTrigger>
-                <SelectContent>
-                  {typeOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </LabelInputContainer>
-
-            {/* On Behalf Of */}
-            <LabelInputContainer>
-              <Label htmlFor="on_behalf_of">Atas Nama</Label>
-              <Input
-                id="on_behalf_of"
-                value={fund?.on_behalf_of || ""}
-                onChange={(e) =>
-                  setFund((prev) =>
-                    prev ? { ...prev, on_behalf_of: e.target.value } : null
-                  )
-                }
-                placeholder="Atas nama rekening"
-              />
-            </LabelInputContainer>
-
-            {/* Account Number */}
-            <LabelInputContainer>
-              <Label htmlFor="account_number">Nomor Rekening</Label>
-              <Input
-                id="account_number"
-                value={fund?.account_number || ""}
-                onChange={(e) =>
-                  setFund((prev) =>
-                    prev ? { ...prev, account_number: e.target.value } : null
-                  )
-                }
-                placeholder="Nomor rekening"
-              />
-            </LabelInputContainer>
-
-            {/* Amount */}
-            <LabelInputContainer>
-              <Label htmlFor="amount">Saldo Awal</Label>
-              <Input
-                id="amount"
-                type="number"
-                value={fund?.amount ?? ""}
-                onChange={(e) =>
-                  setFund((prev) =>
-                    prev
-                      ? { ...prev, amount: parseFloat(e.target.value) || 0 }
-                      : null
-                  )
-                }
-                placeholder="Saldo awal"
-              />
-            </LabelInputContainer>
-
-            <Button
-              type="submit"
-              className="w-full cursor-pointer"
-              disabled={saving}
-            >
-              {saving ? "Saving..." : "Save Kas/Bank"}
-            </Button>
-          </form>
-        </div>
-      </Layout>
+                {saving ? "Saving..." : "Save Kas/Bank"}
+              </Button>
+            </form>
+          </div>
+        </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

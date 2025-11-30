@@ -13,6 +13,9 @@ import {
   showValidationErrors,
 } from "@/services/toastService";
 import { Search, Trash2, Plus, RefreshCw, Loader2, Pencil, Trash } from "lucide-react";
+import { PermissionRoute } from "@/components/PermissionRoute";
+import { useHasPermission } from "@/services/permissions";
+
 
 export default function LembarKerjaPage() {
   const router = useRouter();
@@ -23,6 +26,9 @@ export default function LembarKerjaPage() {
   const [perPage] = useState(10); // Fixed per page for simplicity
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const canCreate = useHasPermission('Perjanjian-Lembar-View');
+  const canEdit = useHasPermission('Perjanjian-Lembar-Edit');
+  const canDelete = useHasPermission('Perjanjian-Lembar-Delete');
 
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -144,7 +150,8 @@ export default function LembarKerjaPage() {
 
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Perjanjian-Lembar-View']}>            
+        <Layout>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Page header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -188,15 +195,15 @@ export default function LembarKerjaPage() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
               {/* Optional add button (uncomment if route ready) */}
-              <button
-                onClick={() => router.push("/perjanjian-kerja/lembar-kerja/create")}
+              {canCreate && <button
+                onClick={() => router.push("/perjanjian-kerja/lembar-kerja/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800 cursor-pointer"
               >
                 <Plus className="h-4 w-4" />  
                 <div className="inline md:hidden sm:hidden lg:inline">
                   Lembar Kerja
                 </div>
-              </button>
+              </button>}
             </div>
           </div>
 
@@ -222,14 +229,14 @@ export default function LembarKerjaPage() {
                 <span className="font-semibold">{totalSelected}</span> dipilih
             </div>
 
-            <div className="flex items-center gap-2">
+             {canDelete && <div className="flex items-center gap-2">
                 <button
                 onClick={handleDeleteSelected}
                 className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-700 cursor-pointer"
                 >
                 <Trash2 className="h-4 w-4" /> Hapus Terpilih
                 </button>
-            </div>
+            </div>}
             </div>
 
           {/* Table/Card container */}
@@ -344,14 +351,14 @@ export default function LembarKerjaPage() {
                               onClick={() => handleEditPersonal(worksheet.id)}
                               className="font-medium text-blue-600 dark:text-blue-500 hover:underline px-2 py-1 rounded cursor-pointer"
                             >
-                              <Pencil className="h-4 w-4" />
+                              {canEdit && <Pencil className="h-4 w-4" />}
                             </button>
                             <button
                               onClick={() => handleDelete(worksheet.id)}
                               className="font-medium text-red-600 dark:text-red-500 hover:underline px-2 py-1 rounded cursor-pointer"
                               disabled={deletingId === worksheet.id}
                             >
-                              <Trash className="h-4 w-4" />
+                              {canDelete && <Trash className="h-4 w-4" />}
                             </button>
                           </td>
                         </tr>
@@ -446,6 +453,7 @@ export default function LembarKerjaPage() {
           />
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }
@@ -471,7 +479,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
           Reset Search
         </button>
         {/* <button
-          onClick={() => router.push("/pelanggan/perorangan/create")}
+          onClick={() => router.push("/pelanggan/perorangan/tambah")}
           className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           <Plus className="h-4 w-4" /> Add worksheet

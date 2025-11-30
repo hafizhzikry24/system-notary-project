@@ -78,4 +78,14 @@ class RoleService
     {
         return $this->roleRepository->deleteById($id);
     }
+
+    /**
+     * Get all permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllPermissions()
+    {
+        return $this->roleRepository->getAllPermissions();
+    }
 }

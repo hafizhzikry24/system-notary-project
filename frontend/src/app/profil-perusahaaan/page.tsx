@@ -5,11 +5,13 @@ import "leaflet/dist/leaflet.css";
 import Layout from "@/components/layout/Layout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ProfileSettingsForm } from "@/components/profile/profile-form";
+import { PermissionRoute } from "@/components/PermissionRoute";
 
 
 export default function ProfileSettingsPage() {
   return (
     <ProtectedRoute>
+      <PermissionRoute requiredPermissions={['Profile-View']}>      
       <Layout>
         <div className="min-h-screen bg-white text-blue-950 flex items-center justify-center p-4 overflow-hidden">
           <div className="shadow-input mx-auto w-full max-w-5xl rounded-xl bg-white p-4 md:rounded-2xl md:p-4 dark:bg-black">
@@ -19,6 +21,7 @@ export default function ProfileSettingsPage() {
           </div>
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

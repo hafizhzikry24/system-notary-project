@@ -155,17 +155,17 @@ export function EventModal({
       <DialogContent className="max-w-[44vh] sm:max-w-lg max-h-[70vh] sm:max-h-[95vh] flex flex-col rounded-xl">
         <DialogHeader className="pb-4 space-y-2">
           <DialogTitle className="text-xl font-semibold text-gray-900">
-            {mode === "create" ? "Create Event" : "Edit Event"}
+            {mode === "create" ? "Tambah Acara" : "Edit Acara"}
           </DialogTitle>
           <DialogDescription className="text-gray-600">
-            {mode === "create" ? "Fill in the details to create a new event." : "Update the details of this event."}
+            {mode === "create" ? "Isi detail acara baru." : "Update detail acara ini."}
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex-1 space-y-5 overflow-y-auto pr-1">
           <LabelInputContainer>
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">
-              Title *
+              Judul Acara *
             </Label>
             <Input
               id="title"
@@ -181,7 +181,7 @@ export function EventModal({
 
           <LabelInputContainer>
             <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-              Description
+              Keterangan
             </Label>
             <Textarea
               id="description"
@@ -196,7 +196,7 @@ export function EventModal({
 
           <LabelInputContainer>
             <Label htmlFor="priority" className="text-sm font-medium text-gray-700">
-              Priority
+              Prioritas
             </Label>
             <Select value={priority} onValueChange={setPriority}>
               <SelectTrigger id="priority" className="mt-1">
@@ -227,7 +227,7 @@ export function EventModal({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <LabelInputContainer>
                 <Label htmlFor="startDate" className="text-sm font-medium text-gray-700">
-                  Start Date
+                  Tanggal Mulai
                 </Label>
                 <Input
                   id="startDate"
@@ -240,7 +240,7 @@ export function EventModal({
 
               <LabelInputContainer>
                 <Label htmlFor="startTime" className="text-sm font-medium text-gray-700">
-                  Start Time
+                  Waktu Mulai
                 </Label>
                 <Input
                   id="startTime"
@@ -255,7 +255,7 @@ export function EventModal({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <LabelInputContainer>
                 <Label htmlFor="endDate" className="text-sm font-medium text-gray-700">
-                  End Date
+                  Tanggal Selesai
                 </Label>
                 <Input
                   id="endDate"
@@ -268,7 +268,7 @@ export function EventModal({
 
               <LabelInputContainer>
                 <Label htmlFor="endTime" className="text-sm font-medium text-gray-700">
-                  End Time
+                  Waktu Selesai
                 </Label>
                 <Input
                   id="endTime"
@@ -284,18 +284,18 @@ export function EventModal({
 
         <div className="pt-6 border-t border-gray-200 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <Button variant="outline" onClick={onClose} disabled={saving} className="w-full sm:w-auto bg-transparent cursor-pointer">
-            Cancel
+            Batal
           </Button>
           <Button onClick={handleSubmit} disabled={saving} className="w-full sm:w-auto bg-gray-800 hover:bg-gray-800 cursor-pointer">
             {saving ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                Saving…
+                Menyimpan…
               </div>
             ) : mode === "create" ? (
-              "Create Event"
+              "Buat Acara"
             ) : (
-              "Save Changes"
+              "Simpan Perubahan"
             )}
           </Button>
         </div>

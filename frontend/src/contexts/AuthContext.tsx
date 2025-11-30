@@ -8,11 +8,13 @@ interface User {
   name: string;
   username: string;
   email: string;
+  created_at: any;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  permissions: string[];
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
@@ -35,6 +37,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [permissions, setPermissions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const isAuthenticated = !!user;
@@ -44,7 +47,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         if (authService.isAuthenticated()) {
           const userData = await authService.getUser();
-          setUser(userData.data);
+          const permissionsData = await authService.getPermissions();
+          setUser(userData);
+          setPermissions(permissionsData);
         }
       } catch (error) {
         console.error('Failed to get user data:', error);
@@ -64,13 +69,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.access_token) {
         try {
           const userData = await authService.getUser();
-          setUser(userData.data);
+          const permissionsData = await authService.getPermissions();
+          setPermissions(permissionsData);
+          setUser(userData);
         } catch (userError) {
           setUser({
             id: 0,
             name: 'User',
             username: credentials.username,
             email: '',
+            created_at: null,
           });
         }
       } else {
@@ -120,6 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value: AuthContextType = {
     user,
+    permissions,
     isAuthenticated,
     isLoading,
     login,
