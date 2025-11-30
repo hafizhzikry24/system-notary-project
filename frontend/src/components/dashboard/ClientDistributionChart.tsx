@@ -23,7 +23,7 @@ export function ClientDistributionChart({ data, loading }: ClientDistributionCha
   }
 
   const chartData = {
-    labels: ["Personal", "Company", "Bank"],
+    labels: ["Individu", "Perusahaan", "Bank"],
     datasets: [
       {
         data: [

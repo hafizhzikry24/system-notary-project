@@ -64,6 +64,8 @@ import { CustomerPersonal } from "@/types/pelanggan/perorangan/customer-personal
 import { TemplateDeed } from "@/types/master-data/template-deed/template-deed";
 import { CustomerBank } from "@/types/pelanggan/bank/customer-bank";
 import { CustomerCompany } from "@/types/pelanggan/perusahaan/customer-company";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
 
 export default function CreateWorksheet() {
   const router = useRouter();
@@ -931,165 +933,167 @@ export default function CreateWorksheet() {
 
   return (
     <ProtectedRoute>
-      <Layout>
-        <div className="container mx-auto px-12 py-8">
-          <div className="min-w-4xl mx-auto">
-            <h1 className="text-2xl font-bold mb-8">Create Worksheet</h1>
+      <PermissionRoute requiredPermissions={['Perjanjian-Lembar-Edit']}>
+        <Layout>
+          <div className="container mx-auto px-12 py-8">
+            <div className="min-w-4xl mx-auto">
+              <h1 className="text-2xl font-bold mb-8">Create Worksheet</h1>
 
-            {/* Modern Black & White Stepper */}
-            <div className="mb-12">
-              {/* Progress Bar */}
-              <div className="relative mb-8">
-                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200"></div>
-                <div
-                  className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-gray-800 to-black transition-all duration-700 ease-out"
-                  style={{
-                    width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-                  }}
-                ></div>
+              {/* Modern Black & White Stepper */}
+              <div className="mb-12">
+                {/* Progress Bar */}
+                <div className="relative mb-8">
+                  <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200"></div>
+                  <div
+                    className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-gray-800 to-black transition-all duration-700 ease-out"
+                    style={{
+                      width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
+                    }}
+                  ></div>
 
-                {/* Steps */}
-                <div className="relative flex justify-between">
-                  {steps.map((step) => {
-                    const status = getStepStatus(step.id);
-                    return (
-                      <div
-                        key={step.id}
-                        className="flex flex-col items-center group cursor-pointer"
-                        onClick={() => goToStep(step.id)}
-                      >
-                        {/* Step Circle */}
+                  {/* Steps */}
+                  <div className="relative flex justify-between">
+                    {steps.map((step) => {
+                      const status = getStepStatus(step.id);
+                      return (
                         <div
-                          className={`
-                          relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ease-out transform hover:scale-110
-                          ${
-                            status === "completed"
-                              ? "bg-black text-white shadow-lg shadow-black/30"
-                              : status === "active"
-                              ? "bg-black text-white shadow-xl shadow-black/40 ring-4 ring-gray-200"
-                              : "bg-white border-2 border-gray-300 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-600"
-                          }
-                        `}
+                          key={step.id}
+                          className="flex flex-col items-center group cursor-pointer"
+                          onClick={() => goToStep(step.id)}
                         >
-                          {status === "completed" ? (
-                            <Check
-                              size={16}
-                              className="animate-in zoom-in duration-300"
-                            />
-                          ) : (
-                            <span className="text-sm font-semibold">
-                              {step.id}
-                            </span>
-                          )}
-
-                          {/* Pulse animation for active step */}
-                          {status === "active" && (
-                            <div className="absolute inset-0 rounded-full bg-black animate-ping opacity-20"></div>
-                          )}
-                        </div>
-
-                        {/* Step Info */}
-                        <div className="mt-3 text-center">
+                          {/* Step Circle */}
                           <div
                             className={`
-                            text-sm font-semibold transition-colors duration-300
+                            relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ease-out transform hover:scale-110
                             ${
-                              status === "active"
-                                ? "text-black"
-                                : status === "completed"
-                                ? "text-black"
-                                : "text-gray-500"
+                              status === "completed"
+                                ? "bg-black text-white shadow-lg shadow-black/30"
+                                : status === "active"
+                                ? "bg-black text-white shadow-xl shadow-black/40 ring-4 ring-gray-200"
+                                : "bg-white border-2 border-gray-300 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-600"
                             }
                           `}
                           >
-                            {step.label}
+                            {status === "completed" ? (
+                              <Check
+                                size={16}
+                                className="animate-in zoom-in duration-300"
+                              />
+                            ) : (
+                              <span className="text-sm font-semibold">
+                                {step.id}
+                              </span>
+                            )}
+
+                            {/* Pulse animation for active step */}
+                            {status === "active" && (
+                              <div className="absolute inset-0 rounded-full bg-black animate-ping opacity-20"></div>
+                            )}
                           </div>
-                          <div className="text-xs text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            {step.description}
+
+                          {/* Step Info */}
+                          <div className="mt-3 text-center">
+                            <div
+                              className={`
+                              text-sm font-semibold transition-colors duration-300
+                              ${
+                                status === "active"
+                                  ? "text-black"
+                                  : status === "completed"
+                                  ? "text-black"
+                                  : "text-gray-500"
+                              }
+                            `}
+                            >
+                              {step.label}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {step.description}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              {/* Step Content Card */}
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 backdrop-blur-sm">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-sm text-gray-700 font-medium mb-4">
-                    Step {currentStep} of {steps.length}
-                    <ChevronRight size={16} />
+                {/* Step Content Card */}
+                <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 backdrop-blur-sm">
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-sm text-gray-700 font-medium mb-4">
+                      Step {currentStep} of {steps.length}
+                      <ChevronRight size={16} />
+                    </div>
+
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                      {steps[currentStep - 1].label}
+                    </h2>
+
+                    <p className="text-gray-600 mb-8 text-lg">
+                      {steps[currentStep - 1].description}
+                    </p>
                   </div>
 
-                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                    {steps[currentStep - 1].label}
-                  </h2>
-
-                  <p className="text-gray-600 mb-8 text-lg">
-                    {steps[currentStep - 1].description}
-                  </p>
+                  {/* Form Content */}
+                  <form
+                    className="space-y-8"
+                    onSubmit={(e) => e.preventDefault()}
+                  >
+                    {currentStep === 1 ? renderStep1() : renderStep2()}
+                  </form>
                 </div>
 
-                {/* Form Content */}
-                <form
-                  className="space-y-8"
-                  onSubmit={(e) => e.preventDefault()}
-                >
-                  {currentStep === 1 ? renderStep1() : renderStep2()}
-                </form>
-              </div>
-
-              {/* Navigation */}
-              <div className="flex justify-between items-center mt-8">
-                <button
-                  onClick={() => setCurrentStep(1)}
-                  disabled={currentStep === 1}
-                  className={`
-                    px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2
-                    ${
-                      currentStep === 1
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm hover:shadow-md"
-                    }
-                  `}
-                >
-                  <ChevronLeft size={16} />
-                  Previous
-                </button>
-
-                <div className="text-sm text-gray-500">
-                  Progress: {Math.round((currentStep / steps.length) * 100)}%
-                </div>
-
-                {currentStep === 1 ? (
+                {/* Navigation */}
+                <div className="flex justify-between items-center mt-8">
                   <button
-                    type="button"
-                    onClick={() => {
-                      if (validateStep1()) {
-                        setCurrentStep(2);
+                    onClick={() => setCurrentStep(1)}
+                    disabled={currentStep === 1}
+                    className={`
+                      px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2
+                      ${
+                        currentStep === 1
+                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                          : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm hover:shadow-md"
                       }
-                    }}
-                    className="px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transform hover:scale-105"
+                    `}
                   >
-                    Next
-                    <ChevronRight size={16} />
+                    <ChevronLeft size={16} />
+                    Previous
                   </button>
-                ) : (
-                  <button
-                    type="button"
-                    disabled={saving}
-                    onClick={handleSubmit}
-                    className="px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    {saving ? "Saving..." : "Save Worksheet"}
-                  </button>
-                )}
+
+                  <div className="text-sm text-gray-500">
+                    Progress: {Math.round((currentStep / steps.length) * 100)}%
+                  </div>
+
+                  {currentStep === 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (validateStep1()) {
+                          setCurrentStep(2);
+                        }
+                      }}
+                      className="px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transform hover:scale-105"
+                    >
+                      Next
+                      <ChevronRight size={16} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={handleSubmit}
+                      className="px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    >
+                      {saving ? "Saving..." : "Save Worksheet"}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

@@ -44,7 +44,7 @@ export function ProgressGaugeChart({ data, loading }: ProgressGaugeChartProps) {
   const completionPercentage = total > 0 ? Math.round(((data?.completed ?? 0) / total) * 100) : 0;
 
   const chartData = {
-    labels: ["Draft", "Pending", "Processing", "Completed", "Canceled"],
+    labels: ["Draft", "Pending", "Prosess", "Selesai", "Dibatalkan"],
     datasets: [
       {
         data: [
@@ -119,7 +119,7 @@ export function ProgressGaugeChart({ data, loading }: ProgressGaugeChartProps) {
       
       ctx.font = "14px Arial";
       ctx.fillStyle = "#6b7280";
-      ctx.fillText("Completed", centerX, centerY + 20);
+      ctx.fillText("Selesai", centerX, centerY + 20);
       ctx.restore();
     },
   };
@@ -146,15 +146,15 @@ export function ProgressGaugeChart({ data, loading }: ProgressGaugeChartProps) {
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-blue-500">{data?.processing ?? 0}</div>
-          <div className="text-sm text-gray-500">Processing</div>
+          <div className="text-sm text-gray-500">Proses</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-green-500">{data?.completed ?? 0}</div>
-          <div className="text-sm text-gray-500">Completed</div>
+          <div className="text-sm text-gray-500">Selesai</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-red-500">{data?.canceled ?? 0}</div>
-          <div className="text-sm text-gray-500">Canceled</div>
+          <div className="text-sm text-gray-500">Dibatalkan</div>
         </div>
       </div>
     </div>

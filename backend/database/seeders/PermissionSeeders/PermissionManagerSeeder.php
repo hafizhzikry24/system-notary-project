@@ -17,15 +17,12 @@ class PermissionManagerSeeder extends Seeder
     {
         $this->command->info('Seeding Permissions...');
         $permission = [
-            // Dashboard Permissions
-            'Dashboard-View',
-
             //Pelanggan Permissions
             // Perorangan Permissions
-            'Pelanggan-Peorangan-View',
-            'Pelanggan-Peorangan-Create',
-            'Pelanggan-Peorangan-Edit',
-            'Pelanggan-Peorangan-Delete',
+            'Pelanggan-Perorangan-View',
+            'Pelanggan-Perorangan-Create',
+            'Pelanggan-Perorangan-Edit',
+            'Pelanggan-Perorangan-Delete',
 
             // Perusahaan Permissions
             'Pelanggan-Perusahaan-View',
@@ -72,6 +69,10 @@ class PermissionManagerSeeder extends Seeder
             'Master-Akta-Edit',
             'Master-Akta-Delete',
 
+            //Profile Perusahaan Permission
+            'Profile-View',
+            'Profile-Edit',
+
             //Agenda Permissions
             'Agenda-View',
             'Agenda-Create',
@@ -94,14 +95,32 @@ class PermissionManagerSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Truncate the related tables first
+        DB::table('model_has_permissions')->truncate();
+        DB::table('role_has_permissions')->truncate();
+        DB::table('permissions')->truncate();
+
+        // Reset auto-increment
+        DB::statement('ALTER TABLE permissions AUTO_INCREMENT = 1;');
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $this->command->info('All permissions and related data have been deleted.');
+
         // Create permissions
         foreach ($permission as $perm) {
-            Permission::firstOrCreate(
-                ['name' => $perm, 'guard_name' => 'api'],
-                ['created_at' => now(), 'updated_at' => now()]
-            );
+            Permission::create([
+                'name' => $perm,
+                'guard_name' => 'api',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
-            $this->command->info('Permission "' . $perm . '" synced.');
+            $this->command->info('Permission "' . $perm . '" created.');
         }
     }
 }

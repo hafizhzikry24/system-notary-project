@@ -7,17 +7,42 @@ import { useState } from "react";
 import { SidebarProps } from "@/types/layout/sidebar";
 import { navItems } from "@/components/layout/Sidebar/menu-items";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
   const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const { permissions } = useAuth();
+
+  const hasPermission = (permission: string) => {
+    return permissions.includes(permission);
+  };
 
   const toggleMenu = (title: string) => {
     setOpenMenus((prev) =>
       prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
     );
   };
+
+  // Filter menu items based on permissions
+  const filteredNavItems = navItems.filter(item => {
+    // If item has permissions, check if user has at least one of them
+    if (item.permissions && item.permissions.length > 0) {
+      return item.permissions.some(permission => hasPermission(permission));
+    }
+    
+    // If item has children, check if any child is visible
+    if (item.children) {
+      const hasVisibleChildren = item.children.some(child => 
+        !child.permissions || child.permissions.some(permission => hasPermission(permission))
+      );
+      return hasVisibleChildren;
+    }
+    
+    // If no permissions required and no children, show the item
+    return true;
+  });
 
   return (
     <>
@@ -60,20 +85,27 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
             </button>
           </div>
 
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
+          {filteredNavItems.map((item) => {
+            const isActive = pathname.startsWith(item.href);
             const isMenuOpen = openMenus.includes(item.title);
-
-            // Determine if the item should be a direct link or a collapsible menu
             const isDirectLink = !item.children;
+
+            // Filter children based on permissions
+            const filteredChildren = item.children?.filter(child => 
+              !child.permissions || child.permissions.some(permission => hasPermission(permission))
+            );
+
+            // Don't render parent if it has no visible children
+            if (item.children && filteredChildren?.length === 0) {
+              return null;
+            }
 
             return (
               <div key={item.title}>
                 {isDirectLink ? (
-                  // Direct Link
                   <Link
                     href={item.href}
-                    onClick={closeSidebar} // Close sidebar on mobile when a link is clicked
+                    onClick={closeSidebar}
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900",
                       isActive && "bg-gray-100 text-gray-900 font-bold",
@@ -94,7 +126,6 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                     </div>
                   </Link>
                 ) : (
-                  // Parent Menu with children
                   <div
                     onClick={() => toggleMenu(item.title)}
                     className={cn(
@@ -124,8 +155,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                     )}
                   </div>
                 )}
-                {/* Sub Menu */}
-                {item.children && (
+                {item.children && filteredChildren && filteredChildren.length > 0 && (
                   <div
                     className={cn(
                       "ml-8 overflow-hidden transition-all duration-300",
@@ -135,20 +165,24 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                     )}
                   >
                     {isHovered &&
-                      item.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={`${item.href}${child.href}`}
-                          onClick={closeSidebar} // Close sidebar on mobile when a link is clicked
-                          className={cn(
-                            "block rounded-lg px-3 py-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 text-sm",
-                            pathname === `${item.href}${child.href}` &&
-                              "bg-gray-100 text-gray-900 font-semibold"
-                          )}
-                        >
-                          {child.title}
-                        </Link>
-                      ))}
+                      filteredChildren.map((child) => {
+                        const childPath = `${item.href}${child.href}`;
+                        const isChildActive = pathname === childPath;
+                        
+                        return (
+                          <Link
+                            key={child.href}
+                            href={childPath}
+                            onClick={closeSidebar}
+                            className={cn(
+                              "block rounded-lg px-3 py-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 text-sm",
+                              isChildActive && "bg-gray-100 text-gray-900 font-semibold"
+                            )}
+                          >
+                            {child.title}
+                          </Link>
+                        );
+                      })}
                   </div>
                 )}
               </div>

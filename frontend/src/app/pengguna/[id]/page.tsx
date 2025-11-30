@@ -22,6 +22,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PermissionRoute } from "@/components/PermissionRoute";
+
+
 
 // ------------------- Component -------------------
 export default function CreateUser() {
@@ -115,7 +118,8 @@ export default function CreateUser() {
   // ------------------- Render -------------------
    return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['User-Edit']}>
+        <Layout>
         <div className="container mx-auto px-6 sm:px-16 py-8">
           <h1 className="text-2xl font-bold mb-6">Create User</h1>
 
@@ -228,6 +232,7 @@ export default function CreateUser() {
           </form>
         </div>
       </Layout>
+        </PermissionRoute>            
     </ProtectedRoute>
   );
 }

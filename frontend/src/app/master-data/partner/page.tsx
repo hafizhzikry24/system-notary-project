@@ -13,6 +13,9 @@ import {
   showValidationErrors,
 } from "@/services/toastService";
 import { Search, Trash2, Plus, RefreshCw, Loader2, Pencil, Trash } from "lucide-react";
+import { PermissionRoute } from "@/components/PermissionRoute";
+import { useHasPermission } from "@/services/permissions";
+
 
 export default function PartnerPage() {
   const router = useRouter();
@@ -23,6 +26,9 @@ export default function PartnerPage() {
   const [perPage] = useState(10); // Fixed per page for simplicity
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const canEdit = useHasPermission("Master-Partner-Edit");
+  const canDelete = useHasPermission("Master-Partner-Delete");
+  const canCreate = useHasPermission("Master-Partner-Create");
 
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -143,7 +149,8 @@ export default function PartnerPage() {
 
   return (
     <ProtectedRoute>
-      <Layout>
+      <PermissionRoute requiredPermissions={['Master-Partner-View']}>
+        <Layout>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Page header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -187,7 +194,7 @@ export default function PartnerPage() {
                 <span className="hidden sm:inline">Refresh</span>
               </button>
               {/* Optional add button (uncomment if route ready) */}
-              <button
+              {canCreate && <button
                 onClick={() => router.push("/master-data/partner/tambah")}
                 className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-2 md:px-4 py-2 text-sm font-semibold shadow hover:shadow-md hover:bg-neutral-800 cursor-pointer"
               >
@@ -195,7 +202,7 @@ export default function PartnerPage() {
                 <div className="inline md:hidden sm:hidden lg:inline">
                   Partner
                 </div>
-              </button>
+              </button>}
             </div>
           </div>
 
@@ -221,14 +228,14 @@ export default function PartnerPage() {
                 <span className="font-semibold">{totalSelected}</span> dipilih
             </div>
 
-            <div className="flex items-center gap-2">
+             {canDelete && <div className="flex items-center gap-2">
                 <button
                 onClick={handleDeleteSelected}
                 className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-red-700 cursor-pointer"
                 >
                 <Trash2 className="h-4 w-4" /> Hapus Terpilih
                 </button>
-            </div>
+            </div>}
             </div>
 
           {/* Table/Card container */}
@@ -336,14 +343,14 @@ export default function PartnerPage() {
                               onClick={() => handleEditPartner(partner.id)}
                               className="font-medium text-blue-600 dark:text-blue-500 hover:underline px-2 py-1 rounded cursor-pointer"
                             >
-                              <Pencil className="h-4 w-4" />
+                              {canEdit && <Pencil className="h-4 w-4" />}
                             </button>
                             <button
                               onClick={() => handleDelete(partner.id)}
                               className="font-medium text-red-600 dark:text-red-500 hover:underline px-2 py-1 rounded cursor-pointer"
                               disabled={deletingId === partner.id}
                             >
-                              <Trash className="h-4 w-4" />
+                              {canDelete && <Trash className="h-4 w-4" />}
                             </button>
                           </td>
                         </tr>
@@ -438,6 +445,7 @@ export default function PartnerPage() {
           />
         </div>
       </Layout>
+      </PermissionRoute>
     </ProtectedRoute>
   );
 }

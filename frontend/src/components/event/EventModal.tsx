@@ -155,10 +155,10 @@ export function EventModal({
       <DialogContent className="max-w-[44vh] sm:max-w-lg max-h-[70vh] sm:max-h-[95vh] flex flex-col rounded-xl">
         <DialogHeader className="pb-4 space-y-2">
           <DialogTitle className="text-xl font-semibold text-gray-900">
-            {mode === "create" ? "Create Event" : "Edit Event"}
+            {mode === "create" ? "Tambah Acara" : "Edit Acara"}
           </DialogTitle>
           <DialogDescription className="text-gray-600">
-            {mode === "create" ? "Fill in the details to create a new event." : "Update the details of this event."}
+            {mode === "create" ? "Isi detail acara baru." : "Update detail acara ini."}
           </DialogDescription>
         </DialogHeader>
 
