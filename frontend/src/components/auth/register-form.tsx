@@ -32,10 +32,11 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>
 
 interface RegisterFormProps {
+  email: string;
   className?: string;
 }
 
-export function RegisterForm({ className }: RegisterFormProps) {
+export function RegisterForm({ email, className }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -48,7 +49,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
     defaultValues: {
       name: '',
       username: '',
-      email: '',
+      email: email,
       password: '',
       confirmPassword: '',
     },

@@ -21,6 +21,8 @@ use App\Http\Controllers\MonitoringNotaryController;
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/forgot-password', ResetPasswordController::class);

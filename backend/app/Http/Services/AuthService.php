@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use App\Http\Repositories\Interface\AuthRepositoryInterface;
+use App\Mail\OtpMail;
 
 class AuthService
 {
@@ -138,5 +140,42 @@ class AuthService
         }
 
         return $user->getAllPermissions()->pluck('name')->toArray();
+    }
+
+    /**
+     * Request an OTP for the given email.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function requestOtp(string $email): bool
+    {
+        $otp = rand(100000, 999999);
+        
+        try {
+            // Store OTP in cache
+            $this->authRepository->requestOtp($email, $otp);
+            
+            // Send OTP email
+            Mail::to($email)->send(new OtpMail($otp));
+            
+            return true;
+        } catch (\Exception $e) {
+            // If email fails, remove OTP from cache and re-throw
+            cache()->forget('otp_'.$email);
+            throw new \Exception('Failed to send OTP email: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Verify the OTP for the given email.
+     *
+     * @param string $email
+     * @param int $otp
+     * @return bool
+     */
+    public function verifyOtp(string $email, int $otp): bool
+    {
+        return $this->authRepository->verifyOtp($email, $otp);
     }
 }
