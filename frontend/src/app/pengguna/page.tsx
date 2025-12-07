@@ -271,7 +271,7 @@ export default function UserPage() {
                         <td className="px-6 py-4">{user.name}</td>
                         <td className="px-6 py-4">{user.username}</td>
                         <td className="px-6 py-4">{user.email}</td>
-                        <td className="px-6 py-4">{user.role.name}</td>
+                        <td className="px-6 py-4">{user.role?.name || "Not Set"}</td>
                         <td className="px-6 py-4 text-center space-x-2">
                           <button
                             onClick={() => handleEdit(user.id)}
