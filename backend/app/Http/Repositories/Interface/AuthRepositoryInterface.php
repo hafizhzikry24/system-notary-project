@@ -21,4 +21,22 @@ interface AuthRepositoryInterface
      * @return User|null
      */
     public function findByUsername(string $username): ?User;
+
+    /**
+     * Request an OTP for the given email.
+     *
+     * @param string $email
+     * @param int $otp
+     * @return bool
+     */
+    public function requestOtp(string $email, int $otp): bool;
+
+    /**
+     * Verify the OTP for the given email.
+     *
+     * @param string $email
+     * @param int $otp
+     * @return bool
+     */
+    public function verifyOtp(string $email, int $otp): bool;
 }

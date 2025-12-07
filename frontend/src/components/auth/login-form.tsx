@@ -172,7 +172,7 @@ export function LoginForm({ className }: LoginFormProps) {
 
       <div className="text-center text-sm">
         Belum punya akun?{" "}
-        <a href="/auth/register" className="underline underline-offset-4">
+        <a href="/auth/register-validation" className="underline underline-offset-4">
           Daftar
         </a>
       </div>
