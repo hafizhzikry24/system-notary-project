@@ -7,6 +7,9 @@ use App\Http\Services\AuthService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Traits\MessageResponse;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\SendOtpRequest;
+use App\Http\Requests\VerifyOtpRequest;
+use App\Http\Requests\CompleteRegistrationRequest;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -118,6 +121,51 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred while retrieving permissions: ' . $e->getMessage(), 500);
 
+        }
+    }
+
+    /**
+     * Handle OTP sending.
+     *
+     * @param SendOtpRequest $request
+     * @return JsonResponse
+     */
+    public function sendOtp(SendOtpRequest $request)
+    {
+        try {
+            $email = $request->validated()['email'];
+            $this->authService->requestOtp($email);
+
+            return $this->successResponse('message', null, 'OTP sent successfully', 200);
+        } catch (\Exception $e) {
+            $statusCode = 500;
+            $message = 'An error occurred during OTP sending: ' . $e->getMessage();
+            
+            // Handle specific error for existing email
+            if (str_contains($e->getMessage(), 'Email already registered')) {
+                $statusCode = 422;
+                $message = 'This email is already registered. Please use a different email or try logging in.';
+            }
+            
+            return $this->errorResponse($message, $statusCode);
+        }
+    }
+
+    /**
+     * Handle OTP verification.
+     *
+     * @param VerifyOtpRequest $request
+     * @return JsonResponse
+     */
+    public function verifyOtp(VerifyOtpRequest $request)
+    {
+        try {
+            $data = $request->validated();
+            $this->authService->verifyOtp($data['email'], $data['otp']);
+
+            return $this->successResponse('message', null, 'OTP verified successfully', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred during OTP verification: ' . $e->getMessage(), 500);
         }
     }
 }
