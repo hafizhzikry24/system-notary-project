@@ -16,7 +16,7 @@ vendor/
 .env.test.local
 .env.production.local
 /backend/.env
-/frontend/.env*
+/frontend/.env
 
 # Logs
 npm-debug.log*
