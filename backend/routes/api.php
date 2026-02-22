@@ -20,14 +20,14 @@ use App\Http\Controllers\MonitoringNotaryController;
 
 // endpoint for authentication
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/send-otp', [AuthController::class, 'sendOtp']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/send-otp', [AuthController::class, 'sendOtp'])->middleware('throttle:10,1');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:10,1');
 
 Route::prefix('auth')->group(function () {
     Route::post('/forgot-password', ResetPasswordController::class);
     Route::get('/check-token', [ResetPasswordController::class, 'checkToken']);
-    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']);
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->middleware('throttle:10,1');
 });
 
 // endpoint for all module operations with middleware protection
